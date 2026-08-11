@@ -2077,8 +2077,7 @@ function showConversationQuestion() {
   ) {
   
     conversationSceneText.textContent =
-      conversationSceneText.textContent =
-        question.show || "";
+      question.show || "";
   
   }
 
