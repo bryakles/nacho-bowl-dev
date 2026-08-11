@@ -2151,6 +2151,15 @@ function showConversationQuestion() {
       break;
 
 
+    case "SHORT_SPEAK":
+
+      showShortSpeak(
+        question
+      );
+
+      break;
+
+
     case "LONG_WRITE":
 
       showLongWriting();
@@ -2172,6 +2181,410 @@ function showConversationQuestion() {
 
 }
 
+function showShortSpeak(
+  question
+) {
+
+  // ----------------------------------------------------------
+  // SHORT SPEAK
+  //
+  // Student records their response.
+  // There is NO answer checking.
+  // Students can:
+  // - record
+  // - stop
+  // - listen
+  // - record again
+  // - download the recording
+  //
+  // Recordings use WebM format.
+  // ----------------------------------------------------------
+
+  // Clear the normal response area
+
+  clearConversationResponseAreas();
+
+
+  // ----------------------------------------------------------
+  // PROMPT
+  // ----------------------------------------------------------
+
+  conversationPrompt.textContent =
+    "";
+
+
+  if (
+    question.ask
+  ) {
+
+    playSpanishText(
+      getConversationDisplayPrompt(
+        question.ask
+      )
+    );
+
+  }
+
+
+  // ----------------------------------------------------------
+  // CREATE RECORDING UI
+  // ----------------------------------------------------------
+
+  const recorderContainer =
+    document.createElement(
+      "div"
+    );
+
+  recorderContainer.className =
+    "short-speak-container";
+
+
+  // ----------------------------------------------------------
+  // RECORD BUTTON
+  // ----------------------------------------------------------
+
+  const recordButton =
+    document.createElement(
+      "button"
+    );
+
+  recordButton.type =
+    "button";
+
+  recordButton.textContent =
+    "🎙️ Start Recording";
+
+  recordButton.className =
+    "conversation-button";
+
+
+  // ----------------------------------------------------------
+  // STOP BUTTON
+  // ----------------------------------------------------------
+
+  const stopButton =
+    document.createElement(
+      "button"
+    );
+
+  stopButton.type =
+    "button";
+
+  stopButton.textContent =
+    "⏹️ Stop";
+
+  stopButton.className =
+    "conversation-button";
+
+  stopButton.disabled =
+    true;
+
+
+  // ----------------------------------------------------------
+  // AUDIO PLAYER
+  // ----------------------------------------------------------
+
+  const audio =
+    document.createElement(
+      "audio"
+    );
+
+  audio.controls =
+    true;
+
+  audio.style.display =
+    "none";
+
+  // ----------------------------------------------------------
+  // DOWNLOAD BUTTON
+  // ----------------------------------------------------------
+
+  const downloadButton =
+    document.createElement(
+      "button"
+    );
+
+  downloadButton.type =
+    "button";
+
+  downloadButton.textContent =
+    "💾 Download Recording";
+
+  downloadButton.className =
+    "conversation-button";
+
+  downloadButton.disabled =
+    true;
+
+  // ----------------------------------------------------------
+  // STATUS
+  // ----------------------------------------------------------
+
+  const status =
+    document.createElement(
+      "div"
+    );
+
+  status.className =
+    "short-speak-status";
+
+  status.textContent =
+    "Ready to record.";
+
+
+  // ----------------------------------------------------------
+  // ADD TO PAGE
+  // ----------------------------------------------------------
+
+  recorderContainer.appendChild(
+    status
+  );
+
+  recorderContainer.appendChild(
+    recordButton
+  );
+
+  recorderContainer.appendChild(
+    stopButton
+  );
+
+  recorderContainer.appendChild(
+    audio
+  );
+
+  recorderContainer.appendChild(
+    downloadButton
+  );
+
+  conversationFeedback
+    .parentNode
+    .insertBefore(
+      recorderContainer,
+      conversationFeedback
+    );
+
+
+  // ----------------------------------------------------------
+  // RECORDING VARIABLES
+  // ----------------------------------------------------------
+
+  let mediaRecorder =
+    null;
+
+  let audioChunks =
+    [];
+
+  let audioBlob =
+    null;
+
+  // ----------------------------------------------------------
+  // DOWNLOAD FILENAME
+  // ----------------------------------------------------------
+  
+  function getShortSpeakFilename() {
+
+  const studentName =
+    currentUser?.name ||
+    "Student";
+
+  const title =
+    conversationTitle?.textContent?.trim() ||
+    "Conversation";
+
+  const date =
+    new Date()
+      .toISOString()
+      .slice(0, 10);
+
+  return (
+    `${sanitizeFilenamePart(studentName)} - ` +
+    `${sanitizeFilenamePart(title)} - ` +
+    `${date}.webm`
+  );
+}
+
+
+function sanitizeFilenamePart(text) {
+
+  return String(text)
+    .trim()
+    .replace(/[<>:"/\\|?*]/g, "")
+    .replace(/\s+/g, " ");
+
+}
+  
+  
+  // ----------------------------------------------------------
+  // CLEAN FILENAME
+  // ----------------------------------------------------------
+  
+  function sanitizeFilenamePart(text) {
+  
+    return String(text)
+      .trim()
+      .replace(/[<>:"/\\|?*]/g, "")
+      .replace(/\s+/g, " ");
+  
+  } 
+
+  // ----------------------------------------------------------
+  // START RECORDING
+  // ----------------------------------------------------------
+
+  recordButton.addEventListener(
+    "click",
+    async () => {
+
+      try {
+
+        const stream =
+          await navigator
+            .mediaDevices
+            .getUserMedia({
+              audio: true
+            });
+
+
+        audioChunks =
+          [];
+
+
+        mediaRecorder =
+          new MediaRecorder(
+            stream,
+            {
+              mimeType:
+                "audio/webm"
+            }
+          );
+
+
+        mediaRecorder.addEventListener(
+          "dataavailable",
+          event => {
+
+            if (
+              event.data.size >
+              0
+            ) {
+
+              audioChunks.push(
+                event.data
+              );
+
+            }
+
+          }
+        );
+
+
+        mediaRecorder.addEventListener(
+          "stop",
+          () => {
+
+            audioBlob =
+              new Blob(
+                audioChunks,
+                {
+                  type:
+                    "audio/webm"
+                }
+              );
+
+
+            const audioURL =
+              URL.createObjectURL(
+                audioBlob
+              );
+
+
+            audio.src =
+              audioURL;
+
+            audio.style.display =
+              "block";
+
+
+            status.textContent =
+              "Recording ready. Listen before downloading.";
+
+
+            recordButton.disabled =
+              false;
+
+            stopButton.disabled =
+              true;
+
+
+            stream
+              .getTracks()
+              .forEach(
+                track =>
+                  track.stop()
+              );
+
+          }
+        );
+
+
+        mediaRecorder.start();
+
+
+        status.textContent =
+          "🔴 Recording...";
+
+
+        recordButton.disabled =
+          true;
+
+        stopButton.disabled =
+          false;
+
+
+        audio.style.display =
+          "none";
+
+      }
+
+      catch (
+        error
+      ) {
+
+        console.error(
+          error
+        );
+
+        status.textContent =
+          "⚠️ Microphone access was not available.";
+
+      }
+
+    }
+  );
+
+
+  // ----------------------------------------------------------
+  // STOP RECORDING
+  // ----------------------------------------------------------
+
+  stopButton.addEventListener(
+    "click",
+    () => {
+
+      if (
+        mediaRecorder &&
+        mediaRecorder.state !==
+        "inactive"
+      ) {
+
+        mediaRecorder.stop();
+
+      }
+
+    }
+  );
+
+}
 
 // ============================================================
 // CLEAR RESPONSE AREAS
