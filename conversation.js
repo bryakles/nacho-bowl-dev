@@ -2376,6 +2376,9 @@ function showShortSpeak(
   let audioBlob =
     null;
 
+  let recordingDownloaded =
+  false;
+
   // ----------------------------------------------------------
   // DOWNLOAD FILENAME
   // ----------------------------------------------------------
@@ -2580,43 +2583,89 @@ function sanitizeFilenamePart(text) {
   // ----------------------------------------------------------
   
   downloadButton.addEventListener(
-    "click",
-    () => {
-  
-      if (!audioBlob) {
-        return;
-      }
-  
-      const downloadURL =
-        URL.createObjectURL(
-          audioBlob
-        );
-  
-      const link =
-        document.createElement(
-          "a"
-        );
-  
-      link.href =
-        downloadURL;
-  
-      link.download =
-        getShortSpeakFilename();
-  
-      document.body.appendChild(
-        link
-      );
-  
-      link.click();
-  
-      link.remove();
-  
-      URL.revokeObjectURL(
-        downloadURL
-      );
-  
+  "click",
+  () => {
+
+    if (!audioBlob) {
+      return;
     }
-  );
+
+    const downloadURL =
+      URL.createObjectURL(
+        audioBlob
+      );
+
+    const link =
+      document.createElement(
+        "a"
+      );
+
+    link.href =
+      downloadURL;
+
+    link.download =
+      getShortSpeakFilename();
+
+    document.body.appendChild(
+      link
+    );
+
+    link.click();
+
+    link.remove();
+
+    URL.revokeObjectURL(
+      downloadURL
+    );
+
+
+    // --------------------------------------------------------
+    // RECORD THAT THE STUDENT DOWNLOADED THE RECORDING
+    // --------------------------------------------------------
+
+    recordingDownloaded =
+      true;
+
+
+    status.textContent =
+      "Recording downloaded ✓";
+
+
+    // --------------------------------------------------------
+    // SAVE SHORT SPEAK ATTEMPT
+    // --------------------------------------------------------
+
+    const question =
+      getCurrentQuestion();
+
+    if (question) {
+
+      recordQuestionAttempt(
+        question,
+        "[Audio recording downloaded]",
+        true
+      );
+
+    }
+
+
+    // --------------------------------------------------------
+    // ALLOW STUDENT TO MOVE ON
+    // --------------------------------------------------------
+
+    conversationFeedback.textContent =
+      "Recording downloaded ✓ You may continue.";
+
+    conversationFeedback.className =
+      "conversation-feedback correct";
+
+
+    conversationNextBtn.classList.remove(
+      "hidden"
+    );
+
+  }
+);
 
 }
 
@@ -4243,7 +4292,7 @@ function renderConversationReport() {
     "Question",
     "Type",
     "Attempts",
-    "Student Short_Write Responses"
+    "Student Response"
   ]
     .forEach(
       headingText => {
@@ -4358,77 +4407,85 @@ function renderConversationReport() {
         item.type ===
         "SHORT_WRITE"
       ) {
-
+      
         item.responses.forEach(
           response => {
-
+      
             const responseDiv =
               document.createElement(
                 "div"
               );
-
+      
             responseDiv.className =
               "conversation-report-response";
-
-
+      
+      
             const marker =
               document.createElement(
                 "span"
               );
-
-
+      
+      
             if (
               response.accepted
             ) {
-
+      
               marker.textContent =
                 "✓ Accepted ";
-
+      
               marker.className =
                 "conversation-report-accepted";
-
+      
             } else {
-
+      
               marker.textContent =
                 "⚠ Review ";
-
+      
               marker.className =
                 "conversation-report-flagged";
-
+      
             }
-
-
+      
+      
             responseDiv.appendChild(
               marker
             );
-
-
+      
+      
             const text =
               document.createElement(
                 "span"
               );
-
+      
             text.textContent =
               response.text;
-
-
+      
+      
             responseDiv.appendChild(
-              text
-            );
-
-
+              text );
+      
+      
             responseCell.appendChild(
               responseDiv
             );
-
+      
           }
         );
-
+      
+      
+      } else if (
+        item.type ===
+        "SHORT_SPEAK"
+      ) {
+      
+        responseCell.textContent =
+          "🎙️ Recording downloaded ✓";
+      
       } else {
-
+      
         responseCell.textContent =
           "—";
-
+      
       }
 
 
