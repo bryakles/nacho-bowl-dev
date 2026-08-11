@@ -2380,6 +2380,16 @@ function showShortSpeak(
   false;
 
   // ----------------------------------------------------------
+  // CREATE REPORT ENTRY FOR THIS SHORT SPEAK QUESTION
+  // ----------------------------------------------------------
+  
+  recordQuestionAttempt(
+    question,
+    "",
+    false
+  );
+
+  // ----------------------------------------------------------
   // DOWNLOAD FILENAME
   // ----------------------------------------------------------
   
@@ -2640,11 +2650,33 @@ function sanitizeFilenamePart(text) {
 
     if (question) {
 
-      recordQuestionAttempt(
-        question,
-        "[Audio recording downloaded]",
-        true
-      );
+      const reportItem =
+        conversationReport.find(
+          item =>
+            item.conceptIndex ===
+              currentConceptIndex &&
+            item.questionIndex ===
+              currentQuestionIndex &&
+            item.type ===
+              "SHORT_SPEAK"
+        );
+      
+      if (reportItem) {
+      
+        reportItem.responses = [
+          {
+            text:
+              "Recording downloaded",
+      
+            accepted:
+              true,
+      
+            downloaded:
+              true
+          }
+        ];
+      
+      }
 
     }
 
@@ -3781,7 +3813,25 @@ function recordQuestionAttempt(
 
   }
 
-
+  if (
+    question.type ===
+    "SHORT_SPEAK"
+  ) {
+  
+    responses.push({
+  
+      text:
+        "Recording not downloaded",
+  
+      accepted:
+        false,
+  
+      downloaded:
+        false
+  
+    });
+  
+  }
   if (
     question.type ===
       "LONG_WRITE"
@@ -4478,8 +4528,16 @@ function renderConversationReport() {
         "SHORT_SPEAK"
       ) {
       
+        const downloaded =
+          item.responses.some(
+            response =>
+              response.downloaded === true
+          );
+      
         responseCell.textContent =
-          "🎙️ Recording downloaded ✓";
+          downloaded
+            ? "🎙️ Recording downloaded ✓"
+            : "⚠️ Recording NOT downloaded";
       
       } else {
       
