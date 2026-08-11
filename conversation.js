@@ -1507,7 +1507,6 @@ function parseQuestionCell(cell) {
     "MULTIPLE_CHOICE",
     "SHORT_WRITE",
     "LONG_WRITE",
-    "PHRASE"
   ];
 
   if (!validTypes.includes(type)) {
@@ -1756,33 +1755,6 @@ function parseQuestionCell(cell) {
 
     return question;
   }
-
-
-  // ----------------------------------------------------------
-  // PHRASE
-  //
-  // PHRASE is treated as a short production question for now.
-  // The answer is matched using the same keyword system.
-  // ----------------------------------------------------------
-
-  if (
-    type ===
-    "PHRASE"
-  ) {
-
-    question.acceptedKeywords =
-      question.answer
-        .split(/\s+OR\s+/i)
-        .map(answer =>
-          normalizeConversationAnswer(
-            answer
-          )
-        )
-        .filter(Boolean);
-
-    return question;
-  }
-
 
   // ----------------------------------------------------------
   // LONG WRITE
@@ -2723,18 +2695,11 @@ function checkConversationAnswer(
     return;
   }
 
-
-  // ----------------------------------------------------------
-  // COUNT ATTEMPT
-  // ----------------------------------------------------------
-
-  conversationAttempts++;
-
-
   // ----------------------------------------------------------
   // LONG WRITE
   //
   // Save response and allow student to continue.
+  // LONG_WRITE does NOT count as correct/incorrect.
   // ----------------------------------------------------------
 
   if (
@@ -2768,6 +2733,252 @@ function checkConversationAnswer(
 
   }
 
+
+  // ----------------------------------------------------------
+  // DETERMINE CORRECTNESS
+  // ----------------------------------------------------------
+
+  let correct =
+    false;
+
+  let flagForReview =
+    false;
+
+
+  // ----------------------------------------------------------
+  // YES / NO
+  // ----------------------------------------------------------
+
+  if (
+    question.type ===
+    "YES_NO"
+  ) {
+
+    correct =
+      normalizedAnswersMatch(
+        cleanedAnswer,
+        question.answer
+      );
+
+  }
+
+
+  // ----------------------------------------------------------
+  // EITHER / OR
+  // ----------------------------------------------------------
+
+  else if (
+    question.type ===
+    "EITHER_OR"
+  ) {
+
+    correct =
+      normalizedAnswersMatch(
+        cleanedAnswer,
+        question.answer
+      );
+
+  }
+
+
+  // ----------------------------------------------------------
+  // MULTIPLE CHOICE
+  // ----------------------------------------------------------
+
+  else if (
+    question.type ===
+    "MULTIPLE_CHOICE"
+  ) {
+
+    correct =
+      normalizedAnswersMatch(
+        cleanedAnswer,
+        question.correctOption
+      );
+
+  }
+
+
+  // ----------------------------------------------------------
+  // SHORT WRITE
+  // ----------------------------------------------------------
+
+  else if (
+    question.type ===
+    "SHORT_WRITE"
+  ) {
+
+    const result =
+      evaluateShortWrite(
+        cleanedAnswer,
+        question.acceptedKeywords
+      );
+
+
+    correct =
+      result.correct;
+
+
+    flagForReview =
+      result.flagForReview;
+
+  }
+
+
+  // ----------------------------------------------------------
+  // RECORD ATTEMPT
+  // ----------------------------------------------------------
+
+  recordQuestionAttempt(
+    question,
+    cleanedAnswer,
+    correct,
+    flagForReview
+  );
+
+
+  // ----------------------------------------------------------
+  // CORRECT
+  // ----------------------------------------------------------
+
+  if (correct) {
+
+    conversationFeedback.textContent =
+      "¡Muy bien! ✓";
+
+    conversationFeedback.className =
+      "conversation-feedback correct";
+
+
+    disableCurrentConversationResponse();
+
+
+    conversationNextBtn.classList.remove(
+      "hidden"
+    );
+
+
+    return;
+
+  }
+
+
+  // ----------------------------------------------------------
+  // INCORRECT
+  //
+  // IMPORTANT:
+  //
+  // The student DOES NOT repeat this question.
+  //
+  // The student is told the correct answer and then
+  // continues to the next question.
+  //
+  // The incorrect answer counts as one strike for the
+  // current concept.
+  // ----------------------------------------------------------
+
+  conversationAttempts++;
+  
+  conversationFeedback.textContent =
+    `No exactamente. La respuesta correcta es: ${
+      getConversationCorrectAnswerText(
+        question
+      )
+    }`;
+
+  conversationFeedback.className =
+    "conversation-feedback incorrect";
+
+
+  disableCurrentConversationResponse();
+
+
+  conversationNextBtn.classList.remove(
+    "hidden"
+  );
+
+}
+
+function getConversationCorrectAnswerText(
+  question
+) {
+
+  if (
+    question.type ===
+    "YES_NO"
+  ) {
+
+    return question.answer;
+
+  }
+
+
+  if (
+    question.type ===
+    "EITHER_OR"
+  ) {
+
+    return question.answer;
+
+  }
+
+
+  if (
+    question.type ===
+    "MULTIPLE_CHOICE"
+  ) {
+
+    const correctOption =
+      question.options.find(
+        option => {
+
+          const match =
+            option
+              .trim()
+              .match(
+                /^([A-Z])\./i
+              );
+
+          return (
+            match &&
+            match[1]
+              .toUpperCase() ===
+              question.correctOption
+          );
+
+        }
+      );
+
+
+    return (
+      correctOption ||
+      question.correctOption
+    );
+
+  }
+
+
+  if (
+    question.type ===
+    "SHORT_WRITE"
+  ) {
+
+    return (
+      question.answer ||
+      question.acceptedKeywords.join(
+        " / "
+      )
+    );
+
+  }
+
+
+  return (
+    question.answer ||
+    "—"
+  );
+
+}
 
   // ----------------------------------------------------------
   // DETERMINE CORRECTNESS
@@ -3381,11 +3592,7 @@ conversationNextBtn.addEventListener(
 
 
     // --------------------------------------------------------
-    // CONCEPT MASTERED
-    //
-    // Reaching the end of the question sequence means the
-    // student has successfully demonstrated mastery of
-    // this concept.
+    // CONCEPT COMPLETE
     // --------------------------------------------------------
 
     if (
@@ -3393,15 +3600,57 @@ conversationNextBtn.addEventListener(
       row.questions.length
     ) {
 
+      // ------------------------------------------------------
+      // TWO OR MORE STRIKES
+      //
+      // Repeat this concept from Question 1.
+      // ------------------------------------------------------
+
+      if (
+        conversationAttempts >= 2
+      ) {
+
+        conversationFeedback.textContent =
+          "Vamos a practicar esta idea otra vez.";
+
+        conversationFeedback.className =
+          "conversation-feedback incorrect";
+
+
+        currentQuestionIndex =
+          0;
+
+        conversationAttempts =
+          0;
+
+        currentConceptMastered =
+          false;
+
+
+        showConversationQuestion();
+
+        return;
+
+      }
+
+
+      // ------------------------------------------------------
+      // ZERO OR ONE STRIKE
+      //
+      // Concept is complete.
+      // Move permanently to the next concept.
+      // ------------------------------------------------------
+
       currentConceptMastered =
         true;
 
 
-      // Move to the next concept.
-
       currentConceptIndex++;
 
       currentQuestionIndex =
+        0;
+
+      conversationAttempts =
         0;
 
       currentConceptMastered =
