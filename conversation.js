@@ -2698,7 +2698,23 @@ function clearConversationResponseAreas() {
       false;
 
   }
+  
+  // ----------------------------------------------------------
+  // REMOVE OLD RECORDING UI
+  // ----------------------------------------------------------
 
+  const oldRecorder =
+    conversationPanel.querySelector(
+      ".short-speak-container"
+    );
+
+  if (oldRecorder) {
+
+    oldRecorder.remove();
+
+  }
+
+}
 }
 
 
