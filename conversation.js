@@ -2015,16 +2015,6 @@ function showConversationQuestion() {
 
 
   // ----------------------------------------------------------
-  // RESET PER-QUESTION ATTEMPT COUNTER
-  //
-  // The teacher report maintains the permanent attempt
-  // count. This variable is only for the current interaction.
-  // ----------------------------------------------------------
-
-  conversationAttempts = 0;
-
-
-  // ----------------------------------------------------------
   // CLEAR OLD RESPONSE UI
   // ----------------------------------------------------------
 
