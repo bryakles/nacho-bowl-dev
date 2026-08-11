@@ -1581,3 +1581,18 @@ body.teacher-lock-active {
   gap: 10px;
   margin-top: 15px;
 }
+
+/* ============================================================
+   SHORT SPEAK RECORDING CONTROLS
+   ============================================================ */
+
+.short-speak-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.short-speak-container .conversation-button {
+  width: fit-content;
+}
