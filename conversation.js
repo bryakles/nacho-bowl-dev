@@ -2493,6 +2493,10 @@ function sanitizeFilenamePart(text) {
             
             downloadButton.disabled =
               false;
+
+            conversationNextBtn.classList.remove(
+              "hidden"
+            );
             
             status.textContent =
               "Recording ready. Listen before downloading.";
