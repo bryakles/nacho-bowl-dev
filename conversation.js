@@ -2719,7 +2719,6 @@ function clearConversationResponseAreas() {
   }
 
 }
-}
 
 
 // ============================================================
