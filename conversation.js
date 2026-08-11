@@ -2244,7 +2244,7 @@ function showShortSpeak(
     "🎙️ Start Recording";
 
   recordButton.className =
-    "conversation-button";
+    "btn btn-primary conversation-button";
 
 
   // ----------------------------------------------------------
@@ -2263,7 +2263,7 @@ function showShortSpeak(
     "⏹️ Stop";
 
   stopButton.className =
-    "conversation-button";
+    "btn btn-primary conversation-button";
 
   stopButton.disabled =
     true;
@@ -2300,7 +2300,7 @@ function showShortSpeak(
     "💾 Download Recording";
 
   downloadButton.className =
-    "conversation-button";
+    "btn btn-primary conversation-button";
 
   downloadButton.disabled =
     true;
