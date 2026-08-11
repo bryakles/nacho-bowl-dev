@@ -3395,21 +3395,16 @@ function checkConversationAnswer(
 
   }
 
-
   // ----------------------------------------------------------
   // INCORRECT
   //
-  // IMPORTANT:
+  // The incorrect answer counts as one strike
+  // for the CURRENT CONCEPT.
   //
-  // The student DOES NOT repeat this question.
-  //
-  // The student is told the correct answer and then
-  // continues to the next question.
-  //
-  // The incorrect answer counts as one strike for the
-  // current concept.
+  // On the SECOND strike, the student immediately
+  // returns to Question 1 of this concept.
   // ----------------------------------------------------------
-
+  
   conversationAttempts++;
   
   conversationFeedback.textContent =
@@ -3418,14 +3413,68 @@ function checkConversationAnswer(
         question
       )
     }`;
-
+  
   conversationFeedback.className =
     "conversation-feedback incorrect";
-
-
+  
+  
   disableCurrentConversationResponse();
-
-
+  
+  
+  // ----------------------------------------------------------
+  // SECOND STRIKE
+  // ----------------------------------------------------------
+  
+  if (
+    conversationAttempts >= 2
+  ) {
+  
+    conversationFeedback.textContent =
+      `No exactamente. La respuesta correcta es: ${
+        getConversationCorrectAnswerText(
+          question
+        )
+      }<br><br>Vamos a practicar esta idea otra vez.`;
+  
+    conversationFeedback.className =
+      "conversation-feedback incorrect";
+  
+  
+    // Restart this concept.
+    currentQuestionIndex = 0;
+  
+    conversationAttempts = 0;
+  
+    currentConceptMastered = false;
+  
+  
+    // Give the student a moment to see the feedback
+    // before restarting the concept.
+    conversationRetryTimer =
+      setTimeout(
+        () => {
+  
+          conversationRetryTimer =
+            null;
+  
+          showConversationQuestion();
+  
+        },
+        1500
+      );
+  
+  
+    return;
+  
+  }
+  
+  
+  // ----------------------------------------------------------
+  // FIRST STRIKE
+  //
+  // Allow the student to continue normally.
+  // ----------------------------------------------------------
+  
   conversationNextBtn.classList.remove(
     "hidden"
   );
