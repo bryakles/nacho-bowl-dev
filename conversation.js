@@ -2414,20 +2414,7 @@ function sanitizeFilenamePart(text) {
 }
   
   
-  // ----------------------------------------------------------
-  // CLEAN FILENAME
-  // ----------------------------------------------------------
-  
-  function sanitizeFilenamePart(text) {
-  
-    return String(text)
-      .trim()
-      .replace(/[<>:"/\\|?*]/g, "")
-      .replace(/\s+/g, " ");
-  
-  } 
-
-  // ----------------------------------------------------------
+   // ----------------------------------------------------------
   // START RECORDING
   // ----------------------------------------------------------
 
@@ -2500,18 +2487,19 @@ function sanitizeFilenamePart(text) {
 
             audio.src =
               audioURL;
-
+            
             audio.style.display =
               "block";
-
-
+            
+            downloadButton.disabled =
+              false;
+            
             status.textContent =
               "Recording ready. Listen before downloading.";
-
-
+            
             recordButton.disabled =
               false;
-
+            
             stopButton.disabled =
               true;
 
@@ -2585,6 +2573,49 @@ function sanitizeFilenamePart(text) {
   );
 
 }
+
+  // ----------------------------------------------------------
+  // DOWNLOAD RECORDING
+  // ----------------------------------------------------------
+  
+  downloadButton.addEventListener(
+    "click",
+    () => {
+  
+      if (!audioBlob) {
+        return;
+      }
+  
+      const downloadURL =
+        URL.createObjectURL(
+          audioBlob
+        );
+  
+      const link =
+        document.createElement(
+          "a"
+        );
+  
+      link.href =
+        downloadURL;
+  
+      link.download =
+        getShortSpeakFilename();
+  
+      document.body.appendChild(
+        link
+      );
+  
+      link.click();
+  
+      link.remove();
+  
+      URL.revokeObjectURL(
+        downloadURL
+      );
+  
+    }
+  );
 
 // ============================================================
 // CLEAR RESPONSE AREAS
