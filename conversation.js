@@ -1506,6 +1506,7 @@ function parseQuestionCell(cell) {
     "EITHER_OR",
     "MULTIPLE_CHOICE",
     "SHORT_WRITE",
+    "SHORT_SPEAK",
     "LONG_WRITE",
   ];
 
@@ -2200,9 +2201,8 @@ function showShortSpeak(
   // Recordings use WebM format.
   // ----------------------------------------------------------
 
-  // Clear the normal response area
-
-  clearConversationResponseAreas();
+  // Clear only the standard response controls.
+  // Do not clear the recording UI we are about to create.
 
 
   // ----------------------------------------------------------
@@ -2572,8 +2572,6 @@ function sanitizeFilenamePart(text) {
     }
   );
 
-}
-
   // ----------------------------------------------------------
   // DOWNLOAD RECORDING
   // ----------------------------------------------------------
@@ -2616,6 +2614,8 @@ function sanitizeFilenamePart(text) {
   
     }
   );
+
+}
 
 // ============================================================
 // CLEAR RESPONSE AREAS
