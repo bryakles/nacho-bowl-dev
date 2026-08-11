@@ -2980,177 +2980,6 @@ function getConversationCorrectAnswerText(
 
 }
 
-  // ----------------------------------------------------------
-  // DETERMINE CORRECTNESS
-  // ----------------------------------------------------------
-
-  let correct =
-    false;
-
-  let flagForReview =
-  false;
-
-  // ----------------------------------------------------------
-  // YES / NO
-  // ----------------------------------------------------------
-
-  if (
-    question.type ===
-    "YES_NO"
-  ) {
-
-    correct =
-      normalizedAnswersMatch(
-        cleanedAnswer,
-        question.answer
-      );
-
-  }
-
-
-  // ----------------------------------------------------------
-  // EITHER / OR
-  // ----------------------------------------------------------
-
-  else if (
-    question.type ===
-    "EITHER_OR"
-  ) {
-
-    correct =
-      normalizedAnswersMatch(
-        cleanedAnswer,
-        question.answer
-      );
-
-  }
-
-
-  // ----------------------------------------------------------
-  // MULTIPLE CHOICE
-  // ----------------------------------------------------------
-
-  else if (
-    question.type ===
-    "MULTIPLE_CHOICE"
-  ) {
-
-    correct =
-      normalizedAnswersMatch(
-        cleanedAnswer,
-        question.correctOption
-      );
-
-  }
-
-
-  // ----------------------------------------------------------
-  // SHORT WRITE
-  // ----------------------------------------------------------
-
-  else if (
-    question.type ===
-    "SHORT_WRITE"
-  ) {
-  
-    const result =
-      evaluateShortWrite(
-        cleanedAnswer,
-        question.acceptedKeywords
-      );
-  
-  
-    correct =
-      result.correct;
-  
-  
-    flagForReview =
-      result.flagForReview;
-  
-  }
-
-
-  // ----------------------------------------------------------
-  // RECORD THE ATTEMPT
-  // ----------------------------------------------------------
-
-  recordQuestionAttempt(
-    question,
-    cleanedAnswer,
-    correct,
-    flagForReview
-  );
-
-  // ----------------------------------------------------------
-  // CORRECT
-  // ----------------------------------------------------------
-
-  if (correct) {
-  
-    conversationFeedback.textContent =
-      "¡Muy bien! ✓";
-  
-      conversationFeedback.className =
-        "conversation-feedback correct";
-
-
-    disableCurrentConversationResponse();
-
-
-    conversationNextBtn.classList.remove(
-      "hidden"
-    );
-
-
-    return;
-
-  }
-
-
- // ----------------------------------------------------------
-// INCORRECT
-//
-// The student does NOT advance.
-//
-// The current concept restarts at Q1.
-//
-// The attempt remains recorded.
-// ----------------------------------------------------------
-
-conversationFeedback.textContent =
-  "No exactamente. Vamos a repetir esta idea.";
-
-conversationFeedback.className =
-  "conversation-feedback incorrect";
-
-
-if (conversationRetryTimer) {
-
-  clearTimeout(
-    conversationRetryTimer
-  );
-
-}
-
-
-conversationRetryTimer =
-  setTimeout(
-    () => {
-
-      conversationRetryTimer =
-        null;
-
-      resetCurrentConcept();
-
-      showConversationQuestion();
-
-    },
-    900
-  );
-
-}
-
-
 // ============================================================
 // SHORT WRITE EVALUATION
 // ============================================================
@@ -3462,31 +3291,49 @@ function recordQuestionAttempt(
 
   conversationReport.push({
 
-    conceptIndex:
-      currentConceptIndex,
+  conversation:
+    conversationData.title || "",
 
-    concept:
-      getCurrentConversationRow()
-        ?.concept || "",
+  studentName:
+    typeof currentStudentName !== "undefined"
+      ? currentStudentName
+      : "",
 
-    questionIndex:
-      currentQuestionIndex,
+  username:
+    typeof currentUsername !== "undefined"
+      ? currentUsername
+      : "",
 
-    questionNumber:
-      currentQuestionIndex + 1,
+  dateTime:
+    new Date().toLocaleString(),
 
-    type:
-      question.type,
+  conceptIndex:
+    currentConceptIndex,
 
-    prompt:
-      question.prompt,
+  concept:
+    getCurrentConversationRow()
+      ?.concept || "",
 
-    attempts:
-      1,
+  questionIndex:
+    currentQuestionIndex,
 
-    responses
+  questionNumber:
+    currentQuestionIndex + 1,
 
-  });
+  type:
+    question.type,
+
+  prompt:
+    question.ask ||
+    question.show ||
+    "",
+
+  attempts:
+    1,
+
+  responses
+
+});
 
 }
 
