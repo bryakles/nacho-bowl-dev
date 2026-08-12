@@ -381,12 +381,18 @@ function parseCards(csvText) {
 
 function parseAccounts(csvText) {
   const rows = parseCSV(csvText);
+
   return rows
     .filter(r => r.username && r.password)
     .map(r => ({
-      name:     r["student name"] || r.name || r.username,
-      username: r.username.trim().toLowerCase(),
-      password: r.password.trim(),
+      name:        r.name?.trim() || r.username,
+      username:    r.username.trim().toLowerCase(),
+      password:    r.password.trim(),
+      accountType: r["account type"]?.trim() || "",
+      language:    r.language?.trim() || "",
+      period:      r.period
+        ? r.period.split(",").map(p => p.trim())
+        : [],
     }));
 }
 
