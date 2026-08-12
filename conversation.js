@@ -4975,21 +4975,8 @@ conversationSelectionBackBtn.addEventListener(
       "hidden"
     );
 
+    showFilterPanel();
 
-    if (homeOnlyContent) {
-      homeOnlyContent.classList.remove("hidden");
-    }
-    
-    if (
-      typeof filterPanel !==
-      "undefined"
-    ) {
-    
-      filterPanel.classList.remove(
-        "hidden"
-      );
-    
-    }
   }
 );
 
