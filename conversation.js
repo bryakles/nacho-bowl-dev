@@ -641,36 +641,6 @@ function renderConversationList() {
       card.className =
         `conversation-list-card conversation-level-${conversationLevel}`;
 
-
-      // --------------------------------------------------------
-      // IMAGE
-      // --------------------------------------------------------
-
-      if (
-        conversation.imageURL
-      ) {
-
-        const image =
-          document.createElement(
-            "img"
-          );
-
-        image.src =
-          conversation.imageURL;
-
-        image.alt =
-          conversation.title;
-
-        image.className =
-          "conversation-list-image";
-
-        card.appendChild(
-          image
-        );
-
-      }
-
-
       // --------------------------------------------------------
       // CONTENT
       // --------------------------------------------------------
@@ -684,34 +654,34 @@ function renderConversationList() {
         "conversation-list-content";
 
 
-      const title =
-        document.createElement(
-          "h3"
+      const level =
+        conversation.title.match(/^[0-5]/)?.[0] || "";
+      
+      const titleText =
+        conversation.title.replace(
+          /^[0-5]\s*—\s*/,
+          ""
         );
-
-      title.textContent =
-        conversation.title;
-
-
+      
       const meta =
         document.createElement(
           "div"
         );
-
+      
       meta.className =
         "conversation-list-meta";
-
+      
       meta.textContent =
-        `Level ${conversation.level} • ${conversation.topic}`;
-
-
-      const description =
+        `Level ${level}:`;
+      
+      
+      const title =
         document.createElement(
-          "p"
+          "h3"
         );
-
-      description.textContent =
-        conversation.description;
+      
+      title.textContent =
+        titleText;
 
 
       content.appendChild(
