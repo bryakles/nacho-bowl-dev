@@ -3253,8 +3253,8 @@ function startNachoBuilder(cards) {
   practicePanel.classList.add("hidden");
   studySetPanel.classList.add("hidden");
   resultsPanel.classList.add("hidden");
-
-  conversationHomeEntry?.classList.add("hidden");
+  conversationSelectionPanel?.classList.add("hidden");
+  conversationPanel?.classList.add("hidden");
 
   nachoBuilderPanel.classList.remove("hidden");
 
@@ -3262,26 +3262,27 @@ function startNachoBuilder(cards) {
   nachoBuilderWrongGuesses = 0;
 
   updateNachoPracticeSets();
-
   updateNachoBuilderBowl();
   updateNachoBuilderStrikes();
 
-  nachoBuilderCurrentSet = [...lastFilterSettings.sets].join(", ");
+  nachoBuilderCurrentSet =
+    [...lastFilterSettings.sets].join(", ");
 
-  const randomCard = cards[Math.floor(Math.random() * cards.length)];
+  const randomCard =
+    cards[Math.floor(Math.random() * cards.length)];
 
-  nachoBuilderCurrentSpanish = randomCard.spanish;
-  
-  nachoBuilderWord = removeSpanishArticle(randomCard.spanish).toLowerCase();
-  
+  nachoBuilderCurrentSpanish =
+    randomCard.spanish;
+
+  nachoBuilderWord =
+    removeSpanishArticle(randomCard.spanish).toLowerCase();
+
   console.log("Nacho Builder word:", nachoBuilderWord);
   console.log("Original card:", randomCard);
 
   renderNachoBuilderWord();
-  console.log("Rendering Nacho Keyboard");
   renderNachoBuilderKeyboard();
   updateNachoBuilderBowl();
-
 }
 
 function removeSpanishArticle(word) {
