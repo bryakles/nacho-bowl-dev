@@ -165,6 +165,8 @@ conversationBtn.addEventListener(
 
 async function openConversationSelection() {
 
+  saveCurrentPanel("conversationSelection");
+
   if (homeOnlyContent) {
     homeOnlyContent.classList.add("hidden");
   }
