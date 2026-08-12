@@ -2277,7 +2277,7 @@ backFromStudySet.addEventListener(
   "click",
   () => {
     studySetPanel.classList.add("hidden");
-    filterPanel.classList.remove("hidden");
+    showFilterPanel();
   }
 );
 
@@ -3718,7 +3718,9 @@ loadData().then(() => {
       nachoBuilderWrongGuesses = 0;
 
       nachoBuilderCurrentSet =
-        [...lastFilterSettings.sets].join(", ");
+        lastFilterSettings?.sets
+          ? [...lastFilterSettings.sets].join(", ")
+          : "";
 
       nachoBuilderCurrentSpanish =
         savedNachoSpanish;
