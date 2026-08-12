@@ -3765,6 +3765,11 @@ loadData().then(() => {
   const savedPanel =
     localStorage.getItem("nachoCurrentPanel");
 
+  if (savedPanel === "filter") {
+    showFilterPanel();
+    return;
+  }
+
   // ----------------------------------------------------------
   // RESTORE PRACTICE SCREEN
   // ----------------------------------------------------------
