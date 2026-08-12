@@ -3832,6 +3832,8 @@ loadData().then(() => {
       const cards =
         JSON.parse(savedNachoCards);
 
+      loadFilterSettings();
+
       filterPanel.classList.add("hidden");
       practicePanel.classList.add("hidden");
       studySetPanel.classList.add("hidden");
