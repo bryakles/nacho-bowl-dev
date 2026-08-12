@@ -3645,9 +3645,6 @@ loadData().then(() => {
   // RESTORE PRACTICE SESSION AFTER REFRESH
   // ----------------------------------------------------------
 
-  const savedPanel =
-    localStorage.getItem("nachoCurrentPanel");
-
   const savedPracticeCards =
     localStorage.getItem("nachoPracticeCards");
 
