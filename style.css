@@ -803,42 +803,33 @@ body.teacher-lock-active {
   padding: 0;
   overflow: hidden;
 
-  background: var(--color-surface);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border: 2px solid transparent;
+  border-left-width: 7px;
+  border-radius: var(--radius-md);
 
   text-align: left;
   font-family: var(--font-family);
   color: var(--color-text);
 
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
 
   transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    border-color 0.15s ease;
+    background var(--transition),
+    border-color var(--transition),
+    transform var(--transition);
 }
 
 .conversation-list-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 .conversation-list-card:active {
-  transform: translateY(-1px);
+  transform: translateY(0);
 }
 
 .conversation-list-content {
   padding: 0.7rem 0.9rem;
-}
-
-.conversation-list-content h3 {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--color-chip-text);
 }
 
 .conversation-list-meta {
@@ -850,32 +841,74 @@ body.teacher-lock-active {
   letter-spacing: 0.04em;
 }
 
+.conversation-list-content h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
 /* ============================================================
    CONVERSATION LEVEL COLORS
    ============================================================ */
 
+/* 0 = Grey */
 .conversation-level-0 {
-  border-left: 6px solid #94a3b8;
+  background: #f1f5f9;
+  border-left-color: #64748b;
 }
 
+.conversation-level-0:hover {
+  border-color: #64748b;
+}
+
+/* 1 = Orange */
 .conversation-level-1 {
-  border-left: 6px solid #22c55e;
+  background: #ffedd5;
+  border-left-color: #f97316;
 }
 
+.conversation-level-1:hover {
+  border-color: #f97316;
+}
+
+/* 2 = Red */
 .conversation-level-2 {
-  border-left: 6px solid #eab308;
+  background: #fee2e2;
+  border-left-color: #ef4444;
 }
 
+.conversation-level-2:hover {
+  border-color: #ef4444;
+}
+
+/* 3 = Green */
 .conversation-level-3 {
-  border-left: 6px solid #f97316;
+  background: #dcfce7;
+  border-left-color: #22c55e;
 }
 
+.conversation-level-3:hover {
+  border-color: #22c55e;
+}
+
+/* 4 = Purple */
 .conversation-level-4 {
-  border-left: 6px solid #ef4444;
+  background: #ede9fe;
+  border-left-color: #8b5cf6;
 }
 
+.conversation-level-4:hover {
+  border-color: #8b5cf6;
+}
+
+/* 5 = Blue */
 .conversation-level-5 {
-  border-left: 6px solid #8b5cf6;
+  background: #dbeafe;
+  border-left-color: #3b82f6;
+}
+
+.conversation-level-5:hover {
+  border-color: #3b82f6;
 }
 
 /* ============================================================
