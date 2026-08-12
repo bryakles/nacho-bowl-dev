@@ -3295,7 +3295,7 @@ function startNachoBuilder(cards) {
   nachoBuilderCurrentSet =
     [...lastFilterSettings.sets].join(", ");
 
-  const randomCard =
+    const randomCard =
     cards[Math.floor(Math.random() * cards.length)];
 
   nachoBuilderCurrentSpanish =
@@ -3303,6 +3303,16 @@ function startNachoBuilder(cards) {
 
   nachoBuilderWord =
     removeSpanishArticle(randomCard.spanish).toLowerCase();
+
+  localStorage.setItem(
+    "nachoBuilderCurrentSpanish",
+    nachoBuilderCurrentSpanish
+  );
+
+  localStorage.setItem(
+    "nachoBuilderCards",
+    JSON.stringify(cards)
+  );
 
   console.log("Nacho Builder word:", nachoBuilderWord);
   console.log("Original card:", randomCard);
@@ -3665,6 +3675,63 @@ loadData().then(() => {
       conversationPanel?.classList.add("hidden");
 
       showStudySet(cards);
+
+    } else {
+
+      showFilterPanel();
+
+    }
+
+    return;
+  }
+
+
+  // ----------------------------------------------------------
+  // RESTORE NACHO BUILDER
+  // ----------------------------------------------------------
+
+  if (savedPanel === "nachoBuilder") {
+
+    const savedNachoCards =
+      localStorage.getItem("nachoBuilderCards");
+
+    const savedNachoSpanish =
+      localStorage.getItem("nachoBuilderCurrentSpanish");
+
+    if (savedNachoCards && savedNachoSpanish) {
+
+      const cards =
+        JSON.parse(savedNachoCards);
+
+      filterPanel.classList.add("hidden");
+      practicePanel.classList.add("hidden");
+      studySetPanel.classList.add("hidden");
+      resultsPanel.classList.add("hidden");
+      conversationSelectionPanel?.classList.add("hidden");
+      conversationPanel?.classList.add("hidden");
+
+      nachoBuilderPanel.classList.remove("hidden");
+
+      nachoBuilderGuessedLetters.clear();
+      nachoBuilderWrongGuesses = 0;
+
+      nachoBuilderCurrentSet =
+        [...lastFilterSettings.sets].join(", ");
+
+      nachoBuilderCurrentSpanish =
+        savedNachoSpanish;
+
+      nachoBuilderWord =
+        removeSpanishArticle(
+          savedNachoSpanish
+        ).toLowerCase();
+
+      updateNachoPracticeSets();
+      updateNachoBuilderBowl();
+      updateNachoBuilderStrikes();
+
+      renderNachoBuilderWord();
+      renderNachoBuilderKeyboard();
 
     } else {
 
