@@ -813,6 +813,7 @@ body.teacher-lock-active {
 
   cursor: pointer;
   box-shadow: var(--shadow-sm);
+
   transition:
     transform 0.15s ease,
     box-shadow 0.15s ease,
@@ -834,21 +835,46 @@ body.teacher-lock-active {
 }
 
 .conversation-list-content h3 {
-  margin: 0 0 0.3rem;
-  font-size: 1.05rem;
-
-.conversation-list-meta {
-  margin-bottom: 0.65rem;
-  font-size: var(--font-size-sm);
-  font-weight: 700;
-  color: var(--color-secondary);
+  margin: 0;
+  font-size: 1.15rem;
+  color: var(--color-text);
 }
 
-.conversation-list-content p {
-  margin: 0;
+.conversation-list-meta {
+  margin-bottom: 0.2rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
-  line-height: 1.5;
+}
+
+/* ============================================================
+   CONVERSATION LEVEL COLORS
+   ============================================================ */
+
+.conversation-level-0 {
+  border-left: 6px solid #94a3b8;
+}
+
+.conversation-level-1 {
+  border-left: 6px solid #22c55e;
+}
+
+.conversation-level-2 {
+  border-left: 6px solid #eab308;
+}
+
+.conversation-level-3 {
+  border-left: 6px solid #f97316;
+}
+
+.conversation-level-4 {
+  border-left: 6px solid #ef4444;
+}
+
+.conversation-level-5 {
+  border-left: 6px solid #8b5cf6;
 }
 
 /* ============================================================
