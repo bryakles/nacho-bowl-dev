@@ -144,6 +144,30 @@ let sessionStartLength = 0;
 let practiceActive = false;
 let lastFilterSettings = null;  // For "practice again" button
 
+const savedFilterSettings =
+  localStorage.getItem("nachoLastFilterSettings");
+
+if (savedFilterSettings) {
+  try {
+    const saved = JSON.parse(savedFilterSettings);
+
+    selectedLevels = new Set(saved.levels || []);
+    selectedUnits = new Set(saved.units || []);
+    selectedSets = new Set(saved.sets || []);
+
+    lastFilterSettings = {
+      levels: new Set(selectedLevels),
+      units: new Set(selectedUnits),
+      sets: new Set(selectedSets)
+    };
+  } catch (error) {
+    console.error(
+      "Could not restore filter settings:",
+      error
+    );
+  }
+}
+
 let studySetSortColumn = "spanish";
 let studySetSortDirection = "asc";
 
@@ -543,13 +567,43 @@ function showPracticeScreen() {
 function saveCurrentPanel(panelName) {
   localStorage.setItem("nachoCurrentPanel", panelName);
 }
+function loadFilterSettings() {
+  const saved =
+    localStorage.getItem("nachoLastFilterSettings");
+
+  if (!saved) return;
+
+  try {
+    const settings = JSON.parse(saved);
+
+    selectedLevels = new Set(settings.levels || []);
+    selectedUnits = new Set(settings.units || []);
+    selectedSets = new Set(settings.sets || []);
+
+    lastFilterSettings = {
+      levels: new Set(selectedLevels),
+      units: new Set(selectedUnits),
+      sets: new Set(selectedSets)
+    };
+
+  } catch (error) {
+    console.error(
+      "Could not restore filter settings:",
+      error
+    );
+  }
+}
 
 function showFilterPanel() {
   filterPanel.classList.remove("hidden");
   practicePanel.classList.add("hidden");
   resultsPanel.classList.add("hidden");
 
+  loadFilterSettings();
+
   renderLevelChips();
+  renderUnitChips();
+  renderSetChips();
   loadMyStudySets();
   updateCardCountPreview();
 }
@@ -623,6 +677,15 @@ function renderLevelChips() {
           selectedUnits.clear();
           selectedSets.clear();
 
+          localStorage.setItem(
+            "nachoLastFilterSettings",
+            JSON.stringify({
+              levels: [...selectedLevels],
+              units: [...selectedUnits],
+              sets: [...selectedSets]
+            })
+          );
+
           renderUnitChips();
           renderSetChips();
           updateCardCountPreview();
@@ -688,6 +751,15 @@ function renderUnitChips() {
 
           // Reset set selections when units change.
           selectedSets.clear();
+
+          localStorage.setItem(
+            "nachoLastFilterSettings",
+            JSON.stringify({
+              levels: [...selectedLevels],
+              units: [...selectedUnits],
+              sets: [...selectedSets]
+            })
+          );
 
           renderSetChips();
           updateCardCountPreview();
@@ -762,6 +834,15 @@ function renderSetChips() {
           toggleSelection(
             selectedSets,
             set
+          );
+
+          localStorage.setItem(
+            "nachoLastFilterSettings",
+            JSON.stringify({
+              levels: [...selectedLevels],
+              units: [...selectedUnits],
+              sets: [...selectedSets]
+            })
           );
 
           updateCardCountPreview();
@@ -846,6 +927,24 @@ startPracticeBtn.addEventListener("click", () => {
     units: new Set(selectedUnits),
     sets: new Set(selectedSets),
   };
+
+  localStorage.setItem(
+  "nachoLastFilterSettings",
+  JSON.stringify({
+    levels: [...selectedLevels],
+    units: [...selectedUnits],
+    sets: [...selectedSets]
+  })
+);
+  
+  localStorage.setItem(
+    "nachoLastFilterSettings",
+    JSON.stringify({
+      levels: [...selectedLevels],
+      units: [...selectedUnits],
+      sets: [...selectedSets]
+    })
+  );
 
   if (practiceMode === "nacho-builder") {
     startNachoBuilder(filtered);
@@ -2642,11 +2741,18 @@ function showStudySet(cards) {
 
   saveCurrentPanel("studySet");
 
+  loadFilterSettings();
+
   currentStudySetCards = cards;
 
   localStorage.setItem(
     "nachoCurrentStudySetCards",
     JSON.stringify(cards)
+  );
+
+  localStorage.setItem(
+    "nachoCurrentPanel",
+    "studySet"
   );
 
   filterPanel.classList.add("hidden");
@@ -3275,6 +3381,7 @@ const spanishKeyboard = [
 function startNachoBuilder(cards) {
 
   saveCurrentPanel("nachoBuilder");
+  loadFilterSettings();
   
   filterPanel.classList.add("hidden");
   practicePanel.classList.add("hidden");
@@ -3293,8 +3400,8 @@ function startNachoBuilder(cards) {
   updateNachoBuilderStrikes();
 
   nachoBuilderCurrentSet =
-    lastFilterSettings?.sets
-      ? [...lastFilterSettings.sets].join(", ")
+    selectedSets.size
+      ? [...selectedSets].join(", ")
       : "";
 
     const randomCard =
@@ -3314,6 +3421,11 @@ function startNachoBuilder(cards) {
   localStorage.setItem(
     "nachoBuilderCards",
     JSON.stringify(cards)
+  );
+
+  localStorage.setItem(
+    "nachoCurrentPanel",
+    "nachoBuilder"
   );
 
   console.log("Nacho Builder word:", nachoBuilderWord);
