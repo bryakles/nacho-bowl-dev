@@ -2258,12 +2258,6 @@ backFromStudySet.addEventListener(
   "click",
   () => {
     studySetPanel.classList.add("hidden");
-    practicePanel.classList.add("hidden");
-    resultsPanel.classList.add("hidden");
-    conversationSelectionPanel.classList.add("hidden");
-    conversationPanel.classList.add("hidden");
-    nachoBuilderPanel.classList.add("hidden");
-
     filterPanel.classList.remove("hidden");
   }
 );
