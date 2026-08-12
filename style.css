@@ -995,6 +995,20 @@ body.teacher-lock-active {
 }
 .btn-ghost:hover:not(:disabled) { border-color: var(--color-text-muted); color: var(--color-text); }
 
+#teacherModeBtn {
+  position: fixed;
+  bottom: 70px;
+  left: 1rem;
+  z-index: 1000;
+  padding: 0.4rem 0.75rem;
+  font-size: var(--font-size-sm);
+  opacity: 0.7;
+}
+
+#teacherModeBtn:hover {
+  opacity: 1;
+}
+
 .multiple-choice-btn {
   width: 100%;
   padding: 0.75rem 1rem;
