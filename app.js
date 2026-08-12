@@ -3817,6 +3817,26 @@ loadData().then(() => {
 
 
   // ----------------------------------------------------------
+  // RESTORE CONVERSATIONS
+  // ----------------------------------------------------------
+
+  if (savedPanel === "conversationSelection") {
+  
+    filterPanel.classList.add("hidden");
+    practicePanel.classList.add("hidden");
+    studySetPanel.classList.add("hidden");
+    resultsPanel.classList.add("hidden");
+    nachoBuilderPanel.classList.add("hidden");
+    conversationPanel?.classList.add("hidden");
+  
+    conversationSelectionPanel?.classList.remove("hidden");
+  
+    await loadConversationIndex();
+  
+    return;
+  }
+  
+  // ----------------------------------------------------------
   // RESTORE NACHO BUILDER
   // ----------------------------------------------------------
 
