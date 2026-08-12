@@ -3831,7 +3831,7 @@ loadData().then(() => {
   
     conversationSelectionPanel?.classList.remove("hidden");
   
-    await loadConversationIndex();
+    loadConversationIndex();
   
     return;
   }
