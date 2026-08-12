@@ -3630,18 +3630,25 @@ loadData().then(() => {
   const savedPanel =
     localStorage.getItem("nachoCurrentPanel");
 
-  if (savedPanel === "practice") {
-    practiceScreen.classList.remove("hidden");
-    loginScreen.classList.add("hidden");
+  // ----------------------------------------------------------
+  // RESTORE PRACTICE SCREEN
+  // ----------------------------------------------------------
 
-    welcomeName.textContent =
-      currentUser.name;
+  practiceScreen.classList.remove("hidden");
+  loginScreen.classList.add("hidden");
 
-    renderModeChips();
-    renderAttemptHistory();
-    updateFooterNachos();
+  welcomeName.textContent =
+    currentUser.name;
 
-  } else if (savedPanel === "studySet") {
+  renderModeChips();
+  renderAttemptHistory();
+  updateFooterNachos();
+
+  // ----------------------------------------------------------
+  // RESTORE STUDY SET
+  // ----------------------------------------------------------
+
+  if (savedPanel === "studySet") {
 
     const savedStudySetCards =
       localStorage.getItem("nachoCurrentStudySetCards");
@@ -3651,76 +3658,96 @@ loadData().then(() => {
       const cards =
         JSON.parse(savedStudySetCards);
 
+      filterPanel.classList.add("hidden");
+      practicePanel.classList.add("hidden");
+      resultsPanel.classList.add("hidden");
+      conversationSelectionPanel?.classList.add("hidden");
+      conversationPanel?.classList.add("hidden");
+
       showStudySet(cards);
 
     } else {
 
-      showPracticeScreen();
+      showFilterPanel();
 
     }
 
-  } else {
-
-    showPracticeScreen();
-
+    return;
   }
 
   // ----------------------------------------------------------
-  // RESTORE PRACTICE SESSION AFTER REFRESH
+  // RESTORE PRACTICE SESSION
   // ----------------------------------------------------------
 
-  const savedPracticeCards =
-    localStorage.getItem("nachoPracticeCards");
+  if (savedPanel === "practice") {
 
-  const savedPracticeMode =
-    localStorage.getItem("nachoPracticeMode");
+    const savedPracticeCards =
+      localStorage.getItem("nachoPracticeCards");
 
-  const savedPracticeLength =
-    localStorage.getItem("nachoPracticeLength");
+    const savedPracticeMode =
+      localStorage.getItem("nachoPracticeMode");
 
-  if (
-    savedPanel === "practice" &&
-    savedPracticeCards &&
-    savedPracticeMode
-  ) {
+    const savedPracticeLength =
+      localStorage.getItem("nachoPracticeLength");
 
-    practiceCards =
-      JSON.parse(savedPracticeCards);
+    if (
+      savedPracticeCards &&
+      savedPracticeMode
+    ) {
 
-    practiceMode =
-      savedPracticeMode;
+      practiceCards =
+        JSON.parse(savedPracticeCards);
 
-    maxCardsPerSession =
-      Number(savedPracticeLength) || practiceCards.length;
+      practiceMode =
+        savedPracticeMode;
 
-    sessionStartMode = practiceMode;
-    sessionStartLength = maxCardsPerSession;
+      maxCardsPerSession =
+        Number(savedPracticeLength) ||
+        practiceCards.length;
 
-    resetPracticeState();
-    practiceActive = true;
+      sessionStartMode =
+        practiceMode;
 
-    sessionModeLabel =
-      PRACTICE_MODES[practiceMode]?.label ||
-      practiceMode;
+      sessionStartLength =
+        maxCardsPerSession;
 
-    filterPanel.classList.add("hidden");
-    practicePanel.classList.remove("hidden");
-    resultsPanel.classList.add("hidden");
+      resetPracticeState();
+      practiceActive = true;
 
-    practiceModeTitle.textContent =
-      PRACTICE_MODES[practiceMode]?.label ||
-      practiceMode;
+      sessionModeLabel =
+        PRACTICE_MODES[practiceMode]?.label ||
+        practiceMode;
 
-    const setNames = [
-      ...new Set(
-        practiceCards.map(c => c.setName)
-      )
-    ].join(", ");
+      filterPanel.classList.add("hidden");
+      practicePanel.classList.remove("hidden");
+      studySetPanel.classList.add("hidden");
+      resultsPanel.classList.add("hidden");
+      conversationSelectionPanel?.classList.add("hidden");
+      conversationPanel?.classList.add("hidden");
 
-    practiceSetLabel.textContent =
-      setNames;
+      practiceModeTitle.textContent =
+        PRACTICE_MODES[practiceMode]?.label ||
+        practiceMode;
 
-    updateStats();
-    showNextCard();
+      const setNames = [
+        ...new Set(
+          practiceCards.map(c => c.setName)
+        )
+      ].join(", ");
+
+      practiceSetLabel.textContent =
+        setNames;
+
+      updateStats();
+      showNextCard();
+
+      return;
+    }
   }
+
+  // ----------------------------------------------------------
+  // DEFAULT: FILTER SCREEN
+  // ----------------------------------------------------------
+
+  showFilterPanel();
 });
