@@ -567,11 +567,14 @@ function showPracticeScreen() {
 function saveCurrentPanel(panelName) {
   localStorage.setItem("nachoCurrentPanel", panelName);
 }
+
 function loadFilterSettings() {
   const saved =
     localStorage.getItem("nachoLastFilterSettings");
 
-  if (!saved) return;
+  if (!saved) {
+    return;
+  }
 
   try {
     const settings = JSON.parse(saved);
@@ -974,7 +977,7 @@ nachoNextWordBtn.addEventListener("click", () => {
 
 nachoBackBtn.addEventListener("click", () => {
   nachoBuilderPanel.classList.add("hidden");
-  filterPanel.classList.remove("hidden");
+  showFilterPanel();
 });
 
 function openTeacherSettings() {
@@ -3382,15 +3385,6 @@ function startNachoBuilder(cards) {
 
   saveCurrentPanel("nachoBuilder");
   
-  localStorage.setItem(
-    "nachoLastFilterSettings",
-    JSON.stringify({
-      levels: [...selectedLevels],
-      units: [...selectedUnits],
-      sets: [...selectedSets]
-    })
-  );
-
   loadFilterSettings();
   
   filterPanel.classList.add("hidden");
@@ -3831,8 +3825,6 @@ loadData().then(() => {
 
       const cards =
         JSON.parse(savedNachoCards);
-
-      loadFilterSettings();
 
       filterPanel.classList.add("hidden");
       practicePanel.classList.add("hidden");
