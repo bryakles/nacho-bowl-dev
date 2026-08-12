@@ -241,12 +241,20 @@ function updateTeacherLockIndicator() {
 }
 
 function saveTeacherSettings() {
-  if (!currentUser || !currentUser.accountType.startsWith("Teacher")) {
+  if (
+    !currentUser ||
+    !currentUser.accountType.startsWith("Teacher")
+  ) {
     return;
   }
 
   const teacherKey = currentUser.accountType;
   const languageKey = currentUser.language;
+  const period = selectedTeacherPeriod;
+
+  if (!period) {
+    return;
+  }
 
   let allSettings = {};
 
@@ -269,10 +277,6 @@ function saveTeacherSettings() {
   Object.keys(PRACTICE_MODES).forEach(mode => {
     settings[mode] = PRACTICE_MODES[mode].enabled;
   });
-
-  // For now, save to the teacher's first period.
-  // We'll replace this with a period selector next.
-  const period = selectedTeacherPeriod;
 
   allSettings[teacherKey][languageKey][period] = settings;
 
@@ -1056,10 +1060,10 @@ function openTeacherSettings() {
       allSettings = JSON.parse(saved);
     }
 
-    const period = periodSelect.value;
+    selectedTeacherPeriod = periodSelect.value;
 
     const settings =
-      allSettings?.[teacherKey]?.[languageKey]?.[period];
+      allSettings?.[teacherKey]?.[languageKey]?.[selectedTeacherPeriod];
 
     // Default: everything ON
     Object.keys(PRACTICE_MODES).forEach(mode => {
