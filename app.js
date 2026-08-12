@@ -3722,11 +3722,6 @@ loadData().then(() => {
       nachoBuilderGuessedLetters.clear();
       nachoBuilderWrongGuesses = 0;
 
-      nachoBuilderCurrentSet =
-        lastFilterSettings?.sets
-          ? [...lastFilterSettings.sets].join(", ")
-          : "";
-
       nachoBuilderCurrentSpanish =
         savedNachoSpanish;
 
@@ -3735,7 +3730,6 @@ loadData().then(() => {
           savedNachoSpanish
         ).toLowerCase();
 
-      updateNachoPracticeSets();
       updateNachoBuilderBowl();
       updateNachoBuilderStrikes();
 
