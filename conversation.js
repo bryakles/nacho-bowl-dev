@@ -630,8 +630,16 @@ function renderConversationList() {
       card.type =
         "button";
 
+      const levelMatch =
+        conversation.title.match(/^[0-5]/);
+      
+      const conversationLevel =
+        levelMatch
+          ? levelMatch[0]
+          : "default";
+      
       card.className =
-        "conversation-list-card";
+        `conversation-list-card conversation-level-${conversationLevel}`;
 
 
       // --------------------------------------------------------
