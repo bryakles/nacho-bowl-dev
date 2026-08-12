@@ -540,7 +540,12 @@ function showPracticeScreen() {
   updateFooterNachos();
 }
 
+function saveCurrentPanel(panelName) {
+  localStorage.setItem("nachoCurrentPanel", panelName);
+}
+
 function showFilterPanel() {
+  saveCurrentPanel("filter");
   filterPanel.classList.remove("hidden");
   practicePanel.classList.add("hidden");
   resultsPanel.classList.add("hidden");
@@ -963,6 +968,9 @@ function shuffleArray(arr) {
 }
 
 function beginPractice(filtered) {
+
+  saveCurrentPanel("practice");
+  
   console.log("beginPractice() called");
   console.log("MODE:", practiceMode);
   console.log(filtered.map(card => card.spanish));
@@ -972,14 +980,28 @@ function beginPractice(filtered) {
   sessionStartMode = practiceMode;
   sessionStartLength = maxCardsPerSession;
 
+  localStorage.setItem(
+    "nachoPracticeMode",
+    practiceMode
+  );
+  
+  localStorage.setItem(
+    "nachoPracticeLength",
+    maxCardsPerSession
+  );
+
   if (practiceMode === "ordered-answer") {
     practiceCards = [...filtered].slice(0, maxCardsPerSession);
   } else {
     practiceCards = shuffleArray(filtered).slice(0, maxCardsPerSession);
   }
-
-  resetPracticeState();
-  practiceActive = true;
+  
+  localStorage.setItem(
+    "nachoPracticeCards",
+    JSON.stringify(practiceCards)
+  );
+  
+  resetPracticeState();  practiceActive = true;
 
   sessionModeLabel =
     PRACTICE_MODES[practiceMode]?.label || practiceMode;
@@ -2619,6 +2641,8 @@ let currentStudySetCards = [];
 
 function showStudySet(cards) {
 
+  saveCurrentPanel("studySet");
+
   currentStudySetCards = cards;
 
   filterPanel.classList.add("hidden");
@@ -3247,6 +3271,8 @@ const spanishKeyboard = [
 
 function startNachoBuilder(cards) {
 
+  saveCurrentPanel("nachoBuilder");
+  
   filterPanel.classList.add("hidden");
   practicePanel.classList.add("hidden");
   studySetPanel.classList.add("hidden");
@@ -3579,17 +3605,86 @@ function updateNachoBuilderStrikes() {
 // INIT
 // ============================================================
 loadTeacherSettings();
+
 loadData().then(() => {
-  const savedUsername = localStorage.getItem("nachoCurrentUser");
+  const savedUsername =
+    localStorage.getItem("nachoCurrentUser");
 
-  if (savedUsername) {
-    const user = allAccounts.find(
-      a => a.username === savedUsername
-    );
+  if (!savedUsername) {
+    return;
+  }
 
-    if (user) {
-      currentUser = user;
-      showPracticeScreen();
-    }
+  const user = allAccounts.find(
+    a => a.username === savedUsername
+  );
+
+  if (!user) {
+    return;
+  }
+
+  currentUser = user;
+
+  showPracticeScreen();
+
+  // ----------------------------------------------------------
+  // RESTORE PRACTICE SESSION AFTER REFRESH
+  // ----------------------------------------------------------
+
+  const savedPanel =
+    localStorage.getItem("nachoCurrentPanel");
+
+  const savedPracticeCards =
+    localStorage.getItem("nachoPracticeCards");
+
+  const savedPracticeMode =
+    localStorage.getItem("nachoPracticeMode");
+
+  const savedPracticeLength =
+    localStorage.getItem("nachoPracticeLength");
+
+  if (
+    savedPanel === "practice" &&
+    savedPracticeCards &&
+    savedPracticeMode
+  ) {
+
+    practiceCards =
+      JSON.parse(savedPracticeCards);
+
+    practiceMode =
+      savedPracticeMode;
+
+    maxCardsPerSession =
+      Number(savedPracticeLength) || practiceCards.length;
+
+    sessionStartMode = practiceMode;
+    sessionStartLength = maxCardsPerSession;
+
+    resetPracticeState();
+    practiceActive = true;
+
+    sessionModeLabel =
+      PRACTICE_MODES[practiceMode]?.label ||
+      practiceMode;
+
+    filterPanel.classList.add("hidden");
+    practicePanel.classList.remove("hidden");
+    resultsPanel.classList.add("hidden");
+
+    practiceModeTitle.textContent =
+      PRACTICE_MODES[practiceMode]?.label ||
+      practiceMode;
+
+    const setNames = [
+      ...new Set(
+        practiceCards.map(c => c.setName)
+      )
+    ].join(", ");
+
+    practiceSetLabel.textContent =
+      setNames;
+
+    updateStats();
+    showNextCard();
   }
 });
