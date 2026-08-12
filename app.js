@@ -545,7 +545,6 @@ function saveCurrentPanel(panelName) {
 }
 
 function showFilterPanel() {
-  saveCurrentPanel("filter");
   filterPanel.classList.remove("hidden");
   practicePanel.classList.add("hidden");
   resultsPanel.classList.add("hidden");
