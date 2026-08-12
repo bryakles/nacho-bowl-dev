@@ -3381,6 +3381,16 @@ const spanishKeyboard = [
 function startNachoBuilder(cards) {
 
   saveCurrentPanel("nachoBuilder");
+  
+  localStorage.setItem(
+    "nachoLastFilterSettings",
+    JSON.stringify({
+      levels: [...selectedLevels],
+      units: [...selectedUnits],
+      sets: [...selectedSets]
+    })
+  );
+
   loadFilterSettings();
   
   filterPanel.classList.add("hidden");
