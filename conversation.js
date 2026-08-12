@@ -146,6 +146,26 @@ const conversationNextBtn =
   document.getElementById("conversationNextBtn");
 
 // ============================================================
+// CONVERSATION AUTO-ACCENTS
+// ============================================================
+
+conversationWritingInput.addEventListener("input", () => {
+  const pos = conversationWritingInput.selectionStart;
+  const original = conversationWritingInput.value;
+
+  const converted =
+    original.replace(
+      /[AEIOUNY]/g,
+      ch => ACCENT_MAP[ch]
+    );
+
+  if (converted !== original) {
+    conversationWritingInput.value = converted;
+    conversationWritingInput.setSelectionRange(pos, pos);
+  }
+});
+
+// ============================================================
 // OPEN CONVERSATIONS
 // ============================================================
 
