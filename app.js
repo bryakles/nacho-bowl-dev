@@ -3629,34 +3629,42 @@ loadData().then(() => {
 
   const savedPanel =
     localStorage.getItem("nachoCurrentPanel");
-  
+
   if (savedPanel === "practice") {
-    // ...
-    
+    practiceScreen.classList.remove("hidden");
+    loginScreen.classList.add("hidden");
+
+    welcomeName.textContent =
+      currentUser.name;
+
+    renderModeChips();
+    renderAttemptHistory();
+    updateFooterNachos();
+
   } else if (savedPanel === "studySet") {
-  
+
     const savedStudySetCards =
       localStorage.getItem("nachoCurrentStudySetCards");
-  
+
     if (savedStudySetCards) {
-  
+
       const cards =
         JSON.parse(savedStudySetCards);
-  
+
       showStudySet(cards);
-  
+
     } else {
-  
+
       showPracticeScreen();
-  
+
     }
-  
+
   } else {
-  
+
     showPracticeScreen();
-  
+
   }
-  
+
   // ----------------------------------------------------------
   // RESTORE PRACTICE SESSION AFTER REFRESH
   // ----------------------------------------------------------
