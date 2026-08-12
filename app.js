@@ -182,15 +182,43 @@ const practiceModes = {
   "nacho-builder": "🌮 Nacho Builder",
 };
 
-const TEACHER_PASSWORD = "nacho5";
 const TEACHER_SETTINGS_KEY = "nachoBowlTeacherSettings";
 
 function loadTeacherSettings() {
+  // Start with all modes enabled
+  Object.keys(PRACTICE_MODES).forEach(mode => {
+    PRACTICE_MODES[mode].enabled = true;
+  });
+
+  if (!currentUser) {
+    updateTeacherLockIndicator();
+    return;
+  }
+
   const saved = localStorage.getItem(TEACHER_SETTINGS_KEY);
 
-  if (saved) {
-    const settings = JSON.parse(saved);
+  if (!saved) {
+    updateTeacherLockIndicator();
+    return;
+  }
 
+  const allSettings = JSON.parse(saved);
+
+  let teacherKey = currentUser.accountType;
+
+  // Students use the matching teacher:
+  // Student C → Teacher C
+  if (teacherKey.startsWith("Student ")) {
+    teacherKey = teacherKey.replace("Student ", "Teacher ");
+  }
+
+  const languageKey = currentUser.language;
+  const period = currentUser.period?.[0];
+
+  const settings =
+    allSettings?.[teacherKey]?.[languageKey]?.[period];
+
+  if (settings) {
     Object.keys(settings).forEach(mode => {
       if (PRACTICE_MODES[mode]) {
         PRACTICE_MODES[mode].enabled = settings[mode];
@@ -202,25 +230,44 @@ function loadTeacherSettings() {
 }
 
 function saveTeacherSettings() {
+  if (!currentUser || !currentUser.accountType.startsWith("Teacher")) {
+    return;
+  }
+
+  const teacherKey = currentUser.accountType;
+  const languageKey = currentUser.language;
+
+  let allSettings = {};
+
+  const saved = localStorage.getItem(TEACHER_SETTINGS_KEY);
+
+  if (saved) {
+    allSettings = JSON.parse(saved);
+  }
+
+  if (!allSettings[teacherKey]) {
+    allSettings[teacherKey] = {};
+  }
+
+  if (!allSettings[teacherKey][languageKey]) {
+    allSettings[teacherKey][languageKey] = {};
+  }
+
   const settings = {};
 
   Object.keys(PRACTICE_MODES).forEach(mode => {
     settings[mode] = PRACTICE_MODES[mode].enabled;
   });
 
+  // For now, save to the teacher's first period.
+  // We'll replace this with a period selector next.
+  const period = currentUser.period[0];
+
+  allSettings[teacherKey][languageKey][period] = settings;
+
   localStorage.setItem(
     TEACHER_SETTINGS_KEY,
-    JSON.stringify(settings)
-  );
-}
-
-function updateTeacherLockIndicator() {
-  const anyLocked = Object.values(PRACTICE_MODES)
-    .some(mode => !mode.enabled);
-
-  document.body.classList.toggle(
-    "teacher-lock-active",
-    anyLocked
+    JSON.stringify(allSettings)
   );
 }
 
@@ -268,12 +315,6 @@ const teacherModeBtn = document.getElementById("teacherModeBtn");
 const teacherDialog = document.getElementById("teacherDialog");
 const teacherModeList = document.getElementById("teacherModeList");
 const closeTeacherBtn = document.getElementById("closeTeacherBtn");
-
-const teacherPasswordDialog = document.getElementById("teacherPasswordDialog");
-const teacherPasswordInput = document.getElementById("teacherPasswordInput");
-const teacherPasswordSubmit = document.getElementById("teacherPasswordSubmit");
-const teacherPasswordCancel = document.getElementById("teacherPasswordCancel");
-const teacherPasswordError = document.getElementById("teacherPasswordError");
 
 const practiceSetLabel = document.getElementById("practiceSetLabel");
 const practiceProgress = document.getElementById("practiceProgress");
@@ -498,6 +539,7 @@ loginForm.addEventListener("submit", (e) => {
   }
   loginError.classList.add("hidden");
   currentUser = user;
+  loadTeacherSettings();
   localStorage.setItem("nachoCurrentUser", user.username);
   showPracticeScreen();
 });
@@ -523,35 +565,13 @@ boredBtn.addEventListener("click", () => {
 });
 
 teacherModeBtn.addEventListener("click", () => {
-  teacherPasswordInput.value = "";
-  teacherPasswordError.classList.add("hidden");
-  teacherPasswordDialog.classList.remove("hidden");
-  teacherPasswordInput.focus();
-});
-
-
-teacherPasswordSubmit.addEventListener("click", () => {
-  const password = teacherPasswordInput.value.trim();
-
-  if (password !== TEACHER_PASSWORD) {
-    teacherPasswordError.classList.remove("hidden");
+  if (!currentUser || !currentUser.accountType.startsWith("Teacher")) {
     return;
   }
 
-  teacherPasswordDialog.classList.add("hidden");
-  teacherPasswordInput.value = "";
   openTeacherSettings();
 });
 
-teacherPasswordInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    teacherPasswordSubmit.click();
-  }
-});
-
-teacherPasswordCancel.addEventListener("click", () => {
-  teacherPasswordDialog.classList.add("hidden");
-});
 
 closeTeacherBtn.addEventListener("click", () => {
   teacherDialog.classList.add("hidden");
@@ -991,55 +1011,116 @@ nachoBackBtn.addEventListener("click", () => {
 function openTeacherSettings() {
   teacherModeList.innerHTML = "";
 
-  Object.keys(PRACTICE_MODES).forEach(mode => {
-    const row = document.createElement("div");
-    row.className = "teacher-toggle-row";
+  // Create period selector
+  const periodLabel = document.createElement("label");
+  periodLabel.textContent = "Period: ";
 
-    const label = document.createElement("span");
-    label.textContent = PRACTICE_MODES[mode].label;
+  const periodSelect = document.createElement("select");
+  periodSelect.id = "teacherPeriodSelect";
 
-    const button = document.createElement("button");
-    button.className = PRACTICE_MODES[mode].enabled
-      ? "toggle-on"
-      : "toggle-off";
+  currentUser.period.forEach(period => {
+    const option = document.createElement("option");
+    option.value = period;
+    option.textContent = `Period ${period}`;
+    periodSelect.appendChild(option);
+  });
 
-    button.textContent = PRACTICE_MODES[mode].enabled
-      ? "ON"
-      : "OFF";
+  teacherModeList.appendChild(periodLabel);
+  teacherModeList.appendChild(periodSelect);
 
-    button.addEventListener("click", () => {
-      PRACTICE_MODES[mode].enabled = !PRACTICE_MODES[mode].enabled;
-    
-      saveTeacherSettings();
-      updateTeacherLockIndicator();
-    
-      if (!PRACTICE_MODES[mode].enabled && practiceMode === mode) {
-        const nextMode = Object.keys(PRACTICE_MODES)
-          .find(m => PRACTICE_MODES[m].enabled);
-      
-        if (nextMode) {
-          practiceMode = nextMode;
-        }
-      }
-      
-      button.className = PRACTICE_MODES[mode].enabled
-        ? "toggle-on"
-        : "toggle-off";
+  const teacherKey = currentUser.accountType;
+  const languageKey = currentUser.language;
 
-      button.textContent = PRACTICE_MODES[mode].enabled
-        ? "ON"
-        : "OFF";
+  function loadSelectedPeriodSettings() {
+    const saved = localStorage.getItem(TEACHER_SETTINGS_KEY);
 
-      renderModeChips();
-      updateCardCountPreview();
+    let allSettings = {};
+
+    if (saved) {
+      allSettings = JSON.parse(saved);
+    }
+
+    const period = periodSelect.value;
+
+    const settings =
+      allSettings?.[teacherKey]?.[languageKey]?.[period];
+
+    // Default: everything ON
+    Object.keys(PRACTICE_MODES).forEach(mode => {
+      PRACTICE_MODES[mode].enabled =
+        settings?.[mode] ?? true;
     });
 
-    row.appendChild(label);
-    row.appendChild(button);
+    renderTeacherToggles();
+  }
 
-    console.log("Adding teacher row:", PRACTICE_MODES[mode].label);
-    teacherModeList.appendChild(row);
-  });
+  function renderTeacherToggles() {
+    // Remove old toggle rows but keep selector
+    teacherModeList
+      .querySelectorAll(".teacher-toggle-row")
+      .forEach(row => row.remove());
+
+    Object.keys(PRACTICE_MODES).forEach(mode => {
+      const row = document.createElement("div");
+      row.className = "teacher-toggle-row";
+
+      const label = document.createElement("span");
+      label.textContent = PRACTICE_MODES[mode].label;
+
+      const button = document.createElement("button");
+
+      function updateButton() {
+        button.className =
+          PRACTICE_MODES[mode].enabled
+            ? "toggle-on"
+            : "toggle-off";
+
+        button.textContent =
+          PRACTICE_MODES[mode].enabled
+            ? "ON"
+            : "OFF";
+      }
+
+      updateButton();
+
+      button.addEventListener("click", () => {
+        PRACTICE_MODES[mode].enabled =
+          !PRACTICE_MODES[mode].enabled;
+
+        saveTeacherSettings();
+
+        updateTeacherLockIndicator();
+
+        if (
+          !PRACTICE_MODES[mode].enabled &&
+          practiceMode === mode
+        ) {
+          const nextMode = Object.keys(PRACTICE_MODES)
+            .find(m => PRACTICE_MODES[m].enabled);
+
+          if (nextMode) {
+            practiceMode = nextMode;
+          }
+        }
+
+        updateButton();
+        renderModeChips();
+        updateCardCountPreview();
+      });
+
+      row.appendChild(label);
+      row.appendChild(button);
+
+      teacherModeList.appendChild(row);
+    });
+  }
+
+  periodSelect.addEventListener(
+    "change",
+    loadSelectedPeriodSettings
+  );
+
+  loadSelectedPeriodSettings();
 
   teacherDialog.classList.remove("hidden");
 }
@@ -3748,7 +3829,6 @@ function updateNachoBuilderStrikes() {
 // ============================================================
 // INIT
 // ============================================================
-loadTeacherSettings();
 
 loadData().then(() => {
   const savedUsername =
@@ -3767,6 +3847,7 @@ loadData().then(() => {
   }
 
   currentUser = user;
+  loadTeacherSettings();
 
   const savedPanel =
     localStorage.getItem("nachoCurrentPanel");
