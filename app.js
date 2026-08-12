@@ -3362,11 +3362,16 @@ function renderNachoBuilderWord() {
 }
 
 function updateNachoPracticeSets() {
-  const selectedSetNames = [...lastFilterSettings.sets];
+  const selectedSetNames =
+    lastFilterSettings?.sets
+      ? [...lastFilterSettings.sets]
+      : [];
 
   nachoPracticeSets.innerHTML = `
     <strong>Practicing:</strong>
-    ${selectedSetNames.join(" · ")}
+    ${selectedSetNames.length
+      ? selectedSetNames.join(" · ")
+      : "Saved practice set"}
   `;
 }
 
