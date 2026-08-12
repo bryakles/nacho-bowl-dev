@@ -3623,7 +3623,23 @@ loadData().then(() => {
 
   currentUser = user;
 
-  showPracticeScreen();
+  const savedPanel =
+    localStorage.getItem("nachoCurrentPanel");
+  
+  if (savedPanel === "practice") {
+    practiceScreen.classList.remove("hidden");
+    loginScreen.classList.add("hidden");
+  
+    welcomeName.textContent =
+      currentUser.name;
+  
+    renderModeChips();
+    renderAttemptHistory();
+    updateFooterNachos();
+  
+  } else {
+    showPracticeScreen();
+  }
 
   // ----------------------------------------------------------
   // RESTORE PRACTICE SESSION AFTER REFRESH
