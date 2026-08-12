@@ -988,6 +988,8 @@ function beginPractice(filtered) {
   practicePanel.classList.remove("hidden");
   resultsPanel.classList.add("hidden");
 
+  conversationHomeEntry?.classList.add("hidden");
+
   practiceModeTitle.textContent =
     PRACTICE_MODES[practiceMode].label;
 
@@ -2625,6 +2627,8 @@ function showStudySet(cards) {
   practicePanel.classList.add("hidden");
   resultsPanel.classList.add("hidden");
 
+  conversationHomeEntry?.classList.add("hidden");
+
   studySetPanel.classList.remove("hidden");
 
   studySetContainer.innerHTML = `
@@ -3248,6 +3252,8 @@ function startNachoBuilder(cards) {
   practicePanel.classList.add("hidden");
   studySetPanel.classList.add("hidden");
   resultsPanel.classList.add("hidden");
+
+  conversationHomeEntry?.classList.add("hidden");
 
   nachoBuilderPanel.classList.remove("hidden");
 
