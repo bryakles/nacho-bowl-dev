@@ -229,6 +229,16 @@ function loadTeacherSettings() {
   updateTeacherLockIndicator();
 }
 
+function updateTeacherLockIndicator() {
+  const anyLocked = Object.values(PRACTICE_MODES)
+    .some(mode => !mode.enabled);
+
+  document.body.classList.toggle(
+    "teacher-lock-active",
+    anyLocked
+  );
+}
+
 function saveTeacherSettings() {
   if (!currentUser || !currentUser.accountType.startsWith("Teacher")) {
     return;
