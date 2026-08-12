@@ -121,6 +121,7 @@ let allCards = [];       // All cards loaded from Google Sheet
 let allAccounts = [];    // All accounts loaded from Google Sheet
 let boredCards = [];     // Bored button emoji cards
 let currentUser = null;  // Logged-in student { name, username, password }
+let selectedTeacherPeriod = null;
 
 let selectedLevels = new Set();
 let selectedUnits = new Set();
@@ -271,7 +272,7 @@ function saveTeacherSettings() {
 
   // For now, save to the teacher's first period.
   // We'll replace this with a period selector next.
-  const period = currentUser.period[0];
+  const period = selectedTeacherPeriod;
 
   allSettings[teacherKey][languageKey][period] = settings;
 
@@ -1019,6 +1020,9 @@ nachoBackBtn.addEventListener("click", () => {
 });
 
 function openTeacherSettings() {
+  
+  let selectedTeacherPeriod = currentUser.period[0];
+  
   teacherModeList.innerHTML = "";
 
   // Create period selector
@@ -1034,6 +1038,8 @@ function openTeacherSettings() {
     option.textContent = `Period ${period}`;
     periodSelect.appendChild(option);
   });
+  
+  selectedTeacherPeriod = currentUser.period[0];
 
   teacherModeList.appendChild(periodLabel);
   teacherModeList.appendChild(periodSelect);
@@ -1125,10 +1131,10 @@ function openTeacherSettings() {
     });
   }
 
-  periodSelect.addEventListener(
-    "change",
-    loadSelectedPeriodSettings
-  );
+  periodSelect.addEventListener("change", () => {
+    selectedTeacherPeriod = periodSelect.value;
+    loadSelectedPeriodSettings();
+  });
 
   loadSelectedPeriodSettings();
 
