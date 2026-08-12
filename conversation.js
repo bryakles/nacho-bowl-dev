@@ -692,10 +692,6 @@ function renderConversationList() {
         meta
       );
 
-      content.appendChild(
-        description
-      );
-
       card.appendChild(
         content
       );
