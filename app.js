@@ -3293,7 +3293,9 @@ function startNachoBuilder(cards) {
   updateNachoBuilderStrikes();
 
   nachoBuilderCurrentSet =
-    [...lastFilterSettings.sets].join(", ");
+    lastFilterSettings?.sets
+      ? [...lastFilterSettings.sets].join(", ")
+      : "";
 
     const randomCard =
     cards[Math.floor(Math.random() * cards.length)];
