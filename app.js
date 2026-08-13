@@ -552,7 +552,19 @@ async function loadData() {
 
   accountsText =
     localStorage.getItem(ACCOUNTS_CACHE_KEY);
-
+  
+  console.log(
+    "CACHED ACCOUNTS LENGTH:",
+    accountsText ? accountsText.length : 0
+  );
+  
+  console.log(
+    "CACHED ACCOUNTS START:",
+    accountsText
+      ? accountsText.substring(0, 300)
+      : "NO CACHE"
+  );
+  
   boredText =
     localStorage.getItem(BORED_CACHE_KEY);
 
