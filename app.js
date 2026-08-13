@@ -548,6 +548,9 @@ const ACCOUNTS_CACHE_KEY = "spanish-accounts-cache-v1";
 const BORED_CACHE_KEY = "spanish-bored-cache-v1";
 
 async function loadData() {
+  
+  allCards = [];
+  
   console.log(
     "LOAD DATA CALLED"
   );
