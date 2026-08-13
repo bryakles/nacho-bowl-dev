@@ -631,11 +631,14 @@ function showPracticeScreen() {
   welcomeName.textContent =
     currentUser.name;
 
+  showFilterPanel();
+  renderModeChips();
+  renderAttemptHistory();
+  updateFooterNachos();
+
   loadTeacherSettings().then(() => {
-    showFilterPanel();
     renderModeChips();
-    renderAttemptHistory();
-    updateFooterNachos();
+    updateCardCountPreview();
   });
 }
 
@@ -3972,7 +3975,6 @@ loadData().then(() => {
   }
 
   currentUser = user;
-  loadTeacherSettings();
 
   const savedPanel =
     localStorage.getItem("nachoCurrentPanel");
