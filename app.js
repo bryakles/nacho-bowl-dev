@@ -615,6 +615,18 @@ async function loadData() {
         fetch(ACCOUNTS_CSV_URL),
         fetch(BORED_CSV_URL)
       ]);
+    
+    if (!accountsRes.ok) {
+      throw new Error(
+        `Accounts request failed: ${accountsRes.status}`
+      );
+    }
+    
+    if (!boredRes.ok) {
+      throw new Error(
+        `Bored request failed: ${boredRes.status}`
+      );
+    }
 
     const freshAccountsText =
       await accountsRes.text();
@@ -666,6 +678,12 @@ async function loadData() {
       await fetch(
         `${CARDS_SHEET_URL}?output=csv&gid=${CARD_SHEET_GIDS[freshCardLevel]}`
       );
+
+    if (!cardsRes.ok) {
+      throw new Error(
+        `Cards request failed: ${cardsRes.status}`
+      );
+    }
 
     const freshCardsText =
       await cardsRes.text();
