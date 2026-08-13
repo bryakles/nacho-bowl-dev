@@ -235,6 +235,15 @@ function loadTeacherSettings() {
   const period =
     currentUser.period?.[0];
 
+  console.log("CURRENT USER:", currentUser);
+  console.log("MATCHING TEACHER:", teacherKey);
+  console.log("LANGUAGE:", languageKey);
+  console.log("PERIOD:", period);
+  console.log(
+    "SETTINGS FOUND:",
+    teacherSettings?.[teacherKey]?.[languageKey]?.[period]
+  );
+
   // ----------------------------------------------------------
   // LOAD SETTINGS FOR THAT CLASS
   // ----------------------------------------------------------
