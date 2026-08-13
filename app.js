@@ -12,6 +12,8 @@ const CARD_SHEET_TABS = {
   "IB Spanish HL2": "IB Spanish HL2"
 };
 
+const CARDS_SHEET_URL = CARDS_CSV_URL;
+
 const ACCOUNTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQOW8Q53UWa4lEsH1Sk9P_8KmWatSJCqjoCVpTA_uJ-XHH0HGsNzAaqyeuL-sBCNatAC4uAMhhlB6o3/pub?output=csv";
 const BORED_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSJaLVNNtFXTgvxl_BVwGz4efup2RNkgyjdOBcW_DNS7Erg9slS40p8u95XN2p5j0M3iIDoPCswGQMv/pub?output=csv";
 const HISTORY_STORAGE_KEY = "spanish-practice-history-v1";
@@ -649,56 +651,23 @@ async function loadData() {
       await boredRes.text();
 
     // --------------------------------------------------------
-    // DETERMINE USER'S SPANISH LEVEL
+    // LOAD DEFAULT SPANISH TAB FOR NOW
     // --------------------------------------------------------
-
-    let freshCardLevel =
-      cardLevel;
-
-    const savedUsername =
-      localStorage.getItem("nachoCurrentUser");
-
+    
     const freshAccounts =
       parseAccounts(freshAccountsText);
-
-    if (savedUsername) {
-
-      const user =
-        freshAccounts.find(
-          a =>
-            String(a.username).trim().toLowerCase() ===
-            String(savedUsername).trim().toLowerCase()
-        );
-
-      if (
-        user &&
-        CARD_SHEET_GIDS[user.language]
-      ) {
-        freshCardLevel =
-          user.language;
-
-        localStorage.setItem(
-          `nachoCardLevel_${savedUsername}`,
-          freshCardLevel
-        );
-      }
-    }
-
-    // --------------------------------------------------------
-    // LOAD CORRECT CARD TAB
-    // --------------------------------------------------------
-
+    
     const cardsRes =
       await fetch(
-        `${CARDS_SHEET_URL}?output=csv&gid=${CARD_SHEET_GIDS[freshCardLevel]}`
+        `${CARDS_SHEET_URL}?output=csv&gid=${CARD_SHEET_GIDS["Spanish 1"]}`
       );
-
+    
     if (!cardsRes.ok) {
       throw new Error(
         `Cards request failed: ${cardsRes.status}`
       );
     }
-
+    
     const freshCardsText =
       await cardsRes.text();
 
@@ -754,7 +723,7 @@ async function loadData() {
     const [cardsRes, accountsRes, boredRes] =
       await Promise.all([
         fetch(
-          `${CARDS_SHEET_URL}?output=csv&gid=${CARD_SHEET_GIDS[cardLevel]}`
+          `${CARDS_SHEET_URL}?output=csv&gid=${CARD_SHEET_GIDS["Spanish 1"]}`
         ),
         fetch(ACCOUNTS_CSV_URL),
         fetch(BORED_CSV_URL)
@@ -771,7 +740,7 @@ async function loadData() {
     ]);
 
     localStorage.setItem(
-      CARDS_CACHE_KEY,
+      `${CARDS_CACHE_KEY}${cardLevel}`,
       cardsText
     );
 
