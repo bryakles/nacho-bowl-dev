@@ -691,6 +691,13 @@ async function loadData() {
         });
   
         allCards.push(...cards);
+
+        console.log(
+          "CARD LANGUAGE CHECK:",
+          level,
+          cards.length,
+          cards.slice(0, 3)
+        );
       }
     }
   
@@ -989,6 +996,13 @@ async function loadData() {
         });
   
         allCards.push(...cards);
+
+        console.log(
+          "CARD LANGUAGE CHECK:",
+          level,
+          cards.length,
+          cards.slice(0, 3)
+        );
   
       }
     );
