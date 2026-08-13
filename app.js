@@ -671,6 +671,16 @@ async function loadData() {
     const freshCardsText =
       await cardsRes.text();
 
+    console.log(
+      "CARD CSV LENGTH:",
+      cardsText.length
+    );
+    
+    console.log(
+      "CARD CSV START:",
+      cardsText.substring(0, 300)
+    );
+
     // --------------------------------------------------------
     // SAVE FRESH DATA
     // --------------------------------------------------------
@@ -728,6 +738,14 @@ async function loadData() {
         fetch(ACCOUNTS_CSV_URL),
         fetch(BORED_CSV_URL)
       ]);
+
+    console.log(
+      "CARD RESPONSE:",
+      cardsRes.status,
+      cardsRes.url
+    );
+
+    
 
     [
       cardsText,
