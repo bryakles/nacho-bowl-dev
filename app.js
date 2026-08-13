@@ -1092,7 +1092,8 @@ async function openTeacherSettings() {
 
   const periodSettings = {};
 
-  for (const period of periods) {
+await Promise.all(
+  periods.map(async period => {
     try {
       const url =
         `${TEACHER_SETTINGS_API}` +
@@ -1111,6 +1112,7 @@ async function openTeacherSettings() {
         result.success && result.settings
           ? result.settings
           : {};
+
     } catch (error) {
       console.error(
         "Could not load settings for period",
@@ -1120,7 +1122,8 @@ async function openTeacherSettings() {
 
       periodSettings[period] = {};
     }
-  }
+  })
+);
 
   // ----------------------------------------------------------
   // TABLE
