@@ -3968,15 +3968,18 @@ loadData().then(async () => {
     return;
   }
 
-  const user = allAccounts.find(
-    a => a.username === savedUsername
-  );
-
-  if (!user) {
-    return;
-  }
-
-  currentUser = user;
+    const user = allAccounts.find(
+      a =>
+        String(a.username).trim().toLowerCase() ===
+        String(savedUsername).trim().toLowerCase()
+    );
+  
+    if (!user) {
+      localStorage.removeItem("nachoCurrentUser");
+      return;
+    }
+  
+    currentUser = user;
 
   const savedPanel =
     localStorage.getItem("nachoCurrentPanel");
@@ -3990,17 +3993,24 @@ loadData().then(async () => {
   // RESTORE PRACTICE SCREEN
   // ----------------------------------------------------------
 
-  practiceScreen.classList.remove("hidden");
-  loginScreen.classList.add("hidden");
+    practiceScreen.classList.remove("hidden");
+    loginScreen.classList.add("hidden");
   
-  welcomeName.textContent =
-    currentUser.name;
+    welcomeName.textContent =
+      currentUser.name;
   
-  await loadTeacherSettings();
+    try {
+      await loadTeacherSettings();
+    } catch (error) {
+      console.error(
+        "Teacher settings failed during restore:",
+        error
+      );
+    }
   
-  renderModeChips();
-  renderAttemptHistory();
-  updateFooterNachos();
+    renderModeChips();
+    renderAttemptHistory();
+    updateFooterNachos();
 
   // ----------------------------------------------------------
   // RESTORE STUDY SET
