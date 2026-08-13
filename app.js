@@ -637,6 +637,7 @@ function showPracticeScreen() {
   practiceScreen.classList.remove("hidden");
   welcomeName.textContent = currentUser.name;
   showFilterPanel();
+  loadTeacherSettings();
   renderModeChips();
   renderAttemptHistory();
   updateFooterNachos();
@@ -3981,6 +3982,7 @@ loadData().then(() => {
   welcomeName.textContent =
     currentUser.name;
 
+  loadTeacherSettings();
   renderModeChips();
   renderAttemptHistory();
   updateFooterNachos();
