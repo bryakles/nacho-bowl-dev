@@ -1039,6 +1039,13 @@ loginForm.addEventListener("submit", (e) => {
   loginError.classList.add("hidden");
   currentUser = user;
 
+  console.log(
+    "RESTORED ACCOUNT LANGUAGE:",
+    currentUser.language,
+    "TYPE:",
+    currentUser.accountType
+  );
+
   loadTeacherSettings();
   
   localStorage.setItem(
