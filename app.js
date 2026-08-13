@@ -584,6 +584,11 @@ async function loadData() {
   
     let language =
       "Spanish";
+
+    console.log(
+      "CARD LANGUAGE:",
+      language
+    );
   
     if (savedUsername) {
   
@@ -595,9 +600,15 @@ async function loadData() {
         );
   
       if (user && user.language) {
-        language = user.language;
+        language =
+          user.language;
+      
+        console.log(
+          "USER LANGUAGE:",
+          user.username,
+          user.language
+        );
       }
-    }
   
     // --------------------------------------------------------
     // LOAD CACHED TABS FOR THIS LANGUAGE
