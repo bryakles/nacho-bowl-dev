@@ -511,6 +511,8 @@ const BORED_CACHE_KEY = "spanish-bored-cache-v1";
 
 const DEFAULT_CARD_LEVEL = "Spanish 1";
 
+let cardLevel = DEFAULT_CARD_LEVEL;
+
 const CARD_SHEET_GIDS = {
   "Primary": "0",
   "Spanish 1": "205808895",
