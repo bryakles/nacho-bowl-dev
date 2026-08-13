@@ -186,6 +186,7 @@ const practiceModes = {
 const TEACHER_SETTINGS_KEY = "nachoBowlTeacherSettings";
 
 function loadTeacherSettings() {
+  // Start with everything ON
   Object.keys(PRACTICE_MODES).forEach(mode => {
     PRACTICE_MODES[mode].enabled = true;
   });
@@ -212,18 +213,37 @@ function loadTeacherSettings() {
     return;
   }
 
+  // ----------------------------------------------------------
+  // DETERMINE TEACHER
+  // ----------------------------------------------------------
+
   let teacherKey = currentUser.accountType;
 
+  // Student C → Teacher C
   if (teacherKey.startsWith("Student ")) {
     teacherKey =
       teacherKey.replace("Student ", "Teacher ");
   }
 
-  const languageKey = currentUser.language;
-  const period = currentUser.period?.[0];
+  // ----------------------------------------------------------
+  // STUDENT'S LANGUAGE + PERIOD
+  // ----------------------------------------------------------
+
+  const languageKey =
+    currentUser.language;
+
+  const period =
+    currentUser.period?.[0];
+
+  // ----------------------------------------------------------
+  // LOAD SETTINGS FOR THAT CLASS
+  // ----------------------------------------------------------
 
   const settings =
-    teacherSettings?.[teacherKey]?.[languageKey]?.[period];
+    teacherSettings
+      ?. [teacherKey]
+      ?. [languageKey]
+      ?. [period];
 
   if (settings) {
     Object.keys(settings).forEach(mode => {
@@ -236,7 +256,6 @@ function loadTeacherSettings() {
 
   updateTeacherLockIndicator();
 }
-
 function updateTeacherLockIndicator() {
   const anyLocked = Object.values(PRACTICE_MODES)
     .some(mode => !mode.enabled);
@@ -439,14 +458,30 @@ function parseAccounts(csvText) {
   return rows
     .filter(r => r.username && r.password)
     .map(r => ({
-      name:        r.name?.trim() || r.username,
-      username:    r.username.trim().toLowerCase(),
-      password:    r.password.trim(),
-      accountType: r["account type"]?.trim() || "",
-      language:    r.language?.trim() || "",
-      period:      r.period
-        ? r.period.split(",").map(p => p.trim())
-        : [],
+      name:
+        r.name ||
+        r["student name"] ||
+        r.username,
+
+      username:
+        r.username
+          .trim()
+          .toLowerCase(),
+
+      password:
+        r.password.trim(),
+
+      accountType:
+        r["account type"]?.trim() || "",
+
+      language:
+        r.language?.trim() || "",
+
+      period:
+        (r.period || "")
+          .split(",")
+          .map(p => p.trim())
+          .filter(Boolean)
     }));
 }
 
@@ -553,6 +588,7 @@ loginForm.addEventListener("submit", (e) => {
   loginError.classList.add("hidden");
   currentUser = user;
   loadTeacherSettings();
+  
   localStorage.setItem("nachoCurrentUser", user.username);
   showPracticeScreen();
 });
