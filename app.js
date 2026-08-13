@@ -688,7 +688,7 @@ async function loadData() {
     // --------------------------------------------------------
 
     localStorage.setItem(
-      `${CARDS_CACHE_KEY}${freshCardLevel}`,
+      `${CARDS_CACHE_KEY}Spanish 1`,
       freshCardsText
     );
 
