@@ -467,14 +467,30 @@ function parseCSV(text) {
 
 function parseCards(csvText) {
   const rows = parseCSV(csvText);
+
   return rows
-    .filter(r => r.spanish && r.english)
+    .filter(r =>
+      (r.spanish || r.french || r.korean) &&
+      r.english
+    )
     .map(r => ({
-      spanish:  r.spanish,
-      english:  r.english,
-      setName:  r["card set"] || "",
-      level:    r.level || "",
-      unit:     r.unit || "",
+      spanish:
+        r.spanish ||
+        r.french ||
+        r.korean ||
+        "",
+
+      english:
+        r.english,
+
+      setName:
+        r["card set"] || "",
+
+      level:
+        r.level || "",
+
+      unit:
+        r.unit || "",
     }));
 }
 
