@@ -935,6 +935,8 @@ async function loadData() {
     return;
   }
 
+}
+
 function getRandomBoredCard() {
   if (!boredCards.length) return null;
 
