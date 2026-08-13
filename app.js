@@ -511,10 +511,21 @@ const BORED_CACHE_KEY = "spanish-bored-cache-v1";
 
 const DEFAULT_CARD_LEVEL = "Spanish 1";
 
+const CARD_SHEET_GIDS = {
+  "Primary": "0",
+  "Spanish 1": "205808895",
+  "Spanish 2": "1458645106",
+  "Spanish 3": "2121606325",
+  "IB Spanish HL1": "178791964",
+  "IB Spanish HL2": "901279306"
+};
+
 async function loadData() {
   loadingMsg.classList.remove("hidden");
 
   let cardsText = null;
+  let cardLevel = DEFAULT_CARD_LEVEL;
+  
   let accountsText = null;
   let boredText = null;
 
@@ -522,8 +533,20 @@ async function loadData() {
   // USE CACHE FIRST
   // ----------------------------------------------------------
 
+  const savedUsername =
+    localStorage.getItem("nachoCurrentUser");
+  
+  if (savedUsername) {
+    cardLevel =
+      localStorage.getItem(
+        `nachoCardLevel_${savedUsername}`
+      ) || DEFAULT_CARD_LEVEL;
+  }
+  
   cardsText =
-    localStorage.getItem(CARDS_CACHE_KEY);
+    localStorage.getItem(
+      `${CARDS_CACHE_KEY}${cardLevel}`
+    );
 
   accountsText =
     localStorage.getItem(ACCOUNTS_CACHE_KEY);
@@ -537,72 +560,156 @@ async function loadData() {
 
   if (cardsText && accountsText) {
 
-    allCards =
-      parseCards(cardsText);
-
-    allAccounts =
-      parseAccounts(accountsText);
-
-    boredCards =
-      parseBoredCards(boredText || "");
-
-    loadingMsg.textContent = "";
-
-    // --------------------------------------------------------
-    // REFRESH DATA IN BACKGROUND
-    // --------------------------------------------------------
-
-    try {
-      const [cardsRes, accountsRes, boredRes] =
-        await Promise.all([
-          fetch(CARDS_CSV_URL),
-          fetch(ACCOUNTS_CSV_URL),
-          fetch(BORED_CSV_URL)
-        ]);
-
-      const [
-        freshCardsText,
-        freshAccountsText,
-        freshBoredText
-      ] = await Promise.all([
-        cardsRes.text(),
-        accountsRes.text(),
-        boredRes.text()
-      ]);
-
-      localStorage.setItem(
-        CARDS_CACHE_KEY,
-        freshCardsText
+  allCards =
+    parseCards(cardsText);
+  
+  allAccounts =
+    parseAccounts(accountsText);
+  
+  boredCards =
+    parseBoredCards(boredText);
+  
+  // ----------------------------------------------------------
+  // SAVE USER'S CARD LEVEL
+  // ----------------------------------------------------------
+  
+  const savedUsername =
+    localStorage.getItem("nachoCurrentUser");
+  
+  if (savedUsername) {
+  
+    const user =
+      allAccounts.find(
+        a =>
+          String(a.username).trim().toLowerCase() ===
+          String(savedUsername).trim().toLowerCase()
       );
-
+  
+    if (
+      user &&
+      CARD_SHEET_GIDS[user.language]
+    ) {
+  
+      cardLevel =
+        user.language;
+  
       localStorage.setItem(
-        ACCOUNTS_CACHE_KEY,
-        freshAccountsText
-      );
-
-      localStorage.setItem(
-        BORED_CACHE_KEY,
-        freshBoredText
-      );
-
-      allCards =
-        parseCards(freshCardsText);
-
-      allAccounts =
-        parseAccounts(freshAccountsText);
-
-      boredCards =
-        parseBoredCards(freshBoredText);
-
-    } catch (err) {
-      console.warn(
-        "Background data refresh failed. Using cached data.",
-        err
+        `nachoCardLevel_${savedUsername}`,
+        cardLevel
       );
     }
-
-    return;
   }
+  
+  loadingMsg.textContent = "";
+
+  // ----------------------------------------------------------
+  // REFRESH DATA IN BACKGROUND
+  // ----------------------------------------------------------
+
+  try {
+
+    const [accountsRes, boredRes] =
+      await Promise.all([
+        fetch(ACCOUNTS_CSV_URL),
+        fetch(BORED_CSV_URL)
+      ]);
+
+    const freshAccountsText =
+      await accountsRes.text();
+
+    const freshBoredText =
+      await boredRes.text();
+
+    // --------------------------------------------------------
+    // DETERMINE USER'S SPANISH LEVEL
+    // --------------------------------------------------------
+
+    let freshCardLevel =
+      cardLevel;
+
+    const savedUsername =
+      localStorage.getItem("nachoCurrentUser");
+
+    const freshAccounts =
+      parseAccounts(freshAccountsText);
+
+    if (savedUsername) {
+
+      const user =
+        freshAccounts.find(
+          a =>
+            String(a.username).trim().toLowerCase() ===
+            String(savedUsername).trim().toLowerCase()
+        );
+
+      if (
+        user &&
+        CARD_SHEET_GIDS[user.language]
+      ) {
+        freshCardLevel =
+          user.language;
+
+        localStorage.setItem(
+          `nachoCardLevel_${savedUsername}`,
+          freshCardLevel
+        );
+      }
+    }
+
+    // --------------------------------------------------------
+    // LOAD CORRECT CARD TAB
+    // --------------------------------------------------------
+
+    const cardsRes =
+      await fetch(
+        `${CARDS_SHEET_URL}?output=csv&gid=${CARD_SHEET_GIDS[freshCardLevel]}`
+      );
+
+    const freshCardsText =
+      await cardsRes.text();
+
+    // --------------------------------------------------------
+    // SAVE FRESH DATA
+    // --------------------------------------------------------
+
+    localStorage.setItem(
+      `${CARDS_CACHE_KEY}${freshCardLevel}`,
+      freshCardsText
+    );
+
+    localStorage.setItem(
+      ACCOUNTS_CACHE_KEY,
+      freshAccountsText
+    );
+
+    localStorage.setItem(
+      BORED_CACHE_KEY,
+      freshBoredText
+    );
+
+    // --------------------------------------------------------
+    // USE FRESH DATA
+    // --------------------------------------------------------
+
+    allCards =
+      parseCards(freshCardsText);
+
+    allAccounts =
+      freshAccounts;
+
+    boredCards =
+      parseBoredCards(freshBoredText);
+
+  } catch (err) {
+
+    console.warn(
+      "Background data refresh failed. Using cached data.",
+      err
+    );
+  }
+
+  return;
+}
 
   // ----------------------------------------------------------
   // NO CACHE — LOAD FROM NETWORK
@@ -612,7 +719,9 @@ async function loadData() {
 
     const [cardsRes, accountsRes, boredRes] =
       await Promise.all([
-        fetch(CARDS_CSV_URL),
+        fetch(
+          `${CARDS_SHEET_URL}?output=csv&gid=${CARD_SHEET_GIDS[cardLevel]}`
+        ),
         fetch(ACCOUNTS_CSV_URL),
         fetch(BORED_CSV_URL)
       ]);
