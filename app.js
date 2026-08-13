@@ -997,6 +997,15 @@ loginForm.addEventListener("submit", (e) => {
     "SAVED USER:",
     localStorage.getItem("nachoCurrentUser")
   );
+
+  console.log(
+    "CURRENT ACCOUNT OBJECT:",
+    allAccounts.find(
+      a =>
+        String(a.username).trim().toLowerCase() ===
+        String(localStorage.getItem("nachoCurrentUser")).trim().toLowerCase()
+    )
+  );
   
   showPracticeScreen();
 });
