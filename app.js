@@ -4121,8 +4121,16 @@ loadData().then(async () => {
   
   const savedPanel =
     localStorage.getItem("nachoCurrentPanel");
-
+  
+  console.log(
+    "SAVED PANEL:",
+    savedPanel
+  );
+  
   if (savedPanel === "filter") {
+    practiceScreen.classList.remove("hidden");
+    loginScreen.classList.add("hidden");
+  
     showFilterPanel();
     return;
   }
