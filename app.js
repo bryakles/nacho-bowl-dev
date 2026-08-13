@@ -4078,9 +4078,20 @@ loadData().then(async () => {
   const savedUsername =
     localStorage.getItem("nachoCurrentUser");
 
+  console.log(
+    "RESTORE USER:",
+    savedUsername
+  );
+
   if (!savedUsername) {
+    console.log("NO SAVED USER");
     return;
   }
+
+  console.log(
+    "ACCOUNTS LOADED:",
+    allAccounts.length
+  );
 
   const user = allAccounts.find(
     a =>
@@ -4088,13 +4099,26 @@ loadData().then(async () => {
       String(savedUsername).trim().toLowerCase()
   );
 
+  console.log(
+    "RESTORED USER OBJECT:",
+    user
+  );
+
   if (!user) {
-    localStorage.removeItem("nachoCurrentUser");
+    console.log(
+      "SAVED USER NOT FOUND IN ACCOUNTS:",
+      savedUsername
+    );
     return;
   }
 
   currentUser = user;
 
+  console.log(
+    "USER RESTORED:",
+    currentUser.username
+  );
+  
   const savedPanel =
     localStorage.getItem("nachoCurrentPanel");
 
