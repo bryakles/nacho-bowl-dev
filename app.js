@@ -711,20 +711,30 @@ function renderModeChips() {
   modeOptions.innerHTML = "";
 
   Object.keys(PRACTICE_MODES).forEach(mode => {
-    if (!PRACTICE_MODES[mode].enabled) return;
+    if (!PRACTICE_MODES[mode].enabled) {
+      return;
+    }
 
     const chip = document.createElement("button");
+
     chip.type = "button";
-    chip.className = "mode-chip" + (practiceMode === mode ? " active" : "");
+    chip.className =
+      "mode-chip" +
+      (practiceMode === mode ? " active" : "");
+
     chip.dataset.mode = mode;
-    chip.textContent = PRACTICE_MODES[mode].label;
+
+    chip.textContent =
+      PRACTICE_MODES[mode].label;
 
     chip.addEventListener("click", () => {
       practiceMode = mode;
 
-      document.querySelectorAll(".mode-chip").forEach(c => {
-        c.classList.remove("active");
-      });
+      document
+        .querySelectorAll(".mode-chip")
+        .forEach(c => {
+          c.classList.remove("active");
+        });
 
       chip.classList.add("active");
     });
