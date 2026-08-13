@@ -651,53 +651,53 @@ async function loadData() {
       await boredRes.text();
 
     // --------------------------------------------------------
-    // LOAD DEFAULT SPANISH TAB FOR NOW
+    // LOAD ALL SPANISH CARD TABS
     // --------------------------------------------------------
     
     const freshAccounts =
       parseAccounts(freshAccountsText);
     
-    const cardsRes =
-      await fetch(
-        `${CARDS_SHEET_URL}?output=csv&gid=${CARD_SHEET_GIDS["Spanish 1"]}`
+    const cardLevels =
+      Object.keys(CARD_SHEET_GIDS);
+    
+    const cardResults =
+      await Promise.all(
+        cardLevels.map(async level => {
+    
+          const response =
+            await fetch(
+              `${CARDS_SHEET_URL}?output=csv&gid=${CARD_SHEET_GIDS[level]}`
+            );
+    
+          if (!response.ok) {
+            throw new Error(
+              `Cards request failed for ${level}: ${response.status}`
+            );
+          }
+    
+          const text =
+            await response.text();
+    
+          return {
+            level,
+            text
+          };
+        })
       );
-
-    console.log(
-      "CARD REQUEST:",
-      cardsRes.status,
-      cardsRes.url
-    );
-    
-    if (!cardsRes.ok) {
-      throw new Error(
-        `Cards request failed: ${cardsRes.status}`
-      );
-    }
-    
-    const freshCardsText =
-      await cardsRes.text();
-
-    console.log(
-      "CARD CSV LENGTH:",
-      cardsText ? cardsText.length : 0
-    );
-    
-    console.log(
-      "CARD CSV START:",
-      cardsText
-        ? cardsText.substring(0, 300)
-        : "NO CARD DATA"
-    );
 
     // --------------------------------------------------------
     // SAVE FRESH DATA
     // --------------------------------------------------------
 
-    localStorage.setItem(
-      `${CARDS_CACHE_KEY}Spanish 1`,
-      freshCardsText
-    );
+    cardResults.forEach(({ level, text }) => {
 
+      localStorage.setItem(
+        `${CARDS_CACHE_KEY}${level}`,
+        text
+      );
+    
+    });
+    
     localStorage.setItem(
       ACCOUNTS_CACHE_KEY,
       freshAccountsText
@@ -712,9 +712,19 @@ async function loadData() {
     // USE FRESH DATA
     // --------------------------------------------------------
 
-    allCards =
-      parseCards(freshCardsText);
+    allCards = [];
 
+    cardResults.forEach(({ level, text }) => {
+    
+      const cards =
+        parseCards(text);
+    
+      cards.forEach(card => {
+        card.level = level;
+      });
+    
+      allCards.push(...cards);
+    });
     allAccounts =
       freshAccounts;
 
