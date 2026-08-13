@@ -3963,7 +3963,12 @@ function updateNachoBuilderStrikes() {
 loadData().then(async () => {
   const savedUsername =
     localStorage.getItem("nachoCurrentUser");
-
+  
+  console.log(
+    "RESTORE USER:",
+    savedUsername
+  );
+  
   if (!savedUsername) {
     return;
   }
