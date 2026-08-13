@@ -1060,18 +1060,39 @@ function getRandomBoredCard() {
 // ============================================================
 // AUTH
 // ============================================================
-loginForm.addEventListener("submit", (e) => {
+loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const username = usernameInput.value.trim().toLowerCase();
-  const password = passwordInput.value.trim();
-  const user = allAccounts.find(a => a.username === username && a.password === password);
+
+  const username =
+    usernameInput.value.trim().toLowerCase();
+
+  const password =
+    passwordInput.value.trim();
+
+  const user =
+    allAccounts.find(
+      a =>
+        a.username === username &&
+        a.password === password
+    );
+
   if (!user) {
-    loginError.textContent = "Username or password not found.";
+    loginError.textContent =
+      "Username or password not found.";
+
     loginError.classList.remove("hidden");
+
     return;
   }
+
   loginError.classList.add("hidden");
+
   currentUser = user;
+
+  localStorage.setItem(
+    "nachoCurrentUser",
+    user.username
+  );
 
   console.log(
     "RESTORED ACCOUNT LANGUAGE:",
@@ -1080,27 +1101,26 @@ loginForm.addEventListener("submit", (e) => {
     currentUser.accountType
   );
 
-  loadTeacherSettings();
-  
-  localStorage.setItem(
-    "nachoCurrentUser",
-    user.username
-  );
-  
   console.log(
     "SAVED USER:",
     localStorage.getItem("nachoCurrentUser")
   );
+
+  await loadData();
+
+  await loadTeacherSettings();
 
   console.log(
     "CURRENT ACCOUNT OBJECT:",
     allAccounts.find(
       a =>
         String(a.username).trim().toLowerCase() ===
-        String(localStorage.getItem("nachoCurrentUser")).trim().toLowerCase()
+        String(
+          localStorage.getItem("nachoCurrentUser")
+        ).trim().toLowerCase()
     )
   );
-  
+
   showPracticeScreen();
 });
 
