@@ -622,6 +622,12 @@ async function loadData() {
   
     const tabs =
       getCardTabsForLanguage(language);
+
+    console.log(
+      "LANGUAGE TABS:",
+      language,
+      tabs
+    );
   
     allCards = [];
   
