@@ -673,12 +673,14 @@ async function loadData() {
 
     console.log(
       "CARD CSV LENGTH:",
-      cardsText.length
+      cardsText ? cardsText.length : 0
     );
     
     console.log(
       "CARD CSV START:",
-      cardsText.substring(0, 300)
+      cardsText
+        ? cardsText.substring(0, 300)
+        : "NO CARD DATA"
     );
 
     // --------------------------------------------------------
