@@ -661,6 +661,12 @@ async function loadData() {
       await fetch(
         `${CARDS_SHEET_URL}?output=csv&gid=${CARD_SHEET_GIDS["Spanish 1"]}`
       );
+
+    console.log(
+      "CARD REQUEST:",
+      cardsRes.status,
+      cardsRes.url
+    );
     
     if (!cardsRes.ok) {
       throw new Error(
