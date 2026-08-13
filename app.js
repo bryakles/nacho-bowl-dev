@@ -502,48 +502,152 @@ const BORED_CACHE_KEY = "spanish-bored-cache-v1";
 async function loadData() {
   loadingMsg.classList.remove("hidden");
 
-  // Try loading from network first, fall back to cache
-  let cardsText    = null;
+  let cardsText = null;
   let accountsText = null;
-  let boredText    = null;
+  let boredText = null;
+
+  // ----------------------------------------------------------
+  // USE CACHE FIRST
+  // ----------------------------------------------------------
+
+  cardsText =
+    localStorage.getItem(CARDS_CACHE_KEY);
+
+  accountsText =
+    localStorage.getItem(ACCOUNTS_CACHE_KEY);
+
+  boredText =
+    localStorage.getItem(BORED_CACHE_KEY);
+
+  // ----------------------------------------------------------
+  // IF CACHE EXISTS, LOAD IT IMMEDIATELY
+  // ----------------------------------------------------------
+
+  if (cardsText && accountsText) {
+
+    allCards =
+      parseCards(cardsText);
+
+    allAccounts =
+      parseAccounts(accountsText);
+
+    boredCards =
+      parseBoredCards(boredText || "");
+
+    loadingMsg.textContent = "";
+
+    // --------------------------------------------------------
+    // REFRESH DATA IN BACKGROUND
+    // --------------------------------------------------------
+
+    try {
+      const [cardsRes, accountsRes, boredRes] =
+        await Promise.all([
+          fetch(CARDS_CSV_URL),
+          fetch(ACCOUNTS_CSV_URL),
+          fetch(BORED_CSV_URL)
+        ]);
+
+      const [
+        freshCardsText,
+        freshAccountsText,
+        freshBoredText
+      ] = await Promise.all([
+        cardsRes.text(),
+        accountsRes.text(),
+        boredRes.text()
+      ]);
+
+      localStorage.setItem(
+        CARDS_CACHE_KEY,
+        freshCardsText
+      );
+
+      localStorage.setItem(
+        ACCOUNTS_CACHE_KEY,
+        freshAccountsText
+      );
+
+      localStorage.setItem(
+        BORED_CACHE_KEY,
+        freshBoredText
+      );
+
+      allCards =
+        parseCards(freshCardsText);
+
+      allAccounts =
+        parseAccounts(freshAccountsText);
+
+      boredCards =
+        parseBoredCards(freshBoredText);
+
+    } catch (err) {
+      console.warn(
+        "Background data refresh failed. Using cached data.",
+        err
+      );
+    }
+
+    return;
+  }
+
+  // ----------------------------------------------------------
+  // NO CACHE — LOAD FROM NETWORK
+  // ----------------------------------------------------------
 
   try {
-    const [cardsRes, accountsRes, boredRes] = await Promise.all([
-      fetch(CARDS_CSV_URL),
-      fetch(ACCOUNTS_CSV_URL),
-      fetch(BORED_CSV_URL),
-    ]);
 
-    [cardsText, accountsText, boredText] = await Promise.all([
+    const [cardsRes, accountsRes, boredRes] =
+      await Promise.all([
+        fetch(CARDS_CSV_URL),
+        fetch(ACCOUNTS_CSV_URL),
+        fetch(BORED_CSV_URL)
+      ]);
+
+    [
+      cardsText,
+      accountsText,
+      boredText
+    ] = await Promise.all([
       cardsRes.text(),
       accountsRes.text(),
-      boredRes.text(),
+      boredRes.text()
     ]);
-    
-    // Save fresh data to cache
-    localStorage.setItem(CARDS_CACHE_KEY, cardsText);
-    localStorage.setItem(ACCOUNTS_CACHE_KEY, accountsText);
-    localStorage.setItem(BORED_CACHE_KEY, boredText);
+
+    localStorage.setItem(
+      CARDS_CACHE_KEY,
+      cardsText
+    );
+
+    localStorage.setItem(
+      ACCOUNTS_CACHE_KEY,
+      accountsText
+    );
+
+    localStorage.setItem(
+      BORED_CACHE_KEY,
+      boredText
+    );
+
   } catch (err) {
-    // Network failed — try cache
-    cardsText    = localStorage.getItem(CARDS_CACHE_KEY);
-    accountsText = localStorage.getItem(ACCOUNTS_CACHE_KEY);
-    boredText    = localStorage.getItem(BORED_CACHE_KEY);
-    
-    if (cardsText && accountsText) {
-      loadingMsg.textContent = "⚠️ Offline — using last saved data.";
-    } else {
-      loadingMsg.textContent = "Could not load data. Check your internet connection.";
-      return;
-    }
+
+    loadingMsg.textContent =
+      "Could not load data. Check your internet connection.";
+
+    return;
   }
 
-  allCards    = parseCards(cardsText);
-  allAccounts = parseAccounts(accountsText);
-  boredCards  = parseBoredCards(boredText);
-  if (!loadingMsg.textContent.startsWith("⚠️")) {
-    loadingMsg.textContent = "";
-  }
+  allCards =
+    parseCards(cardsText);
+
+  allAccounts =
+    parseAccounts(accountsText);
+
+  boredCards =
+    parseBoredCards(boredText);
+
+  loadingMsg.textContent = "";
 }
 
 function getRandomBoredCard() {
@@ -3963,28 +4067,23 @@ function updateNachoBuilderStrikes() {
 loadData().then(async () => {
   const savedUsername =
     localStorage.getItem("nachoCurrentUser");
-  
-  console.log(
-    "RESTORE USER:",
-    savedUsername
-  );
-  
+
   if (!savedUsername) {
     return;
   }
 
-    const user = allAccounts.find(
-      a =>
-        String(a.username).trim().toLowerCase() ===
-        String(savedUsername).trim().toLowerCase()
-    );
-  
-    if (!user) {
-      localStorage.removeItem("nachoCurrentUser");
-      return;
-    }
-  
-    currentUser = user;
+  const user = allAccounts.find(
+    a =>
+      String(a.username).trim().toLowerCase() ===
+      String(savedUsername).trim().toLowerCase()
+  );
+
+  if (!user) {
+    localStorage.removeItem("nachoCurrentUser");
+    return;
+  }
+
+  currentUser = user;
 
   const savedPanel =
     localStorage.getItem("nachoCurrentPanel");
