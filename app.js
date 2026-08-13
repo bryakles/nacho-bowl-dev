@@ -663,6 +663,12 @@ async function loadData() {
   
         const cards =
           parseCards(cachedCards);
+
+        console.log(
+          "PARSED CARDS:",
+          level,
+          cards
+        );
   
         cards.forEach(card => {
           card.level = level;
