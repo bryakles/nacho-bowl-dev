@@ -3960,7 +3960,7 @@ function updateNachoBuilderStrikes() {
 // INIT
 // ============================================================
 
-loadData().then(() => {
+loadData().then(async () => {
   const savedUsername =
     localStorage.getItem("nachoCurrentUser");
 
@@ -3996,11 +3996,11 @@ loadData().then(() => {
   welcomeName.textContent =
     currentUser.name;
   
-  loadTeacherSettings().then(() => {
-    renderModeChips();
-    renderAttemptHistory();
-    updateFooterNachos();
-  });
+  await loadTeacherSettings();
+  
+  renderModeChips();
+  renderAttemptHistory();
+  updateFooterNachos();
 
   // ----------------------------------------------------------
   // RESTORE STUDY SET
