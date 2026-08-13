@@ -1073,6 +1073,8 @@ nachoBackBtn.addEventListener("click", () => {
 });
 
 async function openTeacherSettings() {
+  console.count("OPEN TEACHER SETTINGS CALLED");
+  
   teacherModeList.innerHTML = "";
 
   if (
