@@ -4425,7 +4425,9 @@ loadData().then(async () => {
 
   console.log(
     "USER RESTORED:",
-    currentUser.username
+    currentUser.username,
+    "LANGUAGE:",
+    currentUser.language
   );
   
   const savedPanel =
