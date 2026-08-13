@@ -121,7 +121,7 @@ let allCards = [];       // All cards loaded from Google Sheet
 let allAccounts = [];    // All accounts loaded from Google Sheet
 let boredCards = [];     // Bored button emoji cards
 let currentUser = null;  // Logged-in student { name, username, password }
-let selectedTeacherPeriod = null;
+let teacherSettings = {};
 
 let selectedLevels = new Set();
 let selectedUnits = new Set();
@@ -186,43 +186,50 @@ const practiceModes = {
 const TEACHER_SETTINGS_KEY = "nachoBowlTeacherSettings";
 
 function loadTeacherSettings() {
-  // Start with all modes enabled
   Object.keys(PRACTICE_MODES).forEach(mode => {
     PRACTICE_MODES[mode].enabled = true;
   });
+
+  teacherSettings = {};
+
+  const saved =
+    localStorage.getItem(TEACHER_SETTINGS_KEY);
+
+  if (saved) {
+    try {
+      teacherSettings = JSON.parse(saved);
+    } catch (err) {
+      console.error(
+        "Could not load teacher settings:",
+        err
+      );
+      teacherSettings = {};
+    }
+  }
 
   if (!currentUser) {
     updateTeacherLockIndicator();
     return;
   }
 
-  const saved = localStorage.getItem(TEACHER_SETTINGS_KEY);
-
-  if (!saved) {
-    updateTeacherLockIndicator();
-    return;
-  }
-
-  const allSettings = JSON.parse(saved);
-
   let teacherKey = currentUser.accountType;
 
-  // Students use the matching teacher:
-  // Student C → Teacher C
   if (teacherKey.startsWith("Student ")) {
-    teacherKey = teacherKey.replace("Student ", "Teacher ");
+    teacherKey =
+      teacherKey.replace("Student ", "Teacher ");
   }
 
   const languageKey = currentUser.language;
   const period = currentUser.period?.[0];
 
   const settings =
-    allSettings?.[teacherKey]?.[languageKey]?.[period];
+    teacherSettings?.[teacherKey]?.[languageKey]?.[period];
 
   if (settings) {
     Object.keys(settings).forEach(mode => {
       if (PRACTICE_MODES[mode]) {
-        PRACTICE_MODES[mode].enabled = settings[mode];
+        PRACTICE_MODES[mode].enabled =
+          settings[mode];
       }
     });
   }
@@ -240,49 +247,40 @@ function updateTeacherLockIndicator() {
   );
 }
 
-function saveTeacherSettings() {
+function saveTeacherSettings(
+  teacherKey,
+  languageKey,
+  period
+) {
   if (
-    !currentUser ||
-    !currentUser.accountType.startsWith("Teacher")
+    !teacherKey ||
+    !languageKey ||
+    !period
   ) {
     return;
-  }
-
-  const teacherKey = currentUser.accountType;
-  const languageKey = currentUser.language;
-  const period = selectedTeacherPeriod;
-
-  if (!period) {
-    return;
-  }
-
-  let allSettings = {};
-
-  const saved = localStorage.getItem(TEACHER_SETTINGS_KEY);
-
-  if (saved) {
-    allSettings = JSON.parse(saved);
-  }
-
-  if (!allSettings[teacherKey]) {
-    allSettings[teacherKey] = {};
-  }
-
-  if (!allSettings[teacherKey][languageKey]) {
-    allSettings[teacherKey][languageKey] = {};
   }
 
   const settings = {};
 
   Object.keys(PRACTICE_MODES).forEach(mode => {
-    settings[mode] = PRACTICE_MODES[mode].enabled;
+    settings[mode] =
+      PRACTICE_MODES[mode].enabled;
   });
 
-  allSettings[teacherKey][languageKey][period] = settings;
+  if (!teacherSettings[teacherKey]) {
+    teacherSettings[teacherKey] = {};
+  }
+
+  if (!teacherSettings[teacherKey][languageKey]) {
+    teacherSettings[teacherKey][languageKey] = {};
+  }
+
+  teacherSettings[teacherKey][languageKey][period] =
+    settings;
 
   localStorage.setItem(
     TEACHER_SETTINGS_KEY,
-    JSON.stringify(allSettings)
+    JSON.stringify(teacherSettings)
   );
 }
 
@@ -580,7 +578,10 @@ boredBtn.addEventListener("click", () => {
 });
 
 teacherModeBtn.addEventListener("click", () => {
-  if (!currentUser || !currentUser.accountType.startsWith("Teacher")) {
+  if (
+    !currentUser ||
+    !currentUser.accountType.startsWith("Teacher")
+  ) {
     return;
   }
 
@@ -1024,127 +1025,184 @@ nachoBackBtn.addEventListener("click", () => {
 });
 
 function openTeacherSettings() {
-  
-  let selectedTeacherPeriod = currentUser.period[0];
-  
   teacherModeList.innerHTML = "";
 
-  // Create period selector
-  const periodLabel = document.createElement("label");
-  periodLabel.textContent = "Period: ";
-
-  const periodSelect = document.createElement("select");
-  periodSelect.id = "teacherPeriodSelect";
-
-  currentUser.period.forEach(period => {
-    const option = document.createElement("option");
-    option.value = period;
-    option.textContent = `Period ${period}`;
-    periodSelect.appendChild(option);
-  });
-  
-  selectedTeacherPeriod = currentUser.period[0];
-
-  teacherModeList.appendChild(periodLabel);
-  teacherModeList.appendChild(periodSelect);
-
-  const teacherKey = currentUser.accountType;
-  const languageKey = currentUser.language;
-
-  function loadSelectedPeriodSettings() {
-    const saved = localStorage.getItem(TEACHER_SETTINGS_KEY);
-
-    let allSettings = {};
-
-    if (saved) {
-      allSettings = JSON.parse(saved);
-    }
-
-    selectedTeacherPeriod = periodSelect.value;
-
-    const settings =
-      allSettings?.[teacherKey]?.[languageKey]?.[selectedTeacherPeriod];
-
-    // Default: everything ON
-    Object.keys(PRACTICE_MODES).forEach(mode => {
-      PRACTICE_MODES[mode].enabled =
-        settings?.[mode] ?? true;
-    });
-
-    renderTeacherToggles();
+  if (
+    !currentUser ||
+    !currentUser.accountType.startsWith("Teacher")
+  ) {
+    return;
   }
 
-  function renderTeacherToggles() {
-    // Remove old toggle rows but keep selector
-    teacherModeList
-      .querySelectorAll(".teacher-toggle-row")
-      .forEach(row => row.remove());
+  const teacherKey =
+    currentUser.accountType;
+
+  const languageKey =
+    currentUser.language;
+
+  const periods =
+    currentUser.period || [];
+
+  // ----------------------------------------------------------
+  // TABLE
+  // ----------------------------------------------------------
+
+  const table =
+    document.createElement("table");
+
+  table.className =
+    "teacher-settings-table";
+
+  // ----------------------------------------------------------
+  // HEADER
+  // ----------------------------------------------------------
+
+  const thead =
+    document.createElement("thead");
+
+  const headerRow =
+    document.createElement("tr");
+
+  const periodHeader =
+    document.createElement("th");
+
+  periodHeader.textContent =
+    "Period";
+
+  headerRow.appendChild(periodHeader);
+
+  Object.keys(PRACTICE_MODES).forEach(mode => {
+    const th =
+      document.createElement("th");
+
+    th.textContent =
+      PRACTICE_MODES[mode].label;
+
+    headerRow.appendChild(th);
+  });
+
+  thead.appendChild(headerRow);
+  table.appendChild(thead);
+
+  // ----------------------------------------------------------
+  // BODY
+  // ----------------------------------------------------------
+
+  const tbody =
+    document.createElement("tbody");
+
+  periods.forEach(period => {
+
+    const row =
+      document.createElement("tr");
+
+    const periodCell =
+      document.createElement("td");
+
+    periodCell.textContent =
+      `Period ${period}`;
+
+    row.appendChild(periodCell);
+
+    // Load existing settings for this period
+    const existingSettings =
+      teacherSettings
+        ?. [teacherKey]
+        ?. [languageKey]
+        ?. [period];
 
     Object.keys(PRACTICE_MODES).forEach(mode => {
-      const row = document.createElement("div");
-      row.className = "teacher-toggle-row";
 
-      const label = document.createElement("span");
-      label.textContent = PRACTICE_MODES[mode].label;
+      const cell =
+        document.createElement("td");
 
-      const button = document.createElement("button");
+      const button =
+        document.createElement("button");
+
+      const enabled =
+        existingSettings?.[mode] ?? true;
 
       function updateButton() {
         button.className =
-          PRACTICE_MODES[mode].enabled
+          enabledState()
             ? "toggle-on"
             : "toggle-off";
 
         button.textContent =
-          PRACTICE_MODES[mode].enabled
+          enabledState()
             ? "ON"
             : "OFF";
       }
 
+      function enabledState() {
+        return button.dataset.enabled === "true";
+      }
+
+      button.dataset.enabled =
+        enabled ? "true" : "false";
+
       updateButton();
 
       button.addEventListener("click", () => {
-        PRACTICE_MODES[mode].enabled =
-          !PRACTICE_MODES[mode].enabled;
 
-        saveTeacherSettings();
+        const newValue =
+          !enabledState();
 
-        updateTeacherLockIndicator();
+        button.dataset.enabled =
+          newValue ? "true" : "false";
 
-        if (
-          !PRACTICE_MODES[mode].enabled &&
-          practiceMode === mode
-        ) {
-          const nextMode = Object.keys(PRACTICE_MODES)
-            .find(m => PRACTICE_MODES[m].enabled);
+        const settings = {};
 
-          if (nextMode) {
-            practiceMode = nextMode;
+        Object.keys(PRACTICE_MODES).forEach(
+          settingMode => {
+
+            const existing =
+              teacherSettings
+                ?. [teacherKey]
+                ?. [languageKey]
+                ?. [period]
+                ?. [settingMode];
+
+            settings[settingMode] =
+              existing ?? true;
           }
+        );
+
+        settings[mode] =
+          newValue;
+
+        if (!teacherSettings[teacherKey]) {
+          teacherSettings[teacherKey] = {};
         }
 
+        if (!teacherSettings[teacherKey][languageKey]) {
+          teacherSettings[teacherKey][languageKey] = {};
+        }
+
+        teacherSettings[teacherKey][languageKey][period] =
+          settings;
+
+        localStorage.setItem(
+          TEACHER_SETTINGS_KEY,
+          JSON.stringify(teacherSettings)
+        );
+
         updateButton();
-        renderModeChips();
-        updateCardCountPreview();
       });
 
-      row.appendChild(label);
-      row.appendChild(button);
-
-      teacherModeList.appendChild(row);
+      cell.appendChild(button);
+      row.appendChild(cell);
     });
-  }
 
-  periodSelect.addEventListener("change", () => {
-    selectedTeacherPeriod = periodSelect.value;
-    loadSelectedPeriodSettings();
+    tbody.appendChild(row);
   });
 
-  loadSelectedPeriodSettings();
+  table.appendChild(tbody);
+
+  teacherModeList.appendChild(table);
 
   teacherDialog.classList.remove("hidden");
 }
-
 // ============================================================
 // SESSION LENGTH CHIPS
 // ============================================================
