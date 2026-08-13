@@ -295,14 +295,17 @@ function saveTeacherSettings(
       PRACTICE_MODES[mode].enabled;
   });
 
+  // Make sure teacher exists
   if (!teacherSettings[teacherKey]) {
     teacherSettings[teacherKey] = {};
   }
 
+  // Make sure language exists
   if (!teacherSettings[teacherKey][languageKey]) {
     teacherSettings[teacherKey][languageKey] = {};
   }
 
+  // Save settings for this specific class
   teacherSettings[teacherKey][languageKey][period] =
     settings;
 
