@@ -578,40 +578,40 @@ async function loadData() {
     // --------------------------------------------------------
     // DETERMINE USER LANGUAGE
     // --------------------------------------------------------
-  
+    
     const savedUsername =
       localStorage.getItem("nachoCurrentUser");
-  
+    
     let language =
       "Spanish";
-
+    
     console.log(
-      "CARD LANGUAGE:",
+      "LOAD DATA LANGUAGE:",
       language
     );
-  
+    
     if (savedUsername) {
-  
+    
       const user =
         allAccounts.find(
           a =>
             String(a.username).trim().toLowerCase() ===
             String(savedUsername).trim().toLowerCase()
         );
-  
+    
       if (user && user.language) {
+    
         language =
           user.language;
-      
+    
         console.log(
-          "USER LANGUAGE:",
-          user.username,
+          "LOAD DATA USER LANGUAGE:",
           user.language
         );
       }
-      
+    
     }
-  
+    
     // --------------------------------------------------------
     // LOAD CACHED TABS FOR THIS LANGUAGE
     // --------------------------------------------------------
