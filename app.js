@@ -609,6 +609,8 @@ async function loadData() {
           user.language
         );
       }
+      
+    }
   
     // --------------------------------------------------------
     // LOAD CACHED TABS FOR THIS LANGUAGE
