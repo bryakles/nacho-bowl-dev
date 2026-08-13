@@ -186,7 +186,7 @@ const practiceModes = {
 const TEACHER_SETTINGS_KEY = "nachoBowlTeacherSettings";
 
 const TEACHER_SETTINGS_API =
-  "https://script.google.com/macros/s/AKfycbw275NX6F4cyt7jxhoVVHvoBQY6s1HrOsnsL5ws9AoEh2kK2Q6_hCEAmthwPt-TL9G3/exec";
+  "https://script.google.com/macros/s/AKfycbw275NX6F4cyt7jxhoVVHvoBQY6s1HrOsnsL5ws9AoEh2kK2Q6_hCEAmthwPt-TL9G3/exec"
 
 async function loadTeacherSettings() {
   // Start with everything ON
