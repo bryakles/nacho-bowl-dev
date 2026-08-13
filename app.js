@@ -641,6 +641,13 @@ async function loadData() {
         level,
         cachedCards ? cachedCards.length : 0
       );
+    
+      if (level === "French 1") {
+        console.log(
+          "FRENCH 1 CACHE CONTENT:",
+          cachedCards
+        );
+      }
     }
   
     allCards = [];
