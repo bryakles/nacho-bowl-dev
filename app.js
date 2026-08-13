@@ -639,6 +639,11 @@ async function loadData() {
     // LOAD CACHED TABS FOR THIS LANGUAGE
     // --------------------------------------------------------
   
+    console.log(
+      "ABOUT TO LOAD TABS:",
+      language
+    );
+    
     const tabs =
       getCardTabsForLanguage(language);
 
@@ -927,6 +932,11 @@ async function loadData() {
     // LOAD ALL TABS FOR USER LANGUAGE
     // --------------------------------------------------------
   
+    console.log(
+      "ABOUT TO LOAD TABS:",
+      language
+    );
+    
     const tabs =
       getCardTabsForLanguage(language);
   
