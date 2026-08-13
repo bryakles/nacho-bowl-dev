@@ -628,6 +628,20 @@ async function loadData() {
       language,
       Object.entries(tabs)
     );
+
+    for (const [level, gid] of Object.entries(tabs)) {
+
+      const cachedCards =
+        localStorage.getItem(
+          `${CARDS_CACHE_KEY}${level}`
+        );
+    
+      console.log(
+        "CACHED TAB:",
+        level,
+        cachedCards ? cachedCards.length : 0
+      );
+    }
   
     allCards = [];
   
