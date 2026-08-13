@@ -1,7 +1,17 @@
 // ============================================================
 // CONFIGURATION
 // ============================================================
-const CARDS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQwlCOUR8nLtmiCUgissCCNAnnpn5hbMM1dLjEKHO0OohmbdvbTldfI__y3TGA39DPb-ZYeVPHCD_Fb/pub?output=csv";
+const CARDS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQdtcoqgPsn4JIkFDVYhyaFFtxjhpdI4zkI0kJw5745vTFTzdwQ6wc8czNPQznrHEroZ7_SasZ5EAnd/pub";
+
+const CARD_SHEET_TABS = {
+  "Primary": "Primary",
+  "Spanish 1": "Spanish 1",
+  "Spanish 2": "Spanish 2",
+  "Spanish 3": "Spanish 3",
+  "IB Spanish HL1": "IB Spanish HL1",
+  "IB Spanish HL2": "IB Spanish HL2"
+};
+
 const ACCOUNTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQOW8Q53UWa4lEsH1Sk9P_8KmWatSJCqjoCVpTA_uJ-XHH0HGsNzAaqyeuL-sBCNatAC4uAMhhlB6o3/pub?output=csv";
 const BORED_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSJaLVNNtFXTgvxl_BVwGz4efup2RNkgyjdOBcW_DNS7Erg9slS40p8u95XN2p5j0M3iIDoPCswGQMv/pub?output=csv";
 const HISTORY_STORAGE_KEY = "spanish-practice-history-v1";
@@ -495,9 +505,11 @@ function parseBoredCards(csvText) {
 // ============================================================
 // DATA LOADING
 // ============================================================
-const CARDS_CACHE_KEY    = "spanish-cards-cache-v1";
+const CARDS_CACHE_KEY    = "nachoCardsCache_";
 const ACCOUNTS_CACHE_KEY = "spanish-accounts-cache-v1";
 const BORED_CACHE_KEY = "spanish-bored-cache-v1";
+
+const DEFAULT_CARD_LEVEL = "Spanish 1";
 
 async function loadData() {
   loadingMsg.classList.remove("hidden");
