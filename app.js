@@ -626,7 +626,7 @@ async function loadData() {
     console.log(
       "LANGUAGE TABS:",
       language,
-      tabs
+      Object.entries(tabs)
     );
   
     allCards = [];
