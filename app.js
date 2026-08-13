@@ -226,6 +226,8 @@ async function loadTeacherSettings() {
     const result =
       await response.json();
 
+    console.log("TEACHER SETTINGS LOADED:", result.settings);
+
     if (result.success && result.settings) {
 
       Object.keys(result.settings).forEach(mode => {
