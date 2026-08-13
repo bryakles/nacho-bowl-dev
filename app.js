@@ -624,15 +624,19 @@ closeTeacherBtn.addEventListener("click", () => {
 // ============================================================
 // SCREEN TRANSITIONS
 // ============================================================
-async function showPracticeScreen() {
+function showPracticeScreen() {
   loginScreen.classList.add("hidden");
   practiceScreen.classList.remove("hidden");
-  welcomeName.textContent = currentUser.name;
-  showFilterPanel();
-  loadTeacherSettings();
-  renderModeChips();
-  renderAttemptHistory();
-  updateFooterNachos();
+
+  welcomeName.textContent =
+    currentUser.name;
+
+  loadTeacherSettings().then(() => {
+    showFilterPanel();
+    renderModeChips();
+    renderAttemptHistory();
+    updateFooterNachos();
+  });
 }
 
 function saveCurrentPanel(panelName) {
@@ -3981,14 +3985,15 @@ loadData().then(() => {
 
   practiceScreen.classList.remove("hidden");
   loginScreen.classList.add("hidden");
-
+  
   welcomeName.textContent =
     currentUser.name;
-
-  loadTeacherSettings();
-  renderModeChips();
-  renderAttemptHistory();
-  updateFooterNachos();
+  
+  loadTeacherSettings().then(() => {
+    renderModeChips();
+    renderAttemptHistory();
+    updateFooterNachos();
+  });
 
   // ----------------------------------------------------------
   // RESTORE STUDY SET
