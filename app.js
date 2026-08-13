@@ -185,37 +185,19 @@ const practiceModes = {
 
 const TEACHER_SETTINGS_KEY = "nachoBowlTeacherSettings";
 
-function loadTeacherSettings() {
+const TEACHER_SETTINGS_API =
+  "https://script.google.com/macros/s/AKfycbw275NX6F4cyt7jxhoVVHvoBQY6s1HrOsnsL5ws9AoEh2kK2Q6_hCEAmthwPt-TL9G3/exec";
+
+async function loadTeacherSettings() {
   // Start with everything ON
   Object.keys(PRACTICE_MODES).forEach(mode => {
     PRACTICE_MODES[mode].enabled = true;
   });
 
-  teacherSettings = {};
-
-  const saved =
-    localStorage.getItem(TEACHER_SETTINGS_KEY);
-
-  if (saved) {
-    try {
-      teacherSettings = JSON.parse(saved);
-    } catch (err) {
-      console.error(
-        "Could not load teacher settings:",
-        err
-      );
-      teacherSettings = {};
-    }
-  }
-
   if (!currentUser) {
     updateTeacherLockIndicator();
     return;
   }
-
-  // ----------------------------------------------------------
-  // DETERMINE TEACHER
-  // ----------------------------------------------------------
 
   let teacherKey = currentUser.accountType;
 
@@ -225,94 +207,102 @@ function loadTeacherSettings() {
       teacherKey.replace("Student ", "Teacher ");
   }
 
-  // ----------------------------------------------------------
-  // STUDENT'S LANGUAGE + PERIOD
-  // ----------------------------------------------------------
-
   const languageKey =
     currentUser.language;
 
   const period =
     currentUser.period?.[0];
 
-  console.log("CURRENT USER:", currentUser);
-  console.log("MATCHING TEACHER:", teacherKey);
-  console.log("LANGUAGE:", languageKey);
-  console.log("PERIOD:", period);
-  console.log(
-    "SETTINGS FOUND:",
-    teacherSettings?.[teacherKey]?.[languageKey]?.[period]
-  );
+  if (!teacherKey || !languageKey || !period) {
+    updateTeacherLockIndicator();
+    return;
+  }
 
-  // ----------------------------------------------------------
-  // LOAD SETTINGS FOR THAT CLASS
-  // ----------------------------------------------------------
+  try {
+    const url =
+      `${TEACHER_SETTINGS_API}` +
+      `?action=getSettings` +
+      `&teacher=${encodeURIComponent(teacherKey)}` +
+      `&language=${encodeURIComponent(languageKey)}` +
+      `&period=${encodeURIComponent(period)}`;
 
-  const settings =
-    teacherSettings
-      ?. [teacherKey]
-      ?. [languageKey]
-      ?. [period];
+    const response =
+      await fetch(url);
 
-  if (settings) {
-    Object.keys(settings).forEach(mode => {
-      if (PRACTICE_MODES[mode]) {
-        PRACTICE_MODES[mode].enabled =
-          settings[mode];
-      }
-    });
+    const result =
+      await response.json();
+
+    if (result.success && result.settings) {
+
+      Object.keys(result.settings).forEach(mode => {
+
+        if (PRACTICE_MODES[mode]) {
+          PRACTICE_MODES[mode].enabled =
+            result.settings[mode];
+        }
+
+      });
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Could not load teacher settings:",
+      error
+    );
+
   }
 
   updateTeacherLockIndicator();
 }
-function updateTeacherLockIndicator() {
-  const anyLocked = Object.values(PRACTICE_MODES)
-    .some(mode => !mode.enabled);
 
-  document.body.classList.toggle(
-    "teacher-lock-active",
-    anyLocked
-  );
-}
-
-function saveTeacherSettings(
+async function saveTeacherSettings(
   teacherKey,
   languageKey,
-  period
+  period,
+  settings
 ) {
   if (
     !teacherKey ||
     !languageKey ||
-    !period
+    !period ||
+    !settings
   ) {
     return;
   }
 
-  const settings = {};
+  try {
+    const response = await fetch(
+      TEACHER_SETTINGS_API,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          action: "saveSettings",
+          teacher: teacherKey,
+          language: languageKey,
+          period: period,
+          settings: settings
+        })
+      }
+    );
 
-  Object.keys(PRACTICE_MODES).forEach(mode => {
-    settings[mode] =
-      PRACTICE_MODES[mode].enabled;
-  });
+    const result =
+      await response.json();
 
-  // Make sure teacher exists
-  if (!teacherSettings[teacherKey]) {
-    teacherSettings[teacherKey] = {};
+    if (!result.success) {
+      console.error(
+        "Teacher settings were not saved:",
+        result.error
+      );
+    }
+
+  } catch (error) {
+    console.error(
+      "Could not save teacher settings:",
+      error
+    );
   }
-
-  // Make sure language exists
-  if (!teacherSettings[teacherKey][languageKey]) {
-    teacherSettings[teacherKey][languageKey] = {};
-  }
-
-  // Save settings for this specific class
-  teacherSettings[teacherKey][languageKey][period] =
-    settings;
-
-  localStorage.setItem(
-    TEACHER_SETTINGS_KEY,
-    JSON.stringify(teacherSettings)
-  );
 }
 
 // ============================================================
@@ -644,7 +634,7 @@ closeTeacherBtn.addEventListener("click", () => {
 // ============================================================
 // SCREEN TRANSITIONS
 // ============================================================
-function showPracticeScreen() {
+async function showPracticeScreen() {
   loginScreen.classList.add("hidden");
   practiceScreen.classList.remove("hidden");
   welcomeName.textContent = currentUser.name;
@@ -1083,7 +1073,7 @@ nachoBackBtn.addEventListener("click", () => {
   showFilterPanel();
 });
 
-function openTeacherSettings() {
+async function openTeacherSettings() {
   teacherModeList.innerHTML = "";
 
   if (
@@ -1101,6 +1091,42 @@ function openTeacherSettings() {
 
   const periods =
     currentUser.period || [];
+
+  // ----------------------------------------------------------
+  // GET CURRENT SETTINGS FOR ALL PERIODS
+  // ----------------------------------------------------------
+
+  const periodSettings = {};
+
+  for (const period of periods) {
+    try {
+      const url =
+        `${TEACHER_SETTINGS_API}` +
+        `?action=getSettings` +
+        `&teacher=${encodeURIComponent(teacherKey)}` +
+        `&language=${encodeURIComponent(languageKey)}` +
+        `&period=${encodeURIComponent(period)}`;
+
+      const response =
+        await fetch(url);
+
+      const result =
+        await response.json();
+
+      periodSettings[period] =
+        result.success && result.settings
+          ? result.settings
+          : {};
+    } catch (error) {
+      console.error(
+        "Could not load settings for period",
+        period,
+        error
+      );
+
+      periodSettings[period] = {};
+    }
+  }
 
   // ----------------------------------------------------------
   // TABLE
@@ -1163,12 +1189,8 @@ function openTeacherSettings() {
 
     row.appendChild(periodCell);
 
-    // Load existing settings for this period
     const existingSettings =
-      teacherSettings
-        ?. [teacherKey]
-        ?. [languageKey]
-        ?. [period];
+      periodSettings[period] || {};
 
     Object.keys(PRACTICE_MODES).forEach(mode => {
 
@@ -1178,75 +1200,43 @@ function openTeacherSettings() {
       const button =
         document.createElement("button");
 
-      const enabled =
-        existingSettings?.[mode] ?? true;
+      let enabled =
+        existingSettings[mode] ?? true;
 
       function updateButton() {
         button.className =
-          enabledState()
+          enabled
             ? "toggle-on"
             : "toggle-off";
 
         button.textContent =
-          enabledState()
+          enabled
             ? "ON"
             : "OFF";
       }
 
-      function enabledState() {
-        return button.dataset.enabled === "true";
-      }
-
-      button.dataset.enabled =
-        enabled ? "true" : "false";
-
       updateButton();
 
-      button.addEventListener("click", () => {
+      button.addEventListener("click", async () => {
 
-        const newValue =
-          !enabledState();
-
-        button.dataset.enabled =
-          newValue ? "true" : "false";
-
-        const settings = {};
-
-        Object.keys(PRACTICE_MODES).forEach(
-          settingMode => {
-
-            const existing =
-              teacherSettings
-                ?. [teacherKey]
-                ?. [languageKey]
-                ?. [period]
-                ?. [settingMode];
-
-            settings[settingMode] =
-              existing ?? true;
-          }
-        );
-
-        settings[mode] =
-          newValue;
-
-        if (!teacherSettings[teacherKey]) {
-          teacherSettings[teacherKey] = {};
-        }
-
-        if (!teacherSettings[teacherKey][languageKey]) {
-          teacherSettings[teacherKey][languageKey] = {};
-        }
-
-        teacherSettings[teacherKey][languageKey][period] =
-          settings;
-
-        localStorage.setItem(
-          TEACHER_SETTINGS_KEY,
-          JSON.stringify(teacherSettings)
-        );
+        enabled = !enabled;
 
         updateButton();
+
+        const settings = {
+          ...existingSettings,
+          [mode]: enabled
+        };
+
+        existingSettings[mode] =
+          enabled;
+
+        await saveTeacherSettings(
+          teacherKey,
+          languageKey,
+          period,
+          settings
+        );
       });
 
       cell.appendChild(button);
@@ -1262,6 +1252,7 @@ function openTeacherSettings() {
 
   teacherDialog.classList.remove("hidden");
 }
+
 // ============================================================
 // SESSION LENGTH CHIPS
 // ============================================================
