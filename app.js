@@ -572,16 +572,18 @@ async function loadData() {
   // IF CACHE EXISTS, LOAD IT IMMEDIATELY
   // ----------------------------------------------------------
 
-  if (cardsText && accountsText) {
+  if (accountsText) {
 
   allCards =
-    parseCards(cardsText);
+    cardsText
+      ? parseCards(cardsText)
+      : [];
   
   allAccounts =
     parseAccounts(accountsText);
   
   boredCards =
-    parseBoredCards(boredText);
+    parseBoredCards(boredText || "");
   
   // ----------------------------------------------------------
   // SAVE USER'S CARD LEVEL
