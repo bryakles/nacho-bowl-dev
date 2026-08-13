@@ -195,7 +195,6 @@ async function loadTeacherSettings() {
   });
 
   if (!currentUser) {
-    updateTeacherLockIndicator();
     return;
   }
 
@@ -212,11 +211,6 @@ async function loadTeacherSettings() {
 
   const period =
     currentUser.period?.[0];
-
-  if (!teacherKey || !languageKey || !period) {
-    updateTeacherLockIndicator();
-    return;
-  }
 
   try {
     const url =
@@ -242,7 +236,6 @@ async function loadTeacherSettings() {
         }
 
       });
-
     }
 
   } catch (error) {
@@ -251,10 +244,7 @@ async function loadTeacherSettings() {
       "Could not load teacher settings:",
       error
     );
-
   }
-
-  updateTeacherLockIndicator();
 }
 
 async function saveTeacherSettings(
