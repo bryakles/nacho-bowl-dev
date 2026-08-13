@@ -685,9 +685,19 @@ loginForm.addEventListener("submit", (e) => {
   }
   loginError.classList.add("hidden");
   currentUser = user;
+
   loadTeacherSettings();
   
-  localStorage.setItem("nachoCurrentUser", user.username);
+  localStorage.setItem(
+    "nachoCurrentUser",
+    user.username
+  );
+  
+  console.log(
+    "SAVED USER:",
+    localStorage.getItem("nachoCurrentUser")
+  );
+  
   showPracticeScreen();
 });
 
