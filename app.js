@@ -1073,8 +1073,7 @@ nachoBackBtn.addEventListener("click", () => {
 });
 
 async function openTeacherSettings() {
-  console.count("OPEN TEACHER SETTINGS CALLED");
-  
+
   teacherModeList.innerHTML = "";
 
   if (
@@ -1094,43 +1093,37 @@ async function openTeacherSettings() {
     currentUser.period || [];
 
   // ----------------------------------------------------------
-  // GET CURRENT SETTINGS FOR ALL PERIODS
+  // GET ALL SETTINGS WITH ONE REQUEST
   // ----------------------------------------------------------
 
-  const periodSettings = {};
+  let periodSettings = {};
 
-await Promise.all(
-  periods.map(async period => {
-    try {
-      const url =
-        `${TEACHER_SETTINGS_API}` +
-        `?action=getSettings` +
-        `&teacher=${encodeURIComponent(teacherKey)}` +
-        `&language=${encodeURIComponent(languageKey)}` +
-        `&period=${encodeURIComponent(period)}`;
+  try {
 
-      const response =
-        await fetch(url);
+    const url =
+      `${TEACHER_SETTINGS_API}` +
+      `?action=getSettings` +
+      `&teacher=${encodeURIComponent(teacherKey)}` +
+      `&language=${encodeURIComponent(languageKey)}`;
 
-      const result =
-        await response.json();
+    const response =
+      await fetch(url);
 
-      periodSettings[period] =
-        result.success && result.settings
-          ? result.settings
-          : {};
+    const result =
+      await response.json();
 
-    } catch (error) {
-      console.error(
-        "Could not load settings for period",
-        period,
-        error
-      );
-
-      periodSettings[period] = {};
+    if (result.success && result.settings) {
+      periodSettings =
+        result.settings;
     }
-  })
-);
+
+  } catch (error) {
+
+    console.error(
+      "Could not load teacher settings:",
+      error
+    );
+  }
 
   // ----------------------------------------------------------
   // TABLE
@@ -1161,6 +1154,7 @@ await Promise.all(
   headerRow.appendChild(periodHeader);
 
   Object.keys(PRACTICE_MODES).forEach(mode => {
+
     const th =
       document.createElement("th");
 
@@ -1208,6 +1202,7 @@ await Promise.all(
         existingSettings[mode] ?? true;
 
       function updateButton() {
+
         button.className =
           enabled
             ? "toggle-on"
@@ -1221,27 +1216,30 @@ await Promise.all(
 
       updateButton();
 
-      button.addEventListener("click", async () => {
+      button.addEventListener(
+        "click",
+        async () => {
 
-        enabled = !enabled;
+          enabled = !enabled;
 
-        updateButton();
+          updateButton();
 
-        const settings = {
-          ...existingSettings,
-          [mode]: enabled
-        };
+          const settings = {
+            ...existingSettings,
+            [mode]: enabled
+          };
 
-        existingSettings[mode] =
-          enabled;
+          existingSettings[mode] =
+            enabled;
 
-        await saveTeacherSettings(
-          teacherKey,
-          languageKey,
-          period,
-          settings
-        );
-      });
+          await saveTeacherSettings(
+            teacherKey,
+            languageKey,
+            period,
+            settings
+          );
+        }
+      );
 
       cell.appendChild(button);
       row.appendChild(cell);
