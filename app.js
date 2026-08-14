@@ -467,6 +467,12 @@ const historyContent = document.getElementById("historyContent");
 const boredEmoji = document.getElementById("boredEmoji");
 const boredWord = document.getElementById("boredWord");
 
+const landingFoodDecor =
+  document.getElementById("landingFoodDecor");
+
+const landingFoodFooter =
+  document.getElementById("landingFoodFooter");
+
 // ============================================================
 // CSV PARSING
 // ============================================================
@@ -1195,11 +1201,20 @@ const LANDING_LANGUAGE_CONTENT = {
   Spanish: {
     welcome:
       "¡Hola, {name}! ¿Qué quieres practicar hoy?",
+  
+    foodDecor:
+      "🧀 🌮 🌶️",
+  
+    foodFooter:
+      "🌮 🥑 🌶️ 🧀",
+  
     description: {
       studySets:
-        "Practice Spanish vocabulary and phrases",
+        "Practice vocabulary and phrases",
+  
       conversation:
         "Practice Spanish through conversations",
+  
       conjugation:
         "Practice Spanish verb conjugation"
     }
@@ -1207,12 +1222,21 @@ const LANDING_LANGUAGE_CONTENT = {
 
   French: {
     welcome:
-      "Bonjour, {name} ! Qu'est-ce que tu veux pratiquer aujourd'hui?",
+      "Bonjour, {name} ! Qu'est-ce que tu veux pratiquer aujourd'hui ?",
+  
+    foodDecor:
+      "🥐 🥖 🧀",
+  
+    foodFooter:
+      "🥐 🥖 🧀 🍰",
+  
     description: {
       studySets:
-        "Practice French vocabulary and phrases",
+        "Practice vocabulary and phrases",
+  
       conversation:
         "Practice French through conversations",
+  
       conjugation:
         "Practice French verb conjugation"
     }
@@ -1221,11 +1245,20 @@ const LANDING_LANGUAGE_CONTENT = {
   Korean: {
     welcome:
       "안녕하세요, {name} 님! 오늘은 무엇을 연습하고 싶으신가요?",
+  
+    foodDecor:
+      "🍚 🍜 🥢",
+  
+    foodFooter:
+      "🍚 🍜 🥟 🥢",
+  
     description: {
       studySets:
-        "Practice Korean vocabulary and phrases",
+        "Practice vocabulary and phrases",
+  
       conversation:
         "Practice Korean through conversations",
+  
       conjugation:
         "Practice Korean verb conjugation"
     }
@@ -1255,23 +1288,29 @@ function showLandingPage() {
     LANDING_LANGUAGE_CONTENT[language] ||
     LANDING_LANGUAGE_CONTENT.Spanish;
 
-  const name =
-    currentUser.name;
-
-  landingWelcomeTarget.textContent =
-    content.welcome.replace("{name}", name);
-
-  landingWelcomeEnglish.textContent =
-    "What would you like to practice today?";
-
-  studySetsDescription.textContent =
-    content.description.studySets;
-
-  conversationDescription.textContent =
-    content.description.conversation;
-
-  conjugationDescription.textContent =
-    content.description.conjugation;
+    landingFoodDecor.textContent =
+      content.foodDecor;
+    
+    landingFoodFooter.textContent =
+      content.foodFooter;
+    
+      const name =
+        currentUser.name;
+    
+      landingWelcomeTarget.textContent =
+        content.welcome.replace("{name}", name);
+    
+      landingWelcomeEnglish.textContent =
+        "What would you like to practice today?";
+    
+      studySetsDescription.textContent =
+        content.description.studySets;
+    
+      conversationDescription.textContent =
+        content.description.conversation;
+    
+      conjugationDescription.textContent =
+        content.description.conjugation;
 
   landingPanel.classList.remove("hidden");
 
