@@ -1153,6 +1153,7 @@ loginForm.addEventListener("submit", async (e) => {
 signOutBtn.addEventListener("click", () => {
   currentUser = null;
   localStorage.removeItem("nachoCurrentUser");
+  localStorage.removeItem("nachoCurrentPanel");
 
   usernameInput.value = "";
   passwordInput.value = "";
@@ -1234,13 +1235,18 @@ const LANDING_LANGUAGE_CONTENT = {
 
 function showLandingPage() {
 
+  // Never show the landing page without a logged-in user
+  if (!currentUser) {
+    return;
+  }
+
   saveCurrentPanel("landing");
 
   loginScreen.classList.add("hidden");
   practiceScreen.classList.remove("hidden");
 
   const language =
-    currentUser?.language || "Spanish";
+    currentUser.language;
 
   console.log("LANDING LANGUAGE:", currentUser?.language);
   console.log("LANDING USER:", currentUser);
@@ -1250,7 +1256,7 @@ function showLandingPage() {
     LANDING_LANGUAGE_CONTENT.Spanish;
 
   const name =
-    currentUser?.name || "";
+    currentUser.name;
 
   landingWelcomeTarget.textContent =
     content.welcome.replace("{name}", name);
