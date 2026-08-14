@@ -9,18 +9,6 @@ const CONJUGATION_CSV_URL =
 
 let conjugationData = [];
 
-const conjugationVerbSelect =
-  document.getElementById("conjugationVerbSelect");
-
-const conjugationEnglishToggle =
-  document.getElementById("conjugationEnglishToggle");
-
-const conjugationRomanizationToggle =
-  document.getElementById("conjugationRomanizationToggle");
-
-const conjugationTableContainer =
-  document.getElementById("conjugationTableContainer");
-
 const CONJUGATION_SHEET_GIDS = {
   Spanish: "2013416718",
   French: "1784006245",
@@ -199,11 +187,16 @@ function parseConjugationCSV(text) {
 
 function populateConjugationVerbs() {
 
-  if (!conjugationVerbSelect) {
+  const select =
+    document.getElementById(
+      "conjugationVerbSelect"
+    );
+  
+  if (!select) {
     return;
   }
-
-  conjugationVerbSelect.innerHTML = `
+  
+  select.innerHTML = `
     <option value="">
       Choose a verb
     </option>
@@ -231,11 +224,13 @@ function populateConjugationVerbs() {
         verb.Verb;
 
       option.textContent =
-        conjugationEnglishToggle?.checked
+        document.getElementById(
+          "conjugationEnglishToggle"
+        )?.checked
           ? `${verb.Verb} — ${verb.English}`
           : verb.Verb;
 
-      conjugationVerbSelect.appendChild(
+      select.appendChild(
         option
       );
 
@@ -244,24 +239,36 @@ function populateConjugationVerbs() {
 
 }
 
-conjugationVerbSelect?.addEventListener(
-  "change",
-  () => {
+document
+  .getElementById("conjugationVerbSelect")
+  ?.addEventListener(
+    "change",
+    () => {
 
-    if (!conjugationVerbSelect.value) {
+      const select =
+        document.getElementById(
+          "conjugationVerbSelect"
+        );
 
-      conjugationTableContainer.innerHTML =
-        "";
+      const container =
+        document.getElementById(
+          "conjugationTableContainer"
+        );
 
-      return;
+      if (!select.value) {
+
+        container.innerHTML =
+          "";
+
+        return;
+      }
+
+      renderConjugationTable(
+        select.value
+      );
+
     }
-
-    renderConjugationTable(
-      conjugationVerbSelect.value
-    );
-
-  }
-);
+  );
 
 function renderConjugationTable(verbName) {
 
