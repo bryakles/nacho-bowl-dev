@@ -368,8 +368,6 @@ function populateConjugationSettings() {
   setupConjugationTenseButtons();
   setupConjugationVerbFilterButtons();
 
-}
-
   const label =
     document.querySelector(
       "#conjugationSubjectOptions"
