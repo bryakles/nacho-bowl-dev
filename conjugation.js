@@ -363,6 +363,7 @@ function populateConjugationSettings() {
   populateConjugationTenses();
 
   setupConjugationSelectionButtons();
+  setupConjugationVerbFilterButtons();
 
 }
 
@@ -626,6 +627,55 @@ function setupConjugationSelectionButtons() {
       );
 
     }
+
+  };
+
+}
+
+// ============================================================
+// VERB FILTER BUTTONS
+// ============================================================
+
+function setupConjugationVerbFilterButtons() {
+
+  const container =
+    document.getElementById(
+      "conjugationVerbOptions"
+    );
+
+  if (!container) {
+    return;
+  }
+
+  container.onclick = event => {
+
+    const button =
+      event.target.closest(
+        "[data-verb-filter]"
+      );
+
+    if (!button) {
+      return;
+    }
+
+    const buttons =
+      [
+        ...container.querySelectorAll(
+          "[data-verb-filter]"
+        )
+      ];
+
+    buttons.forEach(
+      btn => {
+        btn.classList.remove(
+          "active"
+        );
+      }
+    );
+
+    button.classList.add(
+      "active"
+    );
 
   };
 
