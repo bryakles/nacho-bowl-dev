@@ -191,11 +191,11 @@ function populateConjugationVerbs() {
     document.getElementById(
       "conjugationVerbSelect"
     );
-  
+
   if (!select) {
     return;
   }
-  
+
   select.innerHTML = `
     <option value="">
       Choose a verb
@@ -218,7 +218,9 @@ function populateConjugationVerbs() {
     verb => {
 
       const option =
-        document.createElement("option");
+        document.createElement(
+          "option"
+        );
 
       option.value =
         verb.Verb;
@@ -226,7 +228,7 @@ function populateConjugationVerbs() {
       option.textContent =
         document.getElementById(
           "conjugationEnglishToggle"
-        )?.checked
+        )?.classList.contains("active")
           ? `${verb.Verb} — ${verb.English}`
           : verb.Verb;
 
