@@ -1278,8 +1278,12 @@ function showLandingPage() {
 // ============================================================
 
 homeBtn.addEventListener("click", () => {
+
+  console.log("HOME BUTTON CLICKED");
+
   showLandingPage();
-});
+
+});;
 
 studySetsNavBtn.addEventListener("click", () => {
   showFilterPanel();
