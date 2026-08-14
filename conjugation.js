@@ -25,9 +25,13 @@ async function loadConjugationData() {
     const text =
       await response.text();
 
+    conjugationData =
+      parseConjugationCSV(text);
+
     console.log(
-      "CONJUGATION CSV LOADED:",
-      text.substring(0, 300)
+      "CONJUGATION DATA LOADED:",
+      conjugationData.length,
+      conjugationData.slice(0, 3)
     );
 
   } catch (error) {
@@ -38,5 +42,95 @@ async function loadConjugationData() {
     );
 
   }
+
+}
+
+function parseConjugationCSV(text) {
+
+  const rows = [];
+  let row = [];
+  let cell = "";
+  let insideQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+
+    const char = text[i];
+    const next = text[i + 1];
+
+    if (char === '"' && insideQuotes && next === '"') {
+      cell += '"';
+      i++;
+      continue;
+    }
+
+    if (char === '"') {
+      insideQuotes = !insideQuotes;
+      continue;
+    }
+
+    if (char === "," && !insideQuotes) {
+      row.push(cell);
+      cell = "";
+      continue;
+    }
+
+    if (
+      (char === "\n" || char === "\r") &&
+      !insideQuotes
+    ) {
+
+      if (char === "\r" && next === "\n") {
+        i++;
+      }
+
+      row.push(cell);
+      rows.push(row);
+
+      row = [];
+      cell = "";
+
+      continue;
+    }
+
+    cell += char;
+  }
+
+  if (cell !== "" || row.length > 0) {
+    row.push(cell);
+    rows.push(row);
+  }
+
+  if (rows.length < 2) {
+    return [];
+  }
+
+  const headers =
+    rows[0].map(
+      header => header.trim()
+    );
+
+  return rows
+    .slice(1)
+    .filter(row =>
+      row.some(
+        cell => cell.trim() !== ""
+      )
+    )
+    .map(row => {
+
+      const verb = {};
+
+      headers.forEach(
+        (header, index) => {
+
+          verb[header] =
+            (row[index] || "").trim();
+
+        }
+      );
+
+      return verb;
+
+    });
 
 }
