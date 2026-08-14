@@ -1382,6 +1382,7 @@ function showFilterPanel() {
   renderLevelChips();
   renderUnitChips();
   renderSetChips();
+  renderModeChips();
   loadMyStudySets();
   updateCardCountPreview();
 }
