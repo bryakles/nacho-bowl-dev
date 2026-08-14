@@ -1363,12 +1363,12 @@ function showPracticeScreen() {
   welcomeName.textContent =
     currentUser.name;
 
-  showLandingPage();
-
   renderAttemptHistory();
   updateFooterNachos();
 
   loadTeacherSettings();
+
+  showLandingPage();
 }
 
 function saveCurrentPanel(panelName) {
