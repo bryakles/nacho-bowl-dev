@@ -178,7 +178,125 @@
         </div>
       
       </section>
-  
+
+
+      <!-- CONJUGATION SELECTION PANEL -->
+      <section id="conjugationSelectionPanel" class="panel hidden">
+      
+        <div class="practice-header">
+          <div>
+            <h2>🔤 Verb Conjugator</h2>
+            <div class="practice-meta">
+              <span>Practice Spanish verb conjugations.</span>
+            </div>
+          </div>
+        </div>
+      
+        <div class="conjugation-options">
+      
+          <!-- SHOW ENGLISH -->
+          <div class="filter-group">
+            <label>Show verbs in English?</label>
+      
+            <div class="toggle-row">
+              <button
+                id="conjugationEnglishToggle"
+                class="toggle-btn active"
+                type="button"
+              >
+                ON
+              </button>
+            </div>
+          </div>
+      
+          <!-- REPLACE PRONOUNS -->
+          <div class="filter-group">
+            <label>Replace pronouns?</label>
+      
+            <div class="toggle-row">
+              <button
+                id="conjugationPronounToggle"
+                class="toggle-btn"
+                type="button"
+              >
+                OFF
+              </button>
+            </div>
+          </div>
+      
+          <!-- VERBS -->
+          <div class="filter-group">
+            <label>Which verbs should be included?</label>
+      
+            <div
+              id="conjugationVerbOptions"
+              class="chip-group"
+            >
+      
+              <button
+                class="filter-chip active"
+                data-verb-filter="all"
+                type="button"
+              >
+                All Verbs
+              </button>
+      
+              <button
+                class="filter-chip"
+                data-verb-filter="favorite"
+                type="button"
+              >
+                Favorite Verbs
+              </button>
+      
+            </div>
+          </div>
+      
+          <!-- SUBJECTS -->
+          <div class="filter-group">
+            <label>Subjects</label>
+      
+            <div
+              id="conjugationSubjectOptions"
+              class="chip-group"
+            ></div>
+          </div>
+      
+          <!-- TENSES -->
+          <div class="filter-group">
+            <label>Tenses</label>
+      
+            <div
+              id="conjugationTenseOptions"
+              class="chip-group"
+            ></div>
+          </div>
+      
+        </div>
+      
+        <div class="filter-footer-bottom">
+      
+          <button
+            id="startConjugationBtn"
+            class="btn btn-primary"
+            type="button"
+          >
+            Start Conjugating
+          </button>
+      
+        </div>
+      
+        <button
+          id="conjugationSelectionBackBtn"
+          class="btn btn-secondary"
+          type="button"
+        >
+          ← Home
+        </button>
+      
+      </section>
+      
+      
       <!-- STUDY SETS CONTENT -->
       <main class="practice-main">
       
