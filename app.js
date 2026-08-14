@@ -379,6 +379,7 @@ const loginError       = document.getElementById("loginError");
 const loadingMsg       = document.getElementById("loadingMsg");
 const welcomeName      = document.getElementById("welcomeName");
 const signOutBtn       = document.getElementById("signOutBtn");
+const homeBtn = document.getElementById("homeBtn");
 
 const filterPanel      = document.getElementById("filterPanel");
 const practicePanel    = document.getElementById("practicePanel");
@@ -1275,6 +1276,10 @@ function showLandingPage() {
 // ============================================================
 // LANDING PAGE NAVIGATION
 // ============================================================
+
+homeBtn.addEventListener("click", () => {
+  showLandingPage();
+});
 
 studySetsNavBtn.addEventListener("click", () => {
   showFilterPanel();
