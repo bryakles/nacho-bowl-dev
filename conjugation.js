@@ -134,3 +134,69 @@ function parseConjugationCSV(text) {
     });
 
 }
+
+function populateConjugationVerbs() {
+
+  if (!conjugationVerbSelect) {
+    return;
+  }
+
+  conjugationVerbSelect.innerHTML = `
+    <option value="">
+      Choose a verb
+    </option>
+  `;
+
+  const verbs =
+    [
+      ...new Map(
+        conjugationData.map(
+          row => [
+            row.Verb,
+            row
+          ]
+        )
+      ).values()
+    ];
+
+  verbs.forEach(
+    verb => {
+
+      const option =
+        document.createElement("option");
+
+      option.value =
+        verb.Verb;
+
+      option.textContent =
+        conjugationEnglishToggle?.checked
+          ? `${verb.Verb} — ${verb.English}`
+          : verb.Verb;
+
+      conjugationVerbSelect.appendChild(
+        option
+      );
+
+    }
+  );
+
+}
+
+conjugationVerbSelect?.addEventListener(
+  "change",
+  () => {
+
+    if (!conjugationVerbSelect.value) {
+
+      conjugationTableContainer.innerHTML =
+        "";
+
+      return;
+    }
+
+    renderConjugationTable(
+      conjugationVerbSelect.value
+    );
+
+  }
+);
