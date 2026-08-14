@@ -9,6 +9,18 @@ const CONJUGATION_CSV_URL =
 
 let conjugationData = [];
 
+const conjugationVerbSelect =
+  document.getElementById("conjugationVerbSelect");
+
+const conjugationEnglishToggle =
+  document.getElementById("conjugationEnglishToggle");
+
+const conjugationRomanizationToggle =
+  document.getElementById("conjugationRomanizationToggle");
+
+const conjugationTableContainer =
+  document.getElementById("conjugationTableContainer");
+
 const CONJUGATION_SHEET_GIDS = {
   Spanish: "2013416718",
   French: "1784006245",
