@@ -9,12 +9,60 @@ const CONJUGATION_CSV_URL =
 
 let conjugationData = [];
 
+const CONJUGATION_SHEET_GIDS = {
+  Spanish: "2013416718",
+  French: "1784006245",
+  Korean: "688505735"
+};
+
 async function loadConjugationData() {
 
   try {
 
+    const savedUsername =
+      localStorage.getItem("nachoCurrentUser");
+
+    let language =
+      "Spanish";
+
+    if (savedUsername && typeof allAccounts !== "undefined") {
+
+      const user =
+        allAccounts.find(
+          account =>
+            String(account.username).trim().toLowerCase() ===
+            String(savedUsername).trim().toLowerCase()
+        );
+
+      if (user && user.language) {
+        language = user.language;
+      }
+
+    }
+
+    const gid =
+      CONJUGATION_SHEET_GIDS[language];
+
+    if (!gid) {
+      throw new Error(
+        `No conjugation sheet configured for language: ${language}`
+      );
+    }
+
+    console.log(
+      "CONJUGATION LANGUAGE:",
+      language
+    );
+
+    console.log(
+      "CONJUGATION GID:",
+      gid
+    );
+
     const response =
-      await fetch(CONJUGATION_CSV_URL);
+      await fetch(
+        `${CONJUGATION_CSV_URL}&gid=${gid}`
+      );
 
     if (!response.ok) {
       throw new Error(
@@ -283,3 +331,4 @@ function renderConjugationTable(verbName) {
     html;
 
 }
+
