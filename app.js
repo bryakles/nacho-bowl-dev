@@ -3149,14 +3149,10 @@ function getHint(
     /^(el|la|los|las|un|una|unos|unas)\s+/i;
 
   const studentArticle =
-    student.match(articleRegex)
-      ?.[1]
-      ?.toLowerCase() || "";
-
+    student.match(articleRegex)?.[1]?.toLowerCase() || "";
+  
   const correctArticle =
-    correct.match(articleRegex)
-      ?.[1]
-      ?.toLowerCase() || "";
+    correct.match(articleRegex)?.[1]?.toLowerCase() || "";
 
   if (
     studentArticle !== correctArticle
@@ -5121,17 +5117,17 @@ setTimeout(() => {
     }
   }
 
-    // ----------------------------------------------------------
-    // DEFAULT: LANDING PAGE
-    // ----------------------------------------------------------
+        // ----------------------------------------------------------
+        // DEFAULT: LANDING PAGE
+        // ----------------------------------------------------------
+        
+        showLandingPage();
     
-    showLandingPage();
-
-    finishPageLoading();
+        finishPageLoading();
     
-        });
-      }, 50);
+          });
+        }, 50);
     
-    loadConjugationData();
-
-console.log("APP.JS REACHED BOTTOM");
+      loadConjugationData();
+    
+    console.log("APP.JS REACHED BOTTOM");
