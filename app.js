@@ -1236,6 +1236,9 @@ function showLandingPage() {
 
   saveCurrentPanel("landing");
 
+  loginScreen.classList.add("hidden");
+  practiceScreen.classList.remove("hidden");
+
   const language =
     currentUser?.language || "Spanish";
 
