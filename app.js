@@ -2172,7 +2172,8 @@ function beginPractice(filtered) {
     JSON.stringify(practiceCards)
   );
   
-  resetPracticeState();  practiceActive = true;
+  resetPracticeState();  
+  practiceActive = true;
 
   sessionModeLabel =
     PRACTICE_MODES[practiceMode]?.label || practiceMode;
