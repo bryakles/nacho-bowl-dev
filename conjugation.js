@@ -200,3 +200,86 @@ conjugationVerbSelect?.addEventListener(
 
   }
 );
+
+function renderConjugationTable(verbName) {
+
+  const rows =
+    conjugationData.filter(
+      row =>
+        row.Verb === verbName
+    );
+
+  if (!rows.length) {
+
+    conjugationTableContainer.innerHTML =
+      "<p>Verb not found.</p>";
+
+    return;
+  }
+
+  const headers =
+    Object.keys(rows[0]);
+
+  const excludedHeaders = [
+    "Verb",
+    "English",
+    "Favorite"
+  ];
+
+  const tableHeaders =
+    headers.filter(
+      header =>
+        !excludedHeaders.includes(header)
+    );
+
+  let html = `
+    <table class="conjugation-table">
+      <thead>
+        <tr>
+  `;
+
+  tableHeaders.forEach(
+    header => {
+
+      html += `
+        <th>${header}</th>
+      `;
+
+    }
+  );
+
+  html += `
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  rows.forEach(
+    row => {
+
+      html += "<tr>";
+
+      tableHeaders.forEach(
+        header => {
+
+          html += `
+            <td>${row[header] || ""}</td>
+          `;
+
+        }
+      );
+
+      html += "</tr>";
+
+    }
+  );
+
+  html += `
+      </tbody>
+    </table>
+  `;
+
+  conjugationTableContainer.innerHTML =
+    html;
+
+}
