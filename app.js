@@ -1281,7 +1281,15 @@ studySetsNavBtn.addEventListener("click", () => {
 });
 
 conversationNavBtn.addEventListener("click", () => {
-  openConversationSelection();
+  console.log("CONVERSATION NAV CLICKED");
+
+  if (typeof openConversationSelection === "function") {
+    openConversationSelection();
+  } else {
+    console.error(
+      "openConversationSelection is not available."
+    );
+  }
 });
 
 conjugationNavBtn.addEventListener("click", () => {
@@ -1341,10 +1349,15 @@ function loadFilterSettings() {
 
 function showFilterPanel() {
   saveCurrentPanel("filter");
-  
+
+  landingPanel.classList.add("hidden");
+
   filterPanel.classList.remove("hidden");
   practicePanel.classList.add("hidden");
   resultsPanel.classList.add("hidden");
+
+  conversationSelectionPanel.classList.add("hidden");
+  conversationPanel.classList.add("hidden");
 
   loadFilterSettings();
 
@@ -1354,7 +1367,6 @@ function showFilterPanel() {
   loadMyStudySets();
   updateCardCountPreview();
 }
-
 // ============================================================
 // FILTER CHIPS
 // ============================================================
