@@ -1238,6 +1238,9 @@ function showLandingPage() {
   const language =
     currentUser?.language || "Spanish";
 
+  console.log("LANDING LANGUAGE:", currentUser?.language);
+  console.log("LANDING USER:", currentUser);
+
   const content =
     LANDING_LANGUAGE_CONTENT[language] ||
     LANDING_LANGUAGE_CONTENT.Spanish;
