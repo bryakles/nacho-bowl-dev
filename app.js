@@ -4929,7 +4929,7 @@ setTimeout(() => {
 
     finishPageLoading();
     return;
-
+  }
 
   // ----------------------------------------------------------
   // RESTORE CONVERSATIONS
@@ -5003,6 +5003,7 @@ setTimeout(() => {
 
     finishPageLoading();
     return;
+  }
 
   // ----------------------------------------------------------
   // RESTORE PRACTICE SESSION
