@@ -24,10 +24,81 @@
     </div>
   </div>
 
-  <!-- PRACTICE SCREEN -->
-  <div id="practiceScreen" class="screen hidden">
-
-    <header class="top-bar">
+    <!-- PRACTICE SCREEN -->
+    <div id="practiceScreen" class="screen hidden">
+  
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <span class="logo-small">🌮</span>
+          <span id="welcomeName" class="welcome-name"></span>
+        </div>
+        <button id="signOutBtn" class="btn btn-ghost">Sign Out</button>
+      </header>
+  
+      <!-- LANDING / HOME SCREEN -->
+      <section id="landingPanel" class="panel">
+  
+        <div class="landing-welcome">
+          <h2 id="landingWelcomeTarget"></h2>
+          <p id="landingWelcomeEnglish"></p>
+        </div>
+  
+        <div class="learning-options">
+  
+          <!-- STUDY SETS -->
+          <button
+            id="studySetsNavBtn"
+            type="button"
+            class="learning-option"
+          >
+            <span class="learning-option-icon">🧀</span>
+            <span class="learning-option-text">
+              <strong>Study Sets</strong>
+              <span id="studySetsDescription">
+                Practice vocabulary and phrases
+              </span>
+            </span>
+          </button>
+  
+          <!-- CONVERSATION -->
+          <button
+            id="conversationNavBtn"
+            type="button"
+            class="learning-option"
+          >
+            <span class="learning-option-icon">💬</span>
+            <span class="learning-option-text">
+              <strong>Conversation</strong>
+              <span id="conversationDescription">
+                Practice through conversations
+              </span>
+            </span>
+          </button>
+  
+          <!-- CONJUGATION -->
+          <button
+            id="conjugationNavBtn"
+            type="button"
+            class="learning-option"
+          >
+            <span class="learning-option-icon">🔤</span>
+            <span class="learning-option-text">
+              <strong>Conjugation</strong>
+              <span id="conjugationDescription">
+                Practice verb conjugation
+              </span>
+            </span>
+          </button>
+  
+        </div>
+  
+      </section>
+  
+      <!-- STUDY SETS CONTENT -->
+      <main class="practice-main">
+  
+        <!-- FILTER PANEL -->
+        <section id="filterPanel" class="panel hidden">
       <div class="top-bar-left">
         <span class="logo-small">🌮</span>
         <span id="welcomeName" class="welcome-name"></span>
@@ -108,30 +179,7 @@
             <button id="startPracticeBtn" class="btn btn-primary" disabled>
               Start Practice
             </button>
-
-            <!-- HOME-ONLY CONTENT -->
-            <div id="homeOnlyContent">
-            
-              <!-- CONVERSATIONS -->
-              <div class="section-divider"></div>
-              
-              <div class="conversation-entry">
-                <div class="conversation-entry-text">
-                  <h3>💬 Conversations</h3>
-                  <p>Practice Spanish through real-world conversations.</p>
-                </div>
-              
-                <button
-                  id="conversationBtn"
-                  type="button"
-                  class="conversation-entry-btn"
-                >
-                  Practice Conversations →
-                </button>
-              </div>
-        
-          </div>
-          
+     
           </section>
 
       <!-- CONVERSATION SELECTION PANEL -->
