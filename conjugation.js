@@ -82,6 +82,8 @@ async function loadConjugationData() {
       conjugationData.slice(0, 3)
     );
 
+    populateConjugationSettings();
+
   } catch (error) {
 
     console.error(
@@ -332,3 +334,126 @@ function renderConjugationTable(verbName) {
 
 }
 
+// ============================================================
+// CONJUGATION SETTINGS
+// ============================================================
+
+function populateConjugationSettings() {
+
+  populateConjugationSubjects();
+  populateConjugationTenses();
+
+}
+
+
+// ============================================================
+// SUBJECTS
+// ============================================================
+
+function populateConjugationSubjects() {
+
+  const container =
+    document.getElementById(
+      "conjugationSubjectOptions"
+    );
+
+  if (!container || !conjugationData.length) {
+    return;
+  }
+
+  container.innerHTML = "";
+
+  const subjects = [
+    ...new Set(
+      conjugationData
+        .map(row => row.Subject)
+        .filter(subject => subject)
+    )
+  ];
+
+  subjects.forEach(
+    subject => {
+
+      const button =
+        document.createElement("button");
+
+      button.type =
+        "button";
+
+      button.className =
+        "filter-chip active";
+
+      button.dataset.subject =
+        subject;
+
+      button.textContent =
+        subject;
+
+      container.appendChild(
+        button
+      );
+
+    }
+  );
+
+}
+
+
+// ============================================================
+// TENSES
+// ============================================================
+
+function populateConjugationTenses() {
+
+  const container =
+    document.getElementById(
+      "conjugationTenseOptions"
+    );
+
+  if (!container || !conjugationData.length) {
+    return;
+  }
+
+  container.innerHTML = "";
+
+  const excludedHeaders = [
+    "Verb",
+    "English",
+    "Favorite",
+    "Subject"
+  ];
+
+  const tenses =
+    Object.keys(
+      conjugationData[0]
+    ).filter(
+      header =>
+        !excludedHeaders.includes(header)
+    );
+
+  tenses.forEach(
+    tense => {
+
+      const button =
+        document.createElement("button");
+
+      button.type =
+        "button";
+
+      button.className =
+        "filter-chip active";
+
+      button.dataset.tense =
+        tense;
+
+      button.textContent =
+        tense;
+
+      container.appendChild(
+        button
+      );
+
+    }
+  );
+
+}
