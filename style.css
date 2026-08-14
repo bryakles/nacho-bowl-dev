@@ -1980,3 +1980,170 @@ body.teacher-lock-active {
   }
 
 }
+
+/* ============================================================
+   LOADING SCREEN
+   ============================================================ */
+
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: #fffaf0;
+}
+
+
+.loading-card {
+  width: 100%;
+  max-width: 500px;
+
+  text-align: center;
+
+  padding: 45px 35px;
+
+  border-radius: 24px;
+
+  background: white;
+
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.10);
+}
+
+
+.loading-logo {
+  font-size: 4rem;
+
+  margin-bottom: 8px;
+
+  animation: tacoBounce 1.2s ease-in-out infinite;
+}
+
+
+.loading-card h1 {
+  margin: 0;
+
+  font-size: 2rem;
+}
+
+
+.loading-message {
+  min-height: 28px;
+
+  margin: 12px 0 22px;
+
+  font-size: 1rem;
+
+  opacity: 0.7;
+}
+
+
+/* ------------------------------------------------------------
+   TACOS
+   ------------------------------------------------------------ */
+
+.loading-tacos {
+  min-height: 42px;
+
+  margin-bottom: 18px;
+
+  font-size: 1.8rem;
+
+  letter-spacing: 4px;
+
+  word-break: break-word;
+
+  transition: all 0.2s ease;
+}
+
+
+/* ------------------------------------------------------------
+   PROGRESS BAR
+   ------------------------------------------------------------ */
+
+.loading-progress-track {
+  width: 100%;
+  height: 18px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: #eee6d8;
+}
+
+
+.loading-progress-bar {
+  height: 100%;
+
+  border-radius: 999px;
+
+  background: #d99a2b;
+
+  transition: width 0.35s ease;
+}
+
+
+.loading-percent {
+  margin-top: 10px;
+
+  font-size: 0.9rem;
+
+  font-weight: 600;
+
+  opacity: 0.6;
+}
+
+
+/* ------------------------------------------------------------
+   ANIMATION
+   ------------------------------------------------------------ */
+
+@keyframes tacoBounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-7px);
+  }
+
+}
+
+
+/* ------------------------------------------------------------
+   MOBILE
+   ------------------------------------------------------------ */
+
+@media (max-width: 600px) {
+
+  .loading-card {
+    padding: 35px 22px;
+  }
+
+  .loading-logo {
+    font-size: 3.2rem;
+  }
+
+  .loading-card h1 {
+    font-size: 1.7rem;
+  }
+
+  .loading-message {
+    font-size: 0.9rem;
+  }
+
+  .loading-tacos {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+  }
+
+}
