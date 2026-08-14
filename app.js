@@ -4732,6 +4732,22 @@ loadData().then(async () => {
 
   currentUser = user;
 
+  welcomeName.textContent =
+    currentUser.name;
+  
+  try {
+    await loadTeacherSettings();
+  } catch (error) {
+    console.error(
+      "Teacher settings failed during restore:",
+      error
+    );
+  }
+  
+  renderAttemptHistory();
+  updateFooterNachos();
+  renderModeChips();
+
   landingPanel.classList.add("hidden");
 
   console.log(
