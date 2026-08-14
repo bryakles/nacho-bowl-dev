@@ -340,17 +340,38 @@ function renderConjugationTable(verbName) {
 
 function populateConjugationSettings() {
 
-  populateConjugationSubjects();
+  populateConjugationSelectionDimension();
   populateConjugationTenses();
+
+  const label =
+    document.querySelector(
+      "#conjugationSubjectOptions"
+    )?.closest(".filter-group")
+      ?.querySelector("label");
+
+  if (label) {
+
+    const hasFormality =
+      conjugationData.length &&
+      Object.prototype.hasOwnProperty.call(
+        conjugationData[0],
+        "Formality"
+      );
+
+    label.textContent =
+      hasFormality
+        ? "Formality"
+        : "Subjects";
+
+  }
 
 }
 
-
 // ============================================================
-// SUBJECTS
+// LANGUAGE-AWARE SELECTION DIMENSION
 // ============================================================
 
-function populateConjugationSubjects() {
+function populateConjugationSelectionDimension() {
 
   const container =
     document.getElementById(
@@ -363,16 +384,92 @@ function populateConjugationSubjects() {
 
   container.innerHTML = "";
 
-  const subjects = [
+  const headers =
+    Object.keys(conjugationData[0]);
+
+  let selectionColumn = null;
+
+  if (headers.includes("Formality")) {
+
+    selectionColumn = "Formality";
+
+  } else if (headers.includes("Subject")) {
+
+    selectionColumn = "Subject";
+
+  }
+
+  if (!selectionColumn) {
+    return;
+  }
+
+  const values = [
     ...new Set(
       conjugationData
-        .map(row => row.Subject)
-        .filter(subject => subject)
+        .map(row => row[selectionColumn])
+        .filter(value => value)
     )
   ];
 
-  subjects.forEach(
-    subject => {
+  // ----------------------------------------------------------
+  // SELECT ALL
+  // ----------------------------------------------------------
+
+  const selectAllButton =
+    document.createElement("button");
+
+  selectAllButton.type =
+    "button";
+
+  selectAllButton.className =
+    "filter-chip active";
+
+  selectAllButton.dataset.selectionAction =
+    "all";
+
+  selectAllButton.textContent =
+    "Select All";
+
+  container.appendChild(
+    selectAllButton
+  );
+
+  // ----------------------------------------------------------
+  // SPANISH: ALL BUT VOSOTROS
+  // ----------------------------------------------------------
+
+  if (
+    selectionColumn === "Subject" &&
+    values.includes("vosotros")
+  ) {
+
+    const allButVosotrosButton =
+      document.createElement("button");
+
+    allButVosotrosButton.type =
+      "button";
+
+    allButVosotrosButton.className =
+      "filter-chip";
+
+    allButVosotrosButton.dataset.selectionAction =
+      "all-but-vosotros";
+
+    allButVosotrosButton.textContent =
+      "All but vosotros";
+
+    container.appendChild(
+      allButVosotrosButton
+    );
+
+  }
+
+  // ----------------------------------------------------------
+  // INDIVIDUAL OPTIONS
+  // ----------------------------------------------------------
+
+  values.forEach(
+    value => {
 
       const button =
         document.createElement("button");
@@ -383,11 +480,14 @@ function populateConjugationSubjects() {
       button.className =
         "filter-chip active";
 
-      button.dataset.subject =
-        subject;
+      button.dataset.selectionValue =
+        value;
+
+      button.dataset.selectionColumn =
+        selectionColumn;
 
       button.textContent =
-        subject;
+        value;
 
       container.appendChild(
         button
@@ -398,6 +498,168 @@ function populateConjugationSubjects() {
 
 }
 
+// ============================================================
+// SELECTION BUTTONS
+// ============================================================
+
+document
+  .getElementById("conjugationSubjectOptions")
+  ?.addEventListener(
+    "click",
+    event => {
+
+      const button =
+        event.target.closest(
+          ".filter-chip"
+        );
+
+      if (!button) {
+        return;
+      }
+
+      const container =
+        document.getElementById(
+          "conjugationSubjectOptions"
+        );
+
+      const buttons =
+        [
+          ...container.querySelectorAll(
+            ".filter-chip"
+          )
+        ];
+
+      const action =
+        button.dataset.selectionAction;
+
+      // --------------------------------------------------------
+      // SELECT ALL
+      // --------------------------------------------------------
+
+      if (action === "all") {
+
+        buttons.forEach(
+          btn => {
+
+            btn.classList.add(
+              "active"
+            );
+
+          }
+        );
+
+        return;
+      }
+
+      // --------------------------------------------------------
+      // ALL BUT VOSOTROS
+      // --------------------------------------------------------
+
+      if (
+        action ===
+        "all-but-vosotros"
+      ) {
+
+        buttons.forEach(
+          btn => {
+
+            if (
+              btn.dataset.selectionValue ===
+              "vosotros"
+            ) {
+
+              btn.classList.remove(
+                "active"
+              );
+
+            } else {
+
+              btn.classList.add(
+                "active"
+              );
+
+            }
+
+          }
+        );
+
+        return;
+      }
+
+      // --------------------------------------------------------
+      // INDIVIDUAL SELECTION
+      // --------------------------------------------------------
+
+      if (
+        button.dataset.selectionValue
+      ) {
+
+        button.classList.toggle(
+          "active"
+        );
+
+        const individualButtons =
+          buttons.filter(
+            btn =>
+              btn.dataset.selectionValue
+          );
+
+        const allSelected =
+          individualButtons.every(
+            btn =>
+              btn.classList.contains(
+                "active"
+              )
+          );
+
+        const allButVosotrosSelected =
+          individualButtons
+            .filter(
+              btn =>
+                btn.dataset.selectionValue !==
+                "vosotros"
+            )
+            .every(
+              btn =>
+                btn.classList.contains(
+                  "active"
+                )
+            );
+
+        buttons.forEach(
+          btn => {
+
+            if (
+              btn.dataset.selectionAction ===
+              "all"
+            ) {
+
+              btn.classList.toggle(
+                "active",
+                allSelected
+              );
+
+            }
+
+            if (
+              btn.dataset.selectionAction ===
+              "all-but-vosotros"
+            ) {
+
+              btn.classList.toggle(
+                "active",
+                allButVosotrosSelected
+              );
+
+            }
+
+          }
+        );
+
+      }
+
+    }
+  );
 
 // ============================================================
 // TENSES
@@ -420,7 +682,9 @@ function populateConjugationTenses() {
     "Verb",
     "English",
     "Favorite",
-    "Subject"
+    "Regularity",
+    "Subject",
+    "Formality"
   ];
 
   const tenses =
@@ -453,6 +717,301 @@ function populateConjugationTenses() {
         button
       );
 
+    }
+  );
+
+}
+
+// ============================================================
+// START CONJUGATION
+// ============================================================
+
+document
+  .getElementById("startConjugationBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+
+      const subjectContainer =
+        document.getElementById(
+          "conjugationSubjectOptions"
+        );
+
+      const tenseContainer =
+        document.getElementById(
+          "conjugationTenseOptions"
+        );
+
+      if (
+        !subjectContainer ||
+        !tenseContainer
+      ) {
+        return;
+      }
+
+      // --------------------------------------------------------
+      // SELECTED SUBJECTS / FORMALITY
+      // --------------------------------------------------------
+
+      const selectedSubjects =
+        [
+          ...subjectContainer.querySelectorAll(
+            ".filter-chip.active[data-selection-value]"
+          )
+        ]
+        .map(
+          button =>
+            button.dataset.selectionValue
+        );
+
+      // --------------------------------------------------------
+      // SELECTED TENSES
+      // --------------------------------------------------------
+
+      const selectedTenses =
+        [
+          ...tenseContainer.querySelectorAll(
+            ".filter-chip.active[data-tense]"
+          )
+        ]
+        .map(
+          button =>
+            button.dataset.tense
+        );
+
+      // --------------------------------------------------------
+      // SELECTED VERB FILTER
+      // --------------------------------------------------------
+
+      const selectedVerbFilter =
+        document.querySelector(
+          '[data-verb-filter].active'
+        )?.dataset.verbFilter ||
+        "all";
+
+      // --------------------------------------------------------
+      // SAVE SETTINGS
+      // --------------------------------------------------------
+
+      window.conjugationPracticeSettings = {
+
+        subjects:
+          selectedSubjects,
+
+        tenses:
+          selectedTenses,
+
+        verbFilter:
+          selectedVerbFilter,
+
+        showEnglish:
+          document
+            .getElementById(
+              "conjugationEnglishToggle"
+            )
+            ?.classList.contains("active") ??
+          true,
+
+        replacePronouns:
+          document
+            .getElementById(
+              "conjugationPronounToggle"
+            )
+            ?.classList.contains("active") ??
+          false
+
+      };
+
+      console.log(
+        "CONJUGATION SETTINGS:",
+        window.conjugationPracticeSettings
+      );
+
+      // --------------------------------------------------------
+      // BUILD PRACTICE DATA
+      // --------------------------------------------------------
+
+      buildConjugationPractice();
+
+    }
+  );
+
+
+// ============================================================
+// BUILD PRACTICE DATA
+// ============================================================
+
+function buildConjugationPractice() {
+
+  const settings =
+    window.conjugationPracticeSettings;
+
+  if (!settings) {
+    return;
+  }
+
+  let rows =
+    [...conjugationData];
+
+  // ----------------------------------------------------------
+  // FAVORITE FILTER
+  // ----------------------------------------------------------
+
+  if (
+    settings.verbFilter ===
+    "favorite"
+  ) {
+
+    rows =
+      rows.filter(
+        row =>
+          String(row.Favorite)
+            .trim()
+            .toUpperCase() ===
+          "TRUE"
+      );
+
+  }
+
+  // ----------------------------------------------------------
+  // SUBJECT / FORMALITY FILTER
+  // ----------------------------------------------------------
+
+  if (
+    settings.subjects.length
+  ) {
+
+    rows =
+      rows.filter(
+        row => {
+
+          const value =
+            row.Subject ||
+            row.Formality ||
+            "";
+
+          return settings.subjects.includes(
+            value
+          );
+
+        }
+      );
+
+  }
+
+  // ----------------------------------------------------------
+  // TENSE FILTER
+  // ----------------------------------------------------------
+
+  if (
+    settings.tenses.length
+  ) {
+
+    const filteredRows = [];
+
+    rows.forEach(
+      row => {
+
+        settings.tenses.forEach(
+          tense => {
+
+            if (
+              row[tense] &&
+              String(row[tense]).trim()
+            ) {
+
+              filteredRows.push({
+
+                ...row,
+
+                practiceTense:
+                  tense,
+
+                practiceAnswer:
+                  row[tense]
+
+              });
+
+            }
+
+          }
+        );
+
+      }
+    );
+
+    rows =
+      filteredRows;
+
+  }
+
+  console.log(
+    "CONJUGATION PRACTICE DATA:",
+    rows
+  );
+
+  if (!rows.length) {
+
+    alert(
+      "No conjugation questions match your selected settings."
+    );
+
+    return;
+  }
+
+  window.conjugationPracticeData =
+    rows;
+
+  startConjugationPractice();
+
+}
+
+// ============================================================
+// START PRACTICE
+// ============================================================
+
+function startConjugationPractice() {
+
+  const practiceData =
+    window.conjugationPracticeData;
+
+  if (
+    !practiceData ||
+    !practiceData.length
+  ) {
+    return;
+  }
+
+  console.log(
+    "STARTING CONJUGATION PRACTICE:",
+    practiceData.length,
+    "questions"
+  );
+
+  // Temporary proof that the filtering works.
+  // We will replace this with the actual practice screen next.
+
+  const firstQuestion =
+    practiceData[0];
+
+  console.log(
+    "FIRST CONJUGATION QUESTION:",
+    {
+      verb:
+        firstQuestion.Verb,
+
+      english:
+        firstQuestion.English,
+
+      subject:
+        firstQuestion.Subject ||
+        firstQuestion.Formality,
+
+      tense:
+        firstQuestion.practiceTense,
+
+      answer:
+        firstQuestion.practiceAnswer
     }
   );
 
