@@ -782,16 +782,6 @@ document
             ?.classList.contains("active") ??
           true,
 
-        replacePronouns:
-          document
-            .getElementById(
-              "conjugationPronounToggle"
-            )
-            ?.classList.contains("active") ??
-          false
-
-      };
-
       console.log(
         "CONJUGATION SETTINGS:",
         window.conjugationPracticeSettings
