@@ -5088,3 +5088,5 @@ setTimeout(() => {
       }, 50);
     
     loadConjugationData();
+
+console.log("APP.JS REACHED BOTTOM");
