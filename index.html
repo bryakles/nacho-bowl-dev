@@ -96,94 +96,111 @@
   
       <!-- STUDY SETS CONTENT -->
       <main class="practice-main">
-  
+      
         <!-- FILTER PANEL -->
         <section id="filterPanel" class="panel hidden">
-      <div class="top-bar-left">
-        <span class="logo-small">🌮</span>
-        <span id="welcomeName" class="welcome-name"></span>
-      </div>
-      <button id="signOutBtn" class="btn btn-ghost">Sign Out</button>
-      </header>
-    <main class="practice-main">
-
-      <!-- FILTER PANEL -->
-      <section id="filterPanel" class="panel">
-        <h2>Choose What to Practice</h2>
       
-        <div class="filter-grid">
-          <div class="filter-group">
-            <label>Level</label>
-            <div id="levelOptions" class="chip-group"></div>
+          <h2>Choose What to Practice</h2>
+      
+          <div class="filter-grid">
+      
+            <div class="filter-group">
+              <label>Level</label>
+              <div id="levelOptions" class="chip-group"></div>
+            </div>
+      
+            <div class="filter-group">
+              <label>Unit</label>
+              <div id="unitOptions" class="chip-group">
+                <span class="filter-hint">Select a level first</span>
+              </div>
+            </div>
+      
+            <div class="filter-group">
+              <label>Study Set</label>
+              <div id="setOptions" class="chip-group set-chip-group">
+                <span class="filter-hint">Select a unit first</span>
+              </div>
+            </div>
+      
           </div>
       
-          <div class="filter-group">
-            <label>Unit</label>
-            <div id="unitOptions" class="chip-group">
-              <span class="filter-hint">Select a level first</span>
+          <!-- MY STUDY SETS -->
+          <div class="filter-group my-study-sets-group">
+            <label>My Study Sets</label>
+      
+            <div
+              id="myStudySetOptions"
+              class="chip-group my-study-set-chips"
+            >
+              <span class="filter-hint">
+                No saved study sets yet
+              </span>
             </div>
           </div>
       
-          <div class="filter-group">
-            <label>Study Set</label>
-            <div id="setOptions" class="chip-group set-chip-group">
-              <span class="filter-hint">Select a unit first</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- MY STUDY SETS -->
-        <div class="filter-group my-study-sets-group">
-          <label>My Study Sets</label>
-          <div
-            id="myStudySetOptions"
-            class="chip-group my-study-set-chips"
+          <button
+            id="manageStudySetsBtn"
+            type="button"
+            class="manage-study-sets-btn"
           >
-            <span class="filter-hint">
-              No saved study sets yet
-            </span>
+            ⚙️ Manage Study Sets
+          </button>
+      
+          <div class="section-divider"></div>
+      
+          <div class="filter-group">
+            <label>Practice Mode</label>
+            <div id="modeOptions" class="mode-chips"></div>
           </div>
-        </div>
-        
-        <button
-          id="manageStudySetsBtn"
-          type="button"
-          class="manage-study-sets-btn"
-        >
-          ⚙️ Manage Study Sets
-        </button>
-        
-        <div class="section-divider"></div>
-        
-        <div class="filter-group">
-          <label>Practice Mode</label>
-        
-          <div id="modeOptions" class="mode-chips"></div>
-        </div>
-          
+      
           <div class="mode-row">
             <label>Session Length:</label>
+      
             <div class="session-chips">
-              <button class="session-chip" data-count="10">
+              <button
+                class="session-chip"
+                data-count="10"
+              >
                 Quick (10)
               </button>
-              <button class="session-chip active" data-count="25">
+      
+              <button
+                class="session-chip active"
+                data-count="25"
+              >
                 Standard (25)
               </button>
             </div>
           </div>
-          
+      
           <div class="filter-footer-bottom">
-            <span id="cardCountPreview" class="card-count-preview">No cards selected</span>
-          
-            <button id="startPracticeBtn" class="btn btn-primary" disabled>
+      
+            <span
+              id="cardCountPreview"
+              class="card-count-preview"
+            >
+              No cards selected
+            </span>
+      
+            <button
+              id="startPracticeBtn"
+              class="btn btn-primary"
+              disabled
+            >
               Start Practice
             </button>
-     
-          </section>
-
-      <!-- CONVERSATION SELECTION PANEL -->
-      <section id="conversationSelectionPanel" class="panel hidden">
+      
+          </div>
+      
+        </section>
+      
+      
+        <!-- CONVERSATION SELECTION PANEL -->
+        <section
+          id="conversationSelectionPanel"
+          class="panel hidden"
+        >
       
         <div class="practice-header">
           <div>
