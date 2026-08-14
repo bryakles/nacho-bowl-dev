@@ -1206,7 +1206,7 @@ const LANDING_LANGUAGE_CONTENT = {
 
   French: {
     welcome:
-      "Bonjour, {name} ! Qu'est-ce que tu veux pratiquer aujourd'hui ?",
+      "Bonjour, {name} ! Qu'est-ce que tu veux pratiquer aujourd'hui?",
     description: {
       studySets:
         "Practice French vocabulary and phrases",
