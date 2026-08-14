@@ -5081,10 +5081,10 @@ setTimeout(() => {
     // ----------------------------------------------------------
     
     showLandingPage();
-    
+
     finishPageLoading();
-  
-    loadConjugationData();
     
-      });
-    }, 50);
+        });
+      }, 50);
+    
+    loadConjugationData();
