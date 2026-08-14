@@ -363,7 +363,10 @@ function populateConjugationSettings() {
   populateConjugationTenses();
 
   setupConjugationSelectionButtons();
+  setupConjugationTenseButtons();
   setupConjugationVerbFilterButtons();
+
+}
 
   const label =
     document.querySelector(
@@ -613,7 +616,7 @@ function setupConjugationSelectionButtons() {
     }
 
     // --------------------------------------------------------
-    // INDIVIDUAL BUTTON
+    // INDIVIDUAL OPTION
     // --------------------------------------------------------
 
     if (
@@ -623,6 +626,37 @@ function setupConjugationSelectionButtons() {
       button.classList.toggle(
         "active"
       );
+
+      // Update Select All state
+      const individualButtons =
+        buttons.filter(
+          btn =>
+            btn.dataset.selectionValue
+        );
+
+      const allSelected =
+        individualButtons.every(
+          btn =>
+            btn.classList.contains(
+              "active"
+            )
+        );
+
+      const selectAllButton =
+        buttons.find(
+          btn =>
+            btn.dataset.selectionAction ===
+            "all"
+        );
+
+      if (selectAllButton) {
+
+        selectAllButton.classList.toggle(
+          "active",
+          allSelected
+        );
+
+      }
 
     }
 
@@ -665,9 +699,11 @@ function setupConjugationVerbFilterButtons() {
 
     buttons.forEach(
       btn => {
+
         btn.classList.remove(
           "active"
         );
+
       }
     );
 
@@ -740,6 +776,36 @@ function populateConjugationTenses() {
 
 }
 
+function setupConjugationTenseButtons() {
+
+  const container =
+    document.getElementById(
+      "conjugationTenseOptions"
+    );
+
+  if (!container) {
+    return;
+  }
+
+  container.onclick = event => {
+
+    const button =
+      event.target.closest(
+        ".filter-chip"
+      );
+
+    if (!button) {
+      return;
+    }
+
+    button.classList.toggle(
+      "active"
+    );
+
+  };
+
+}
+
 // ============================================================
 // START CONJUGATION
 // ============================================================
@@ -796,6 +862,26 @@ document
           button =>
             button.dataset.tense
         );
+      
+      if (!selectedSubjects.length) {
+      
+        alert(
+          "Please select at least one subject/formality."
+        );
+      
+        return;
+      
+      }
+      
+      if (!selectedTenses.length) {
+      
+        alert(
+          "Please select at least one tense."
+        );
+      
+        return;
+      
+      }
 
       // --------------------------------------------------------
       // SELECTED VERB FILTER
@@ -1062,7 +1148,9 @@ document
       const correctAnswer =
         String(
           question.practiceAnswer || ""
-        ).trim();
+        )
+        .split("[")[0]
+        .trim();
 
       if (!studentAnswer) {
         feedback.textContent =
