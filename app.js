@@ -350,6 +350,25 @@ const practiceScreen   = document.getElementById("practiceScreen");
 const loginForm        = document.getElementById("loginForm");
 
 const landingPanel     = document.getElementById("landingPanel");
+
+const conjugationPanel =
+  document.getElementById("conjugationPanel");
+
+const conjugationBackBtn =
+  document.getElementById("conjugationBackBtn");
+
+const conjugationVerbSelect =
+  document.getElementById("conjugationVerbSelect");
+
+const conjugationEnglishToggle =
+  document.getElementById("conjugationEnglishToggle");
+
+const conjugationRomanizationToggle =
+  document.getElementById("conjugationRomanizationToggle");
+
+const conjugationTableContainer =
+  document.getElementById("conjugationTableContainer");
+
 const landingWelcomeTarget =
   document.getElementById("landingWelcomeTarget");
 const landingWelcomeEnglish =
@@ -1423,9 +1442,32 @@ conversationNavBtn.addEventListener("click", () => {
   }
 });
 
-conjugationNavBtn.addEventListener("click", () => {
-  alert("Conjugation practice is coming soon!");
-});
+conjugationNavBtn.addEventListener(
+  "click",
+  () => {
+
+    landingPanel.classList.add("hidden");
+
+    filterPanel.classList.add("hidden");
+    practicePanel.classList.add("hidden");
+    studySetPanel.classList.add("hidden");
+    resultsPanel.classList.add("hidden");
+
+    conversationSelectionPanel?.classList.add("hidden");
+    conversationPanel?.classList.add("hidden");
+    nachoBuilderPanel.classList.add("hidden");
+
+    conjugationPanel.classList.remove("hidden");
+
+    localStorage.setItem(
+      "nachoCurrentPanel",
+      "conjugation"
+    );
+
+    populateConjugationVerbs();
+
+  }
+);
 
 // ============================================================
 // SCREEN TRANSITIONS
