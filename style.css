@@ -1763,3 +1763,220 @@ body.teacher-lock-active {
 .short-speak-container .conversation-button {
   width: fit-content;
 }
+
+/* ============================================================
+   LANDING PAGE
+   ============================================================ */
+
+.landing-panel {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 20px 45px;
+}
+
+
+/* ------------------------------------------------------------
+   HERO
+   ------------------------------------------------------------ */
+
+.landing-hero {
+  text-align: center;
+  padding: 25px 20px 30px;
+}
+
+.landing-food-decor {
+  font-size: 2.4rem;
+  letter-spacing: 12px;
+  margin-bottom: 18px;
+}
+
+.landing-hero h1 {
+  margin: 0;
+  font-size: 2.4rem;
+  line-height: 1.25;
+}
+
+.landing-welcome-english {
+  margin: 10px 0 0;
+  font-size: 1rem;
+  opacity: 0.65;
+}
+
+
+/* ------------------------------------------------------------
+   LEARNING OPTIONS
+   ------------------------------------------------------------ */
+
+.landing-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0 auto;
+  max-width: 760px;
+}
+
+
+.landing-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  padding: 22px 24px;
+
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 16px;
+
+  background: white;
+
+  cursor: pointer;
+  text-align: left;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+
+.landing-option:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.10);
+
+  border-color: rgba(0, 0, 0, 0.18);
+}
+
+
+.landing-option:active {
+  transform: translateY(0);
+}
+
+
+/* Icon */
+
+.landing-option-icon {
+  flex: 0 0 58px;
+
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 2rem;
+
+  border-radius: 14px;
+  background: #f7f3e8;
+}
+
+
+/* Text */
+
+.landing-option-content {
+  flex: 1;
+}
+
+
+.landing-option-content h2 {
+  margin: 0 0 5px;
+
+  font-size: 1.25rem;
+}
+
+
+.landing-option-content p {
+  margin: 0;
+
+  font-size: 0.95rem;
+  opacity: 0.68;
+}
+
+
+/* Arrow */
+
+.landing-option-arrow {
+  flex: 0 0 auto;
+
+  font-size: 1.6rem;
+  opacity: 0.45;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+
+.landing-option:hover .landing-option-arrow {
+  transform: translateX(4px);
+  opacity: 0.8;
+}
+
+
+/* ------------------------------------------------------------
+   FOOTER DECORATION
+   ------------------------------------------------------------ */
+
+.landing-food-footer {
+  text-align: center;
+
+  margin-top: 35px;
+
+  font-size: 1.8rem;
+  letter-spacing: 10px;
+
+  opacity: 0.75;
+}
+
+
+/* ------------------------------------------------------------
+   MOBILE
+   ------------------------------------------------------------ */
+
+@media (max-width: 600px) {
+
+  .landing-panel {
+    padding: 20px 12px 35px;
+  }
+
+  .landing-hero {
+    padding: 15px 10px 25px;
+  }
+
+  .landing-food-decor {
+    font-size: 2rem;
+    letter-spacing: 7px;
+  }
+
+  .landing-hero h1 {
+    font-size: 1.9rem;
+  }
+
+  .landing-option {
+    padding: 18px;
+    gap: 14px;
+  }
+
+  .landing-option-icon {
+    flex-basis: 50px;
+    width: 50px;
+    height: 50px;
+    font-size: 1.7rem;
+  }
+
+  .landing-option-content h2 {
+    font-size: 1.1rem;
+  }
+
+  .landing-option-content p {
+    font-size: 0.88rem;
+  }
+
+  .landing-option-arrow {
+    font-size: 1.3rem;
+  }
+
+}
