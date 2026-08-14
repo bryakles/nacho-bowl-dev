@@ -348,6 +348,32 @@ let nachoBuilderCurrentBowl = "";
 const loginScreen      = document.getElementById("loginScreen");
 const practiceScreen   = document.getElementById("practiceScreen");
 const loginForm        = document.getElementById("loginForm");
+
+const landingPanel     = document.getElementById("landingPanel");
+const landingWelcomeTarget =
+  document.getElementById("landingWelcomeTarget");
+const landingWelcomeEnglish =
+  document.getElementById("landingWelcomeEnglish");
+
+const studySetsNavBtn =
+  document.getElementById("studySetsNavBtn");
+
+const conversationNavBtn =
+  document.getElementById("conversationNavBtn");
+
+const conjugationNavBtn =
+  document.getElementById("conjugationNavBtn");
+
+const studySetsDescription =
+  document.getElementById("studySetsDescription");
+
+const conversationDescription =
+  document.getElementById("conversationDescription");
+
+const conjugationDescription =
+  document.getElementById("conjugationDescription");
+
+const loginError       = document.getElementById("loginError");
 const usernameInput    = document.getElementById("usernameInput");
 const passwordInput    = document.getElementById("passwordInput");
 const loginError       = document.getElementById("loginError");
@@ -1161,6 +1187,106 @@ closeTeacherBtn.addEventListener("click", () => {
 });
 
 // ============================================================
+// LANDING PAGE
+// ============================================================
+const LANDING_LANGUAGE_CONTENT = {
+
+  Spanish: {
+    welcome:
+      "¡Hola, {name}! ¿Qué quieres practicar hoy?",
+    description: {
+      studySets:
+        "Practice Spanish vocabulary and phrases",
+      conversation:
+        "Practice Spanish through conversations",
+      conjugation:
+        "Practice Spanish verb conjugation"
+    }
+  },
+
+  French: {
+    welcome:
+      "Bonjour, {name} ! Qu'est-ce que tu veux pratiquer aujourd'hui ?",
+    description: {
+      studySets:
+        "Practice French vocabulary and phrases",
+      conversation:
+        "Practice French through conversations",
+      conjugation:
+        "Practice French verb conjugation"
+    }
+  },
+
+  Korean: {
+    welcome:
+      "안녕하세요, {name} 님! 오늘은 무엇을 연습하고 싶으신가요?",
+    description: {
+      studySets:
+        "Practice Korean vocabulary and phrases",
+      conversation:
+        "Practice Korean through conversations",
+      conjugation:
+        "Practice Korean verb conjugation"
+    }
+  }
+
+};
+
+function showLandingPage() {
+
+  saveCurrentPanel("landing");
+
+  const language =
+    currentUser?.language || "Spanish";
+
+  const content =
+    LANDING_LANGUAGE_CONTENT[language] ||
+    LANDING_LANGUAGE_CONTENT.Spanish;
+
+  const name =
+    currentUser?.name || "";
+
+  landingWelcomeTarget.textContent =
+    content.welcome.replace("{name}", name);
+
+  landingWelcomeEnglish.textContent =
+    "What would you like to practice today?";
+
+  studySetsDescription.textContent =
+    content.description.studySets;
+
+  conversationDescription.textContent =
+    content.description.conversation;
+
+  conjugationDescription.textContent =
+    content.description.conjugation;
+
+  landingPanel.classList.remove("hidden");
+
+  filterPanel.classList.add("hidden");
+  practicePanel.classList.add("hidden");
+  resultsPanel.classList.add("hidden");
+  conversationSelectionPanel.classList.add("hidden");
+  conversationPanel.classList.add("hidden");
+}
+
+// ============================================================
+// LANDING PAGE NAVIGATION
+// ============================================================
+
+studySetsNavBtn.addEventListener("click", () => {
+  showFilterPanel();
+});
+
+conversationNavBtn.addEventListener("click", () => {
+  openConversationSelection();
+});
+
+conjugationNavBtn.addEventListener("click", () => {
+  alert("Conjugation practice is coming soon!");
+});
+
+// ============================================================
 // SCREEN TRANSITIONS
 // ============================================================
 function showPracticeScreen() {
@@ -1170,15 +1296,12 @@ function showPracticeScreen() {
   welcomeName.textContent =
     currentUser.name;
 
-  showFilterPanel();
-  renderModeChips();
+  showLandingPage();
+
   renderAttemptHistory();
   updateFooterNachos();
 
-  loadTeacherSettings().then(() => {
-    renderModeChips();
-    updateCardCountPreview();
-  });
+  loadTeacherSettings();
 }
 
 function saveCurrentPanel(panelName) {
