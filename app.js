@@ -4768,7 +4768,8 @@ function updateNachoBuilderStrikes() {
 
 updateLoadingProgress(10, 0);
 
-loadData().then(async () => {
+setTimeout(() => {
+  loadData().then(async () => {
   
   const savedUsername =
     localStorage.getItem("nachoCurrentUser");
@@ -4812,8 +4813,15 @@ loadData().then(async () => {
   }
 
   currentUser = user;
-  
+
   updateLoadingProgress(70, 5);
+  
+  console.log(
+    "USER RESTORED:",
+    currentUser.username,
+    "LANGUAGE:",
+    currentUser.language
+  );
 
   welcomeName.textContent =
     currentUser.name;
@@ -5071,4 +5079,6 @@ loadData().then(async () => {
   showLandingPage();
   
   finishPageLoading();
-});
+  
+    });
+  }, 50);
