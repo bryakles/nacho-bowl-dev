@@ -1017,6 +1017,104 @@ function startConjugationPractice() {
 }
 
 // ============================================================
+// CHECK CONJUGATION ANSWER
+// ============================================================
+
+document
+  .getElementById("conjugationCheckBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+
+      const practiceData =
+        window.conjugationPracticeData;
+
+      if (
+        !practiceData ||
+        !practiceData.length
+      ) {
+        return;
+      }
+
+      const currentIndex =
+       window.conjugationPracticeIndex || 0;
+
+      const question =
+        practiceData[currentIndex];
+
+      const answerInput =
+        document.getElementById(
+          "conjugationAnswerInput"
+        );
+
+      const feedback =
+        document.getElementById(
+          "conjugationFeedback"
+        );
+
+      if (!answerInput || !feedback) {
+        return;
+      }
+
+      const studentAnswer =
+        answerInput.value.trim();
+
+      const correctAnswer =
+        String(
+          question.practiceAnswer || ""
+        ).trim();
+
+      if (!studentAnswer) {
+        feedback.textContent =
+          "Please enter an answer.";
+
+        return;
+      }
+
+      const normalize =
+        value =>
+          String(value)
+            .trim()
+            .toLowerCase()
+            .replace(/[.!?]+$/g, "");
+
+      if (
+        normalize(studentAnswer) ===
+        normalize(correctAnswer)
+      ) {
+
+        feedback.textContent =
+          "✓ Correct!";
+
+        answerInput.disabled =
+          true;
+
+        document
+          .getElementById(
+            "conjugationNextBtn"
+          )
+          ?.classList.remove("hidden");
+
+      } else {
+
+        feedback.textContent =
+          `✗ Correct answer: ${correctAnswer}`;
+
+        answerInput.disabled =
+          true;
+
+        document
+          .getElementById(
+            "conjugationNextBtn"
+          )
+          ?.classList.remove("hidden");
+
+      }
+
+    }
+  );
+
+// ============================================================
 // SHOW CONJUGATION QUESTION
 // ============================================================
 
