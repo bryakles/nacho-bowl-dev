@@ -362,6 +362,10 @@ function populateConjugationSettings() {
   populateConjugationSelectionDimension();
   populateConjugationTenses();
 
+  setupConjugationSelectionButtons();
+
+}
+
   const label =
     document.querySelector(
       "#conjugationSubjectOptions"
@@ -518,167 +522,114 @@ function populateConjugationSelectionDimension() {
 }
 
 // ============================================================
-// SELECTION BUTTONS
+// CONJUGATION SELECTION BUTTONS
 // ============================================================
 
-document
-  .getElementById("conjugationSubjectOptions")
-  ?.addEventListener(
-    "click",
-    event => {
+function setupConjugationSelectionButtons() {
 
-      const button =
-        event.target.closest(
+  const container =
+    document.getElementById(
+      "conjugationSubjectOptions"
+    );
+
+  if (!container) {
+    return;
+  }
+
+  container.onclick = event => {
+
+    const button =
+      event.target.closest(
+        ".filter-chip"
+      );
+
+    if (!button) {
+      return;
+    }
+
+    const buttons =
+      [
+        ...container.querySelectorAll(
           ".filter-chip"
-        );
+        )
+      ];
 
-      if (!button) {
-        return;
-      }
+    const action =
+      button.dataset.selectionAction;
 
-      const container =
-        document.getElementById(
-          "conjugationSubjectOptions"
-        );
+    // --------------------------------------------------------
+    // SELECT ALL
+    // --------------------------------------------------------
 
-      const buttons =
-        [
-          ...container.querySelectorAll(
-            ".filter-chip"
-          )
-        ];
+    if (action === "all") {
 
-      const action =
-        button.dataset.selectionAction;
+      buttons.forEach(
+        btn => {
 
-      // --------------------------------------------------------
-      // SELECT ALL
-      // --------------------------------------------------------
+          btn.classList.add(
+            "active"
+          );
 
-      if (action === "all") {
+        }
+      );
 
-        buttons.forEach(
-          btn => {
+      return;
+    }
+
+    // --------------------------------------------------------
+    // ALL BUT VOSOTROS
+    // --------------------------------------------------------
+
+    if (
+      action ===
+      "all-but-vosotros"
+    ) {
+
+      buttons.forEach(
+        btn => {
+
+          const value =
+            btn.dataset.selectionValue;
+
+          if (
+            value === "vosotros"
+          ) {
+
+            btn.classList.remove(
+              "active"
+            );
+
+          } else if (value) {
 
             btn.classList.add(
               "active"
             );
 
           }
-        );
 
-        return;
-      }
+        }
+      );
 
-      // --------------------------------------------------------
-      // ALL BUT VOSOTROS
-      // --------------------------------------------------------
+      return;
+    }
 
-      if (
-        action ===
-        "all-but-vosotros"
-      ) {
+    // --------------------------------------------------------
+    // INDIVIDUAL BUTTON
+    // --------------------------------------------------------
 
-        buttons.forEach(
-          btn => {
+    if (
+      button.dataset.selectionValue
+    ) {
 
-            if (
-              btn.dataset.selectionValue ===
-              "vosotros"
-            ) {
-
-              btn.classList.remove(
-                "active"
-              );
-
-            } else {
-
-              btn.classList.add(
-                "active"
-              );
-
-            }
-
-          }
-        );
-
-        return;
-      }
-
-      // --------------------------------------------------------
-      // INDIVIDUAL SELECTION
-      // --------------------------------------------------------
-
-      if (
-        button.dataset.selectionValue
-      ) {
-
-        button.classList.toggle(
-          "active"
-        );
-
-        const individualButtons =
-          buttons.filter(
-            btn =>
-              btn.dataset.selectionValue
-          );
-
-        const allSelected =
-          individualButtons.every(
-            btn =>
-              btn.classList.contains(
-                "active"
-              )
-          );
-
-        const allButVosotrosSelected =
-          individualButtons
-            .filter(
-              btn =>
-                btn.dataset.selectionValue !==
-                "vosotros"
-            )
-            .every(
-              btn =>
-                btn.classList.contains(
-                  "active"
-                )
-            );
-
-        buttons.forEach(
-          btn => {
-
-            if (
-              btn.dataset.selectionAction ===
-              "all"
-            ) {
-
-              btn.classList.toggle(
-                "active",
-                allSelected
-              );
-
-            }
-
-            if (
-              btn.dataset.selectionAction ===
-              "all-but-vosotros"
-            ) {
-
-              btn.classList.toggle(
-                "active",
-                allButVosotrosSelected
-              );
-
-            }
-
-          }
-        );
-
-      }
+      button.classList.toggle(
+        "active"
+      );
 
     }
-  );
+
+  };
+
+}
 
 // ============================================================
 // TENSES
