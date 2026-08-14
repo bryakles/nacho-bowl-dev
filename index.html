@@ -295,7 +295,101 @@
         </button>
       
       </section>
+
+      <!-- ACTIVE CONJUGATION PANEL -->
+      <section id="conjugationPanel" class="panel hidden">
       
+        <div class="practice-header">
+      
+          <div>
+            <h2 id="conjugationVerbTitle">
+              Verb Conjugation
+            </h2>
+      
+            <div class="practice-meta">
+      
+              <span
+                id="conjugationVerbEnglish"
+                class="set-label"
+              ></span>
+      
+              <span
+                id="conjugationProgress"
+                class="progress-label"
+              ></span>
+      
+            </div>
+          </div>
+      
+        </div>
+      
+      
+        <!-- CONJUGATION CARD -->
+        <div class="conjugation-card">
+      
+          <div
+            id="conjugationSubject"
+            class="conjugation-subject"
+          ></div>
+      
+          <div
+            id="conjugationTense"
+            class="conjugation-tense"
+          ></div>
+      
+          <div
+            id="conjugationPrompt"
+            class="conjugation-prompt"
+          ></div>
+      
+          <input
+            id="conjugationAnswerInput"
+            type="text"
+            class="conjugation-answer-input"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+            placeholder="Type your answer..."
+          />
+      
+          <button
+            id="conjugationCheckBtn"
+            class="btn btn-primary"
+            type="button"
+          >
+            Check
+          </button>
+      
+          <div
+            id="conjugationFeedback"
+            class="conjugation-feedback"
+          ></div>
+      
+        </div>
+      
+      
+        <!-- NAVIGATION -->
+        <div class="conjugation-navigation">
+      
+          <button
+            id="conjugationNextBtn"
+            class="btn btn-primary hidden"
+            type="button"
+          >
+            Next →
+          </button>
+      
+          <button
+            id="conjugationEndBtn"
+            class="btn btn-secondary"
+            type="button"
+          >
+            ← Conjugation Settings
+          </button>
+      
+        </div>
+      
+      </section>
       
       <!-- STUDY SETS CONTENT -->
       <main class="practice-main">
