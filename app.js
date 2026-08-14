@@ -473,6 +473,80 @@ const landingFoodDecor =
 const landingFoodFooter =
   document.getElementById("landingFoodFooter");
 
+const loadingScreen =
+  document.getElementById("loadingScreen");
+
+const loadingMessage =
+  document.getElementById("loadingMessage");
+
+const loadingTacos =
+  document.getElementById("loadingTacos");
+
+const loadingProgressBar =
+  document.getElementById("loadingProgressBar");
+
+const loadingPercent =
+  document.getElementById("loadingPercent");
+
+// ============================================================
+// LOADING SCREEN
+// ============================================================
+
+const loadingMessages = [
+  "Warming up the kitchen...",
+  "Melting the cheese...",
+  "Adding a little spice...",
+  "Slicing the avocado...",
+  "Stacking your tacos...",
+  "Loading the good stuff...",
+  "Checking the salsa...",
+  "Almost ready...",
+  "Serving up Nacho Bowl..."
+];
+
+function updateLoadingProgress(percent, messageIndex = null) {
+
+  const safePercent =
+    Math.max(0, Math.min(100, percent));
+
+  loadingProgressBar.style.width =
+    `${safePercent}%`;
+
+  loadingPercent.textContent =
+    `${Math.round(safePercent)}%`;
+
+  const tacoCount =
+    Math.max(1, Math.ceil(safePercent / 12.5));
+
+  loadingTacos.textContent =
+    "🌮".repeat(tacoCount);
+
+  if (messageIndex !== null) {
+    loadingMessage.textContent =
+      loadingMessages[messageIndex];
+  }
+}
+
+
+function finishLoadingScreen() {
+
+  updateLoadingProgress(100);
+
+  loadingMessage.textContent =
+    "🌮 Nacho Bowl is ready!";
+
+  setTimeout(() => {
+
+    loadingScreen.classList.add("hidden");
+
+  }, 350);
+}
+
+function finishPageLoading() {
+  updateLoadingProgress(100, 8);
+  finishLoadingScreen();
+}
+
 // ============================================================
 // CSV PARSING
 // ============================================================
@@ -4692,7 +4766,10 @@ function updateNachoBuilderStrikes() {
 // INIT
 // ============================================================
 
+updateLoadingProgress(10, 0);
+
 loadData().then(async () => {
+  
   const savedUsername =
     localStorage.getItem("nachoCurrentUser");
 
@@ -4703,6 +4780,8 @@ loadData().then(async () => {
 
   if (!savedUsername) {
     console.log("NO SAVED USER");
+  
+    finishPageLoading();
     return;
   }
 
@@ -4710,6 +4789,8 @@ loadData().then(async () => {
     "ACCOUNTS LOADED:",
     allAccounts.length
   );
+
+  updateLoadingProgress(40, 1);
 
   const user = allAccounts.find(
     a =>
@@ -4731,6 +4812,8 @@ loadData().then(async () => {
   }
 
   currentUser = user;
+  
+  updateLoadingProgress(70, 5);
 
   welcomeName.textContent =
     currentUser.name;
@@ -4777,6 +4860,8 @@ loadData().then(async () => {
     loginScreen.classList.add("hidden");
   
     showFilterPanel();
+  
+    finishPageLoading();
     return;
   }
 
@@ -4831,8 +4916,8 @@ loadData().then(async () => {
 
     }
 
+    finishPageLoading();
     return;
-  }
 
 
   // ----------------------------------------------------------
@@ -4840,7 +4925,7 @@ loadData().then(async () => {
   // ----------------------------------------------------------
 
   if (savedPanel === "conversationSelection") {
-  
+
     filterPanel.classList.add("hidden");
     practicePanel.classList.add("hidden");
     studySetPanel.classList.add("hidden");
@@ -4852,6 +4937,7 @@ loadData().then(async () => {
   
     loadConversationIndex();
   
+    finishPageLoading();
     return;
   }
   
@@ -4904,8 +4990,8 @@ loadData().then(async () => {
 
     }
 
+    finishPageLoading();
     return;
-  }
 
   // ----------------------------------------------------------
   // RESTORE PRACTICE SESSION
@@ -4973,6 +5059,7 @@ loadData().then(async () => {
       updateStats();
       showNextCard();
 
+      finishPageLoading();
       return;
     }
   }
@@ -4982,4 +5069,6 @@ loadData().then(async () => {
   // ----------------------------------------------------------
   
   showLandingPage();
+  
+  finishPageLoading();
 });
