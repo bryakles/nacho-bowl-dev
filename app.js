@@ -4809,6 +4809,8 @@ setTimeout(() => {
       "SAVED USER NOT FOUND IN ACCOUNTS:",
       savedUsername
     );
+  
+    finishPageLoading();
     return;
   }
 
@@ -4860,6 +4862,7 @@ setTimeout(() => {
   
     showLandingPage();
   
+    finishPageLoading();
     return;
   }
   
