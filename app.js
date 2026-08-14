@@ -4683,6 +4683,8 @@ loadData().then(async () => {
 
   currentUser = user;
 
+  landingPanel.classList.add("hidden");
+
   console.log(
     "USER RESTORED:",
     currentUser.username,
@@ -4697,6 +4699,13 @@ loadData().then(async () => {
     "SAVED PANEL:",
     savedPanel
   );
+
+  if (savedPanel === "landing") {
+  
+    showLandingPage();
+  
+    return;
+  }
   
   if (savedPanel === "filter") {
     practiceScreen.classList.remove("hidden");
@@ -4904,8 +4913,8 @@ loadData().then(async () => {
   }
 
   // ----------------------------------------------------------
-  // DEFAULT: FILTER SCREEN
+  // DEFAULT: LANDING PAGE
   // ----------------------------------------------------------
-
-  showFilterPanel();
+  
+  showLandingPage();
 });
