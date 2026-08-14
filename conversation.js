@@ -173,6 +173,13 @@ async function openConversationSelection() {
 
   saveCurrentPanel("conversationSelection");
 
+    if (
+      typeof landingPanel !==
+      "undefined"
+    ) {
+      landingPanel.classList.add("hidden");
+    }
+
   if (homeOnlyContent) {
     homeOnlyContent.classList.add("hidden");
   }
