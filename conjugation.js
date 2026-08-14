@@ -830,7 +830,9 @@ document
               "conjugationEnglishToggle"
             )
             ?.classList.contains("active") ??
-          true,
+          true
+
+      };
 
       console.log(
         "CONJUGATION SETTINGS:",
@@ -992,37 +994,163 @@ function startConjugationPractice() {
     return;
   }
 
-  console.log(
-    "STARTING CONJUGATION PRACTICE:",
-    practiceData.length,
-    "questions"
+  window.conjugationPracticeIndex = 0;
+
+  const selectionPanel =
+    document.getElementById(
+      "conjugationSelectionPanel"
+    );
+
+  const practicePanel =
+    document.getElementById(
+      "conjugationPanel"
+    );
+
+  selectionPanel?.classList.add(
+    "hidden"
   );
 
-  // Temporary proof that the filtering works.
-  // We will replace this with the actual practice screen next.
+  practicePanel?.classList.remove(
+    "hidden"
+  );
 
-  const firstQuestion =
-    practiceData[0];
+  showNextConjugationQuestion();
 
-  console.log(
-    "FIRST CONJUGATION QUESTION:",
-    {
-      verb:
-        firstQuestion.Verb,
+}
 
-      english:
-        firstQuestion.English,
+// ============================================================
+// SHOW CONJUGATION QUESTION
+// ============================================================
 
-      subject:
-        firstQuestion.Subject ||
-        firstQuestion.Formality,
+function showNextConjugationQuestion() {
 
-      tense:
-        firstQuestion.practiceTense,
+  const practiceData =
+    window.conjugationPracticeData;
 
-      answer:
-        firstQuestion.practiceAnswer
-    }
+  const index =
+    window.conjugationPracticeIndex || 0;
+
+  if (
+    !practiceData ||
+    !practiceData[index]
+  ) {
+    return;
+  }
+
+  const question =
+    practiceData[index];
+
+  const verbTitle =
+    document.getElementById(
+      "conjugationVerbTitle"
+    );
+
+  const verbEnglish =
+    document.getElementById(
+      "conjugationVerbEnglish"
+    );
+
+  const progress =
+    document.getElementById(
+      "conjugationProgress"
+    );
+
+  const subject =
+    document.getElementById(
+      "conjugationSubject"
+    );
+
+  const tense =
+    document.getElementById(
+      "conjugationTense"
+    );
+
+  const prompt =
+    document.getElementById(
+      "conjugationPrompt"
+    );
+
+  const answerInput =
+    document.getElementById(
+      "conjugationAnswerInput"
+    );
+
+  const feedback =
+    document.getElementById(
+      "conjugationFeedback"
+    );
+
+  const nextButton =
+    document.getElementById(
+      "conjugationNextBtn"
+    );
+
+  if (verbTitle) {
+    verbTitle.textContent =
+      question.Verb;
+  }
+
+  if (verbEnglish) {
+
+    const showEnglish =
+      window.conjugationPracticeSettings
+        ?.showEnglish;
+
+    verbEnglish.textContent =
+      showEnglish
+        ? question.English || ""
+        : "";
+
+  }
+
+  if (progress) {
+
+    progress.textContent =
+      `${index + 1} / ${practiceData.length}`;
+
+  }
+
+  if (subject) {
+
+    subject.textContent =
+      question.Subject ||
+      question.Formality ||
+      "";
+
+  }
+
+  if (tense) {
+
+    tense.textContent =
+      question.practiceTense || "";
+
+  }
+
+  if (prompt) {
+
+    prompt.textContent =
+      "Type the correct conjugation:";
+
+  }
+
+  if (answerInput) {
+
+    answerInput.value = "";
+    answerInput.disabled = false;
+    answerInput.focus();
+
+  }
+
+  if (feedback) {
+
+    feedback.textContent = "";
+    feedback.className =
+      "conjugation-feedback";
+
+  }
+
+  nextButton?.classList.add(
+    "hidden"
   );
 
 }
