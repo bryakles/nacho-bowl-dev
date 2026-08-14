@@ -166,20 +166,6 @@ conversationWritingInput.addEventListener("input", () => {
 });
 
 // ============================================================
-// OPEN CONVERSATIONS
-// ============================================================
-
-conversationBtn.addEventListener(
-  "click",
-  () => {
-
-    openConversationSelection();
-
-  }
-);
-
-
-// ============================================================
 // OPEN CONVERSATION SELECTION
 // ============================================================
 
