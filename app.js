@@ -373,7 +373,6 @@ const conversationDescription =
 const conjugationDescription =
   document.getElementById("conjugationDescription");
 
-const loginError       = document.getElementById("loginError");
 const usernameInput    = document.getElementById("usernameInput");
 const passwordInput    = document.getElementById("passwordInput");
 const loginError       = document.getElementById("loginError");
