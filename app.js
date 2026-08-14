@@ -369,6 +369,9 @@ const conjugationRomanizationToggle =
 const conjugationTableContainer =
   document.getElementById("conjugationTableContainer");
 
+const conjugationSelectionPanel =
+  document.getElementById("conjugationSelectionPanel");
+
 const landingWelcomeTarget =
   document.getElementById("landingWelcomeTarget");
 const landingWelcomeEnglish =
@@ -1457,11 +1460,11 @@ conjugationNavBtn.addEventListener(
     conversationPanel?.classList.add("hidden");
     nachoBuilderPanel.classList.add("hidden");
 
-    conjugationPanel.classList.remove("hidden");
+    conjugationSelectionPanel.classList.remove("hidden");
 
     localStorage.setItem(
       "nachoCurrentPanel",
-      "conjugation"
+      "conjugationSelection"
     );
 
     populateConjugationVerbs();
