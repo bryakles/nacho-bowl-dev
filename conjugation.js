@@ -1241,7 +1241,7 @@ function startConjugationPractice() {
 }
 
 // ============================================================
-// ENTER KEY
+// ENTER KEY — CHECK → NEXT
 // ============================================================
 
 document
@@ -1256,43 +1256,9 @@ document
 
       event.preventDefault();
 
-      const nextButton =
-        document.getElementById(
-          "conjugationNextBtn"
-        );
-
-      const answerInput =
-        document.getElementById(
-          "conjugationAnswerInput"
-        );
-
-      if (!answerInput) {
-        return;
-      }
-
-      // If the answer has not been checked yet,
-      // Enter checks it.
-      if (!answerInput.disabled) {
-
-        document
-          .getElementById(
-            "conjugationCheckBtn"
-          )
-          ?.click();
-
-        return;
-      }
-
-      // If the answer has already been checked,
-      // Enter moves to the next question.
-      if (
-        nextButton &&
-        !nextButton.classList.contains("hidden")
-      ) {
-
-        nextButton.click();
-
-      }
+      document
+        .getElementById("conjugationActionBtn")
+        ?.click();
 
     }
   );
