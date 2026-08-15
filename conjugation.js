@@ -1256,9 +1256,35 @@ document
 
       event.preventDefault();
 
-      document
-        .getElementById("conjugationActionBtn")
-        ?.click();
+      const answerInput =
+        document.getElementById(
+          "conjugationAnswerInput"
+        );
+
+      const actionButton =
+        document.getElementById(
+          "conjugationActionBtn"
+        );
+
+      if (!answerInput || !actionButton) {
+        return;
+      }
+
+      // First Enter: check the answer
+      if (!answerInput.disabled) {
+
+        actionButton.click();
+
+        // Keep keyboard focus in the answer field
+        setTimeout(() => {
+          answerInput.focus();
+        }, 0);
+
+        return;
+      }
+
+      // Second Enter: move to the next question
+      actionButton.click();
 
     }
   );
@@ -1398,7 +1424,7 @@ document
 
       }
 
-      answerInput.disabled =
+      answerInput.readOnly =
         true;
 
       // Change the SAME button from Check → Next
@@ -1555,9 +1581,9 @@ function showNextConjugationQuestion() {
   if (answerInput) {
 
     answerInput.value = "";
-    answerInput.disabled = false;
+    answerInput.readOnly = false;
     answerInput.focus();
-
+  
   }
 
   if (feedback) {
