@@ -2180,15 +2180,60 @@ body.teacher-lock-active {
   text-align: center;
 }
 
-/* TENSE */
-#conjugationTense {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--color-primary);
-  margin-bottom: 0.75rem;
+/* ============================================================
+   PRACTICE HEADER
+   ============================================================ */
+
+.conjugation-practice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
 }
 
-/* INFINITIVE */
+.conjugation-practice-title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+#conjugationProgress {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+
+/* ============================================================
+   CONJUGATION CARD
+   ============================================================ */
+
+.conjugation-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  text-align: center;
+}
+
+
+/* ============================================================
+   TENSE
+   ============================================================ */
+
+#conjugationTense {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 0.4rem;
+}
+
+
+/* ============================================================
+   INFINITIVE
+   ============================================================ */
+
 #conjugationVerbTitle {
   font-size: 2.5rem;
   font-weight: 700;
@@ -2196,7 +2241,11 @@ body.teacher-lock-active {
   margin: 0;
 }
 
-/* ENGLISH INFINITIVE */
+
+/* ============================================================
+   ENGLISH INFINITIVE
+   ============================================================ */
+
 #conjugationVerbEnglish {
   font-size: var(--font-size-lg);
   font-style: italic;
@@ -2204,28 +2253,54 @@ body.teacher-lock-active {
   margin-top: 0.25rem;
 }
 
-/* SUBJECT + ANSWER */
+
+/* ============================================================
+   SUBJECT + ANSWER + CHECK
+   ============================================================ */
+
 .conjugation-answer-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  gap: 0.75rem;
-  margin: 1.5rem auto 0;
+  gap: 1rem;
+  margin: 2rem auto 0;
+  width: 100%;
 }
 
-/* SUBJECT */
+
+/* ============================================================
+   SUBJECT
+   ============================================================ */
+
 .conjugation-subject {
+  flex: 0 0 110px;
   font-size: 2rem;
   font-weight: 700;
   color: var(--color-text);
   white-space: nowrap;
-  width: 70px;
   text-align: right;
+  padding-top: 0.7rem;
 }
 
-/* ANSWER FIELD */
+
+/* ============================================================
+   INPUT AREA
+   ============================================================ */
+
+.conjugation-input-area {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: min(420px, 60%);
+}
+
+
+/* ============================================================
+   ANSWER FIELD
+   ============================================================ */
+
 .conjugation-answer-input {
-  width: min(420px, 65%);
+  width: 100%;
   height: 64px;
   padding: 0.75rem 1rem;
   border: 2px solid var(--color-border);
@@ -2242,14 +2317,71 @@ body.teacher-lock-active {
   border-color: var(--color-primary);
 }
 
-/* ENGLISH TRANSLATION OF CONJUGATED VERB */
+
+/* ============================================================
+   ENGLISH TRANSLATION OF CONJUGATED VERB
+   ============================================================ */
+
 .conjugation-english-answer {
   font-size: var(--font-size-lg);
   font-style: italic;
   color: var(--color-text-muted);
-  margin-top: 0.4rem;
+  margin-top: 0.5rem;
+  min-height: 1.4em;
 }
 
 .conjugation-english-answer.hidden {
   display: none;
+}
+
+
+/* ============================================================
+   CHECK / NEXT BUTTON
+   ============================================================ */
+
+#conjugationCheckBtn {
+  margin-top: 0.7rem;
+  flex-shrink: 0;
+}
+
+
+/* ============================================================
+   ACCENT SHORTCUTS
+   ============================================================ */
+
+.accent-legend {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1.25rem;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.legend-label {
+  font-weight: 600;
+  margin-right: 0.2rem;
+}
+
+.accent-legend span:not(.legend-label) {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.15rem 0.45rem;
+  font-family: monospace;
+  font-size: var(--font-size-sm);
+}
+
+
+/* ============================================================
+   FEEDBACK
+   ============================================================ */
+
+.conjugation-feedback {
+  min-height: 1.5rem;
+  margin-top: 1rem;
+  font-size: var(--font-size-base);
+  font-weight: 600;
 }
