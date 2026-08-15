@@ -1429,11 +1429,6 @@ function showNextConjugationQuestion() {
       "conjugationVerbEnglish"
     );
 
-  const progress =
-    document.getElementById(
-      "conjugationProgress"
-    );
-
   const subject =
     document.getElementById(
       "conjugationSubject"
@@ -1482,11 +1477,19 @@ function showNextConjugationQuestion() {
 
   }
 
-  if (progress) {
-
-    progress.textContent =
-      `${index + 1} / ${practiceData.length}`;
-
+  const progressFill =
+    document.getElementById(
+      "conjugationProgressFill"
+    );
+  
+  if (progressFill) {
+  
+    const percentage =
+      ((index + 1) / practiceData.length) * 100;
+  
+    progressFill.style.width =
+      `${percentage}%`;
+  
   }
 
   if (subject) {
