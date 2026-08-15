@@ -212,31 +212,37 @@
           <!-- VERBS -->
           <div class="filter-group">
             <label>Which verbs should be included?</label>
-      
+          
             <div
               id="conjugationVerbOptions"
-              class="chip-group"
+              class="conjugation-verb-selector"
             >
-      
+          
               <button
+                id="conjugationAllVerbsBtn"
                 class="filter-chip active"
                 data-verb-filter="all"
                 type="button"
               >
                 All Verbs
               </button>
-      
+          
               <button
+                id="conjugationFavoriteVerbsBtn"
                 class="filter-chip"
                 data-verb-filter="favorite"
                 type="button"
               >
-                Favorite Verbs
+                Favorite Verbs ▾
               </button>
-      
+          
+              <div
+                id="conjugationFavoriteList"
+                class="conjugation-favorite-list hidden"
+              ></div>
+          
             </div>
           </div>
-      
           <!-- SUBJECTS -->
           <div class="filter-group">
             <label>Subjects</label>
