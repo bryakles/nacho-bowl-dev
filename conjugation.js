@@ -1164,6 +1164,45 @@ function buildConjugationPractice() {
 // ============================================================
 // START PRACTICE
 // ============================================================
+const conjugationAnswerInput =
+  document.getElementById(
+    "conjugationAnswerInput"
+  );
+
+if (conjugationAnswerInput) {
+
+  conjugationAnswerInput.addEventListener(
+    "input",
+    () => {
+
+      const pos =
+        conjugationAnswerInput.selectionStart;
+
+      const original =
+        conjugationAnswerInput.value;
+
+      const converted =
+        original.replace(
+          /[AEIOUNY]/g,
+          ch => ACCENT_MAP[ch]
+        );
+
+      if (converted !== original) {
+
+        conjugationAnswerInput.value =
+          converted;
+
+        conjugationAnswerInput.setSelectionRange(
+          pos,
+          pos
+        );
+
+      }
+
+    }
+  );
+
+}
 
 function startConjugationPractice() {
 
