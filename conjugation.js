@@ -185,7 +185,7 @@ function parseConjugationCSV(text) {
 
 }
 
-function populateConjugationVerbs() {
+window.populateConjugationVerbs = function() {
 
   const select =
     document.getElementById(
