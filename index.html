@@ -312,73 +312,74 @@
       <!-- ACTIVE CONJUGATION PANEL -->
       <section id="conjugationPanel" class="panel hidden">
       
-        <div class="practice-header">
+        <!-- HEADER -->
+        <div class="conjugation-practice-header">
       
-          <div>
-            <h2 id="conjugationVerbTitle">
-              Verb Conjugation
-            </h2>
+          <h2 class="conjugation-practice-title">
+            Conjugation Practice
+          </h2>
       
-            <div class="practice-meta">
-      
-              <span
-                id="conjugationVerbEnglish"
-                class="set-label"
-              ></span>
-      
-              <span
-                id="conjugationProgress"
-                class="progress-label"
-              ></span>
-      
-            </div>
-          </div>
+          <span
+            id="conjugationProgress"
+            class="progress-label"
+          ></span>
       
         </div>
       
-      
         <!-- CONJUGATION CARD -->
         <div class="conjugation-card">
-        
+      
           <div
             id="conjugationTense"
             class="conjugation-tense"
           ></div>
-        
+      
           <div
             id="conjugationVerbTitle"
             class="conjugation-verb-title"
           ></div>
-        
+      
           <div
             id="conjugationVerbEnglish"
             class="conjugation-verb-english"
           ></div>
-        
+      
           <div class="conjugation-answer-row">
-        
+      
             <div
               id="conjugationSubject"
               class="conjugation-subject"
             ></div>
-        
-            <input
-              id="conjugationAnswerInput"
-              type="text"
-              class="conjugation-answer-input"
-              autocomplete="off"
-              autocapitalize="off"
-              spellcheck="false"
-              placeholder="Type your answer..."
-            />
-        
+      
+            <div class="conjugation-input-area">
+      
+              <input
+                id="conjugationAnswerInput"
+                type="text"
+                class="conjugation-answer-input"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+                placeholder="Type your answer..."
+              />
+      
+              <div
+                id="conjugationEnglishAnswer"
+                class="conjugation-english-answer hidden"
+              ></div>
+      
+            </div>
+      
+            <button
+              id="conjugationCheckBtn"
+              class="btn btn-primary"
+              type="button"
+            >
+              Check
+            </button>
+      
           </div>
-        
-          <div
-            id="conjugationEnglishAnswer"
-            class="conjugation-english-answer hidden"
-          ></div>
-        
+      
           <div class="accent-legend">
             <span class="legend-label">Shortcuts:</span>
             <span>A=á</span>
@@ -389,22 +390,13 @@
             <span>N=ñ</span>
             <span>Y=ü</span>
           </div>
-        
-          <button
-            id="conjugationCheckBtn"
-            class="btn btn-primary"
-            type="button"
-          >
-            Check
-          </button>
-        
+      
           <div
             id="conjugationFeedback"
             class="conjugation-feedback"
           ></div>
-        
-        </div>
       
+        </div>
       
         <!-- NAVIGATION -->
         <div class="conjugation-navigation">
