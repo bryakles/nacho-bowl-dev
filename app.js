@@ -1467,7 +1467,7 @@ conjugationNavBtn.addEventListener(
       "conjugationSelection"
     );
 
-    populateConjugationVerbs();
+    window.populateConjugationVerbs();
 
   }
 );
