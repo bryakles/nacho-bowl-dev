@@ -367,6 +367,7 @@ function populateConjugationSettings() {
   setupConjugationSelectionButtons();
   setupConjugationTenseButtons();
   setupConjugationVerbFilterButtons();
+  setupConjugationSessionLengthButtons();
 
   const label =
     document.querySelector(
@@ -820,6 +821,51 @@ function setupConjugationTenseButtons() {
 }
 
 // ============================================================
+// SESSION LENGTH
+// ============================================================
+
+function setupConjugationSessionLengthButtons() {
+
+  const container =
+    document.getElementById(
+      "conjugationSessionLengthOptions"
+    );
+
+  if (!container) {
+    return;
+  }
+
+  container.onclick = event => {
+
+    const button =
+      event.target.closest(
+        "[data-session-length]"
+      );
+
+    if (!button) {
+      return;
+    }
+
+    const buttons =
+      [
+        ...container.querySelectorAll(
+          "[data-session-length]"
+        )
+      ];
+
+    buttons.forEach(
+      btn => {
+        btn.classList.remove("active");
+      }
+    );
+
+    button.classList.add("active");
+
+  };
+
+}
+
+// ============================================================
 // START CONJUGATION
 // ============================================================
 
@@ -905,6 +951,17 @@ document
           '[data-verb-filter].active'
         )?.dataset.verbFilter ||
         "all";
+
+      // --------------------------------------------------------
+      // SELECTED SESSION LENGTH
+      // --------------------------------------------------------
+      
+      const selectedSessionLength =
+        Number(
+          document.querySelector(
+            '[data-session-length].active'
+          )?.dataset.sessionLength
+        ) || 25;
 
       // --------------------------------------------------------
       // SAVE SETTINGS
@@ -1054,43 +1111,53 @@ function buildConjugationPractice() {
 
   }
 
-  console.log(
-    "CONJUGATION PRACTICE DATA:",
-    rows
-  );
-
-  if (!rows.length) {
-
-    alert(
-      "No conjugation questions match your selected settings."
+    console.log(
+      "CONJUGATION PRACTICE DATA:",
+      rows
     );
   
-    return;
-  }
+    if (!rows.length) {
   
-  // ----------------------------------------------------------
-  // SHUFFLE QUESTIONS
-  // ----------------------------------------------------------
+      alert(
+        "No conjugation questions match your selected settings."
+      );
   
-  for (let i = rows.length - 1; i > 0; i--) {
+      return;
+    }
   
-    const j =
-      Math.floor(Math.random() * (i + 1));
+    // ----------------------------------------------------------
+    // SHUFFLE QUESTIONS
+    // ----------------------------------------------------------
   
-    [rows[i], rows[j]] =
-      [rows[j], rows[i]];
+    for (let i = rows.length - 1; i > 0; i--) {
   
-  }
+      const j =
+        Math.floor(Math.random() * (i + 1));
   
-  console.log(
-    "CONJUGATION PRACTICE DATA:",
-    rows
-  );
+      [rows[i], rows[j]] =
+        [rows[j], rows[i]];
   
-  window.conjugationPracticeData =
-    rows;
-
-  startConjugationPractice();
+    }
+  
+    // ----------------------------------------------------------
+    // LIMIT SESSION LENGTH
+    // ----------------------------------------------------------
+  
+    rows =
+      rows.slice(
+        0,
+        settings.sessionLength || 25
+      );
+  
+    console.log(
+      "CONJUGATION PRACTICE DATA:",
+      rows
+    );
+  
+    window.conjugationPracticeData =
+      rows;
+  
+    startConjugationPractice();
 
 }
 
