@@ -1364,9 +1364,19 @@ document
           window.conjugationPracticeIndex >=
           practiceData.length
         ) {
-
-          window.conjugationPracticeIndex = 0;
-
+        
+          // Practice session is finished.
+          window.conjugationPracticeIndex =
+            practiceData.length - 1;
+        
+          actionButton.textContent =
+            "Finished";
+        
+          actionButton.disabled =
+            true;
+        
+          return;
+        
         }
 
         actionButton.dataset.action =
