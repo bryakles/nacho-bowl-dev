@@ -239,7 +239,7 @@ window.populateConjugationVerbs = function() {
     }
   );
 
-}
+};
 
 document
   .getElementById("conjugationVerbSelect")
@@ -1089,8 +1089,10 @@ function buildConjugationPractice() {
   
   window.conjugationPracticeData =
     rows;
-  
+
   startConjugationPractice();
+
+}
 
 // ============================================================
 // START PRACTICE
