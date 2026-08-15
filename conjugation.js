@@ -689,41 +689,126 @@ function setupConjugationVerbFilterButtons() {
       "conjugationVerbOptions"
     );
 
-  if (!container) {
+  const allButton =
+    document.getElementById(
+      "conjugationAllVerbsBtn"
+    );
+
+  const favoriteButton =
+    document.getElementById(
+      "conjugationFavoriteVerbsBtn"
+    );
+
+  const favoriteList =
+    document.getElementById(
+      "conjugationFavoriteList"
+    );
+
+  if (
+    !container ||
+    !allButton ||
+    !favoriteButton ||
+    !favoriteList
+  ) {
     return;
   }
 
-  container.onclick = event => {
+  // ----------------------------------------------------------
+  // ALL VERBS
+  // ----------------------------------------------------------
 
-    const button =
-      event.target.closest(
-        "[data-verb-filter]"
+  allButton.onclick = () => {
+
+    allButton.classList.add("active");
+    favoriteButton.classList.remove("active");
+
+    favoriteList.classList.add("hidden");
+
+  };
+
+  // ----------------------------------------------------------
+  // FAVORITE VERBS
+  // ----------------------------------------------------------
+
+  favoriteButton.onclick = () => {
+
+    favoriteButton.classList.add("active");
+    allButton.classList.remove("active");
+
+    favoriteList.classList.toggle("hidden");
+
+    if (
+      !favoriteList.classList.contains("hidden")
+    ) {
+
+      favoriteList.innerHTML = "";
+
+      const favoriteVerbs =
+        [
+          ...new Map(
+            conjugationData
+              .filter(
+                row =>
+                  String(row.Favorite)
+                    .trim()
+                    .toUpperCase() ===
+                  "TRUE"
+              )
+              .map(
+                row => [
+                  row.Verb,
+                  row
+                ]
+              )
+          ).values()
+        ];
+
+      favoriteVerbs.forEach(
+        verb => {
+
+          const label =
+            document.createElement(
+              "label"
+            );
+
+          label.className =
+            "conjugation-favorite-option";
+
+          const checkbox =
+            document.createElement(
+              "input"
+            );
+
+          checkbox.type =
+            "checkbox";
+
+          checkbox.value =
+            verb.Verb;
+
+          const text =
+            document.createElement(
+              "span"
+            );
+
+          text.textContent =
+            verb.Verb;
+
+          label.appendChild(
+            checkbox
+          );
+
+          label.appendChild(
+            text
+          );
+
+          favoriteList.appendChild(
+            label
+          );
+
+        }
       );
 
-    if (!button) {
-      return;
     }
-
-    const buttons =
-      [
-        ...container.querySelectorAll(
-          "[data-verb-filter]"
-        )
-      ];
-
-    buttons.forEach(
-      btn => {
-
-        btn.classList.remove(
-          "active"
-        );
-
-      }
-    );
-
-    button.classList.add(
-      "active"
-    );
 
   };
 
@@ -1020,7 +1105,7 @@ function buildConjugationPractice() {
     [...conjugationData];
 
   // ----------------------------------------------------------
-  // FAVORITE FILTER
+  // FAVORITE / SELECTED VERB FILTER
   // ----------------------------------------------------------
 
   if (
@@ -1028,13 +1113,32 @@ function buildConjugationPractice() {
     "favorite"
   ) {
 
+    const selectedVerbs =
+      [
+        ...document.querySelectorAll(
+          "#conjugationFavoriteList input[type='checkbox']:checked"
+        )
+      ]
+      .map(
+        checkbox =>
+          checkbox.value
+      );
+
+    if (!selectedVerbs.length) {
+
+      alert(
+        "Please select at least one verb."
+      );
+
+      return;
+    }
+
     rows =
       rows.filter(
         row =>
-          String(row.Favorite)
-            .trim()
-            .toUpperCase() ===
-          "TRUE"
+          selectedVerbs.includes(
+            row.Verb
+          )
       );
 
   }
@@ -1111,53 +1215,59 @@ function buildConjugationPractice() {
 
   }
 
-    console.log(
-      "CONJUGATION PRACTICE DATA:",
-      rows
+  console.log(
+    "CONJUGATION PRACTICE DATA:",
+    rows
+  );
+
+  if (!rows.length) {
+
+    alert(
+      "No conjugation questions match your selected settings."
     );
-  
-    if (!rows.length) {
-  
-      alert(
-        "No conjugation questions match your selected settings."
+
+    return;
+  }
+
+  // ----------------------------------------------------------
+  // SHUFFLE QUESTIONS
+  // ----------------------------------------------------------
+
+  for (
+    let i = rows.length - 1;
+    i > 0;
+    i--
+  ) {
+
+    const j =
+      Math.floor(
+        Math.random() * (i + 1)
       );
-  
-      return;
-    }
-  
-    // ----------------------------------------------------------
-    // SHUFFLE QUESTIONS
-    // ----------------------------------------------------------
-  
-    for (let i = rows.length - 1; i > 0; i--) {
-  
-      const j =
-        Math.floor(Math.random() * (i + 1));
-  
-      [rows[i], rows[j]] =
-        [rows[j], rows[i]];
-  
-    }
-  
-    // ----------------------------------------------------------
-    // LIMIT SESSION LENGTH
-    // ----------------------------------------------------------
-  
-    rows =
-      rows.slice(
-        0,
-        settings.sessionLength || 25
-      );
-  
-    console.log(
-      "CONJUGATION PRACTICE DATA:",
-      rows
+
+    [rows[i], rows[j]] =
+      [rows[j], rows[i]];
+
+  }
+
+  // ----------------------------------------------------------
+  // LIMIT SESSION LENGTH
+  // ----------------------------------------------------------
+
+  rows =
+    rows.slice(
+      0,
+      settings.sessionLength || 25
     );
-  
-    window.conjugationPracticeData =
-      rows;
-  
-    startConjugationPractice();
+
+  console.log(
+    "CONJUGATION PRACTICE DATA:",
+    rows
+  );
+
+  window.conjugationPracticeData =
+    rows;
+
+  startConjugationPractice();
 
 }
 
