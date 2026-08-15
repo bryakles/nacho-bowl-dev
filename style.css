@@ -2171,3 +2171,64 @@ body.teacher-lock-active {
   }
 
 }
+
+/* ============================================================
+   CONJUGATION ANSWER LAYOUT
+   ============================================================ */
+
+.conjugation-answer-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin: 24px auto 8px;
+  width: 100%;
+}
+
+.conjugation-subject {
+  font-size: 2rem;
+  font-weight: 600;
+  min-width: 70px;
+  text-align: right;
+}
+
+.conjugation-answer-input {
+  width: min(500px, 70%);
+  height: 64px;
+  font-size: 2rem;
+  text-align: left;
+  padding: 8px 16px;
+  box-sizing: border-box;
+}
+
+.conjugation-english-answer {
+  font-size: 1.2rem;
+  font-style: italic;
+  text-align: center;
+  margin: 4px auto 12px;
+}
+
+.conjugation-english-answer.hidden {
+  display: none;
+}
+
+/* ============================================================
+   CONJUGATION QUESTION HEADER
+   ============================================================ */
+
+#conjugationTense {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+#conjugationVerbTitle {
+  font-size: 2.4rem;
+  font-weight: 700;
+}
+
+#conjugationVerbEnglish {
+  font-size: 1.2rem;
+  font-style: italic;
+  margin-top: 4px;
+}
