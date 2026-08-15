@@ -1528,6 +1528,7 @@ body.teacher-lock-active {
   .prompt-text { font-size: var(--font-size-xl); }
   .answer-actions { flex-direction: column; }
   .filter-footer { flex-direction: column; align-items: flex-start; }
+   }
 
 @media (max-width: 480px) {
   .conversation-entry {
