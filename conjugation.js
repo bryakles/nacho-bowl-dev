@@ -1398,45 +1398,6 @@ document
   );
 
 // ============================================================
-// ENTER KEY: CHECK AND MOVE TO NEXT QUESTION
-// ============================================================
-
-document
-  .getElementById("conjugationAnswerInput")
-  ?.addEventListener(
-    "keydown",
-    event => {
-
-      if (event.key !== "Enter") {
-        return;
-      }
-
-      event.preventDefault();
-
-      document
-        .getElementById("conjugationCheckBtn")
-        ?.click();
-
-      setTimeout(() => {
-
-        const nextButton =
-          document.getElementById(
-            "conjugationNextBtn"
-          );
-
-        if (
-          nextButton &&
-          !nextButton.classList.contains("hidden")
-        ) {
-          nextButton.click();
-        }
-
-      }, 150);
-
-    }
-  );
-
-// ============================================================
 // SHOW CONJUGATION QUESTION
 // ============================================================
 
@@ -1578,58 +1539,13 @@ function showNextConjugationQuestion() {
       "Type the correct conjugation:";
   
   }
-  
-  // ----------------------------------------------------------
-  // ENGLISH TRANSLATION OF CONJUGATED VERB
-  // ----------------------------------------------------------
-  
-  const englishAnswer =
-    document.getElementById(
-      "conjugationEnglishAnswer"
-    );
-  
-  if (englishAnswer) {
-  
-    const rawAnswer =
-      String(
-        question.practiceAnswer || ""
-      );
-  
-    const match =
-      rawAnswer.match(/\[([^\]]+)\]/);
-  
-    const showEnglish =
-      window.conjugationPracticeSettings
-        ?.showEnglish;
-  
-    if (showEnglish && match) {
-  
-      englishAnswer.textContent =
-        `(${match[1].trim()})`;
-  
-      englishAnswer.classList.remove(
-        "hidden"
-      );
-  
-    } else {
-  
-      englishAnswer.textContent =
-        "";
-  
-      englishAnswer.classList.add(
-        "hidden"
-      );
-  
-    }
-  
-  }
-  
+
   if (answerInput) {
-  
+
     answerInput.value = "";
     answerInput.disabled = false;
     answerInput.focus();
-  
+
   }
 
   if (feedback) {
