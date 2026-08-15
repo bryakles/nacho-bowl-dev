@@ -1241,6 +1241,37 @@ function startConjugationPractice() {
 }
 
 // ============================================================
+// RETURN TO CONJUGATION SETTINGS
+// ============================================================
+
+document
+  .getElementById("conjugationEndBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+
+      const practicePanel =
+        document.getElementById(
+          "conjugationPanel"
+        );
+
+      const selectionPanel =
+        document.getElementById(
+          "conjugationSelectionPanel"
+        );
+
+      practicePanel?.classList.add(
+        "hidden"
+      );
+
+      selectionPanel?.classList.remove(
+        "hidden"
+      );
+
+    }
+  );
+
+// ============================================================
 // ENTER KEY — CHECK → NEXT
 // ============================================================
 
