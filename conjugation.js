@@ -447,7 +447,7 @@ function populateConjugationSelectionDimension() {
     "button";
 
   selectAllButton.className =
-    "filter-chip active";
+    "filter-chip";
 
   selectAllButton.dataset.selectionAction =
     "all";
@@ -503,7 +503,7 @@ function populateConjugationSelectionDimension() {
         "button";
 
       button.className =
-        "filter-chip active";
+        "filter-chip";
 
       button.dataset.selectionValue =
         value;
@@ -565,16 +565,29 @@ function setupConjugationSelectionButtons() {
 
     if (action === "all") {
 
+      const shouldSelectAll =
+        !button.classList.contains("active");
+    
       buttons.forEach(
         btn => {
-
-          btn.classList.add(
-            "active"
-          );
-
+    
+          if (btn.dataset.selectionValue) {
+    
+            btn.classList.toggle(
+              "active",
+              shouldSelectAll
+            );
+    
+          }
+    
         }
       );
-
+    
+      button.classList.toggle(
+        "active",
+        shouldSelectAll
+      );
+    
       return;
     }
 
@@ -759,7 +772,7 @@ function populateConjugationTenses() {
         "button";
 
       button.className =
-        "filter-chip active";
+        "filter-chip";
 
       button.dataset.tense =
         tense;
@@ -1338,3 +1351,42 @@ function showNextConjugationQuestion() {
   );
 
 }
+
+// ============================================================
+// NEXT CONJUGATION QUESTION
+// ============================================================
+
+document
+  .getElementById("conjugationNextBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+
+      const practiceData =
+        window.conjugationPracticeData;
+
+      if (
+        !practiceData ||
+        !practiceData.length
+      ) {
+        return;
+      }
+
+      window.conjugationPracticeIndex =
+        (window.conjugationPracticeIndex || 0) + 1;
+
+      if (
+        window.conjugationPracticeIndex >=
+        practiceData.length
+      ) {
+
+        // For now, loop back to the beginning.
+        // We can replace this later with a results screen.
+        window.conjugationPracticeIndex = 0;
+
+      }
+
+      showNextConjugationQuestion();
+
+    }
+  );
