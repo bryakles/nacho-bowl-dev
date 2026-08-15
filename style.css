@@ -2182,7 +2182,7 @@ body.teacher-lock-active {
 
 /* TENSE */
 #conjugationTense {
-  font-size: var(--font-size-lg);
+  font-size: 1.35rem;
   font-weight: 700;
   color: var(--color-primary);
   margin-bottom: 0.75rem;
@@ -2219,6 +2219,8 @@ body.teacher-lock-active {
   font-weight: 700;
   color: var(--color-text);
   white-space: nowrap;
+  width: 70px;
+  text-align: right;
 }
 
 /* ANSWER FIELD */
