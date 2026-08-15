@@ -314,16 +314,23 @@
       
         <!-- HEADER -->
         <div class="conjugation-practice-header">
-      
+
           <h2 class="conjugation-practice-title">
             Conjugation Practice
           </h2>
-      
-          <span
-            id="conjugationProgress"
-            class="progress-label"
-          ></span>
-      
+        
+          <div class="conjugation-header-right">
+        
+            <button
+              id="conjugationEndBtn"
+              class="btn btn-secondary"
+              type="button"
+            >
+              ← Conjugation Settings
+            </button>
+        
+          </div>
+        
         </div>
       
         <!-- CONJUGATION CARD -->
@@ -390,32 +397,18 @@
             <span>N=ñ</span>
             <span>Y=ü</span>
           </div>
+
+          <div class="conjugation-progress-bar">
+            <div
+              id="conjugationProgressFill"
+              class="conjugation-progress-fill"
+            ></div>
+          </div>
       
           <div
             id="conjugationFeedback"
             class="conjugation-feedback"
           ></div>
-      
-        </div>
-      
-        <!-- NAVIGATION -->
-        <div class="conjugation-navigation">
-      
-          <button
-            id="conjugationNextBtn"
-            class="btn btn-primary hidden"
-            type="button"
-          >
-            Next →
-          </button>
-      
-          <button
-            id="conjugationEndBtn"
-            class="btn btn-secondary"
-            type="button"
-          >
-            ← Conjugation Settings
-          </button>
       
         </div>
       
