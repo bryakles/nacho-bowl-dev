@@ -2374,6 +2374,27 @@ body.teacher-lock-active {
   font-size: var(--font-size-sm);
 }
 
+/* ============================================================
+   CONJUGATION PROGRESS BAR
+   ============================================================ */
+
+.conjugation-progress-bar {
+  width: 100%;
+  max-width: 600px;
+  height: 8px;
+  margin: 1rem auto 0;
+  background: var(--color-bg);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.conjugation-progress-fill {
+  width: 0%;
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
 
 /* ============================================================
    FEEDBACK
