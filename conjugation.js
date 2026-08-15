@@ -1241,6 +1241,63 @@ function startConjugationPractice() {
 }
 
 // ============================================================
+// ENTER KEY
+// ============================================================
+
+document
+  .getElementById("conjugationAnswerInput")
+  ?.addEventListener(
+    "keydown",
+    event => {
+
+      if (event.key !== "Enter") {
+        return;
+      }
+
+      event.preventDefault();
+
+      const nextButton =
+        document.getElementById(
+          "conjugationNextBtn"
+        );
+
+      const answerInput =
+        document.getElementById(
+          "conjugationAnswerInput"
+        );
+
+      if (!answerInput) {
+        return;
+      }
+
+      // If the answer has not been checked yet,
+      // Enter checks it.
+      if (!answerInput.disabled) {
+
+        document
+          .getElementById(
+            "conjugationCheckBtn"
+          )
+          ?.click();
+
+        return;
+      }
+
+      // If the answer has already been checked,
+      // Enter moves to the next question.
+      if (
+        nextButton &&
+        !nextButton.classList.contains("hidden")
+      ) {
+
+        nextButton.click();
+
+      }
+
+    }
+  );
+
+// ============================================================
 // CHECK CONJUGATION ANSWER
 // ============================================================
 
@@ -1336,6 +1393,45 @@ document
           ?.classList.remove("hidden");
 
       }
+
+    }
+  );
+
+// ============================================================
+// ENTER KEY: CHECK AND MOVE TO NEXT QUESTION
+// ============================================================
+
+document
+  .getElementById("conjugationAnswerInput")
+  ?.addEventListener(
+    "keydown",
+    event => {
+
+      if (event.key !== "Enter") {
+        return;
+      }
+
+      event.preventDefault();
+
+      document
+        .getElementById("conjugationCheckBtn")
+        ?.click();
+
+      setTimeout(() => {
+
+        const nextButton =
+          document.getElementById(
+            "conjugationNextBtn"
+          );
+
+        if (
+          nextButton &&
+          !nextButton.classList.contains("hidden")
+        ) {
+          nextButton.click();
+        }
+
+      }, 150);
 
     }
   );
@@ -1439,6 +1535,34 @@ function showNextConjugationQuestion() {
       question.Formality ||
       "";
 
+  }
+
+  const englishAnswer =
+    document.getElementById(
+      "conjugationEnglishAnswer"
+    );
+  
+  if (englishAnswer) {
+  
+    const showEnglish =
+      window.conjugationPracticeSettings
+        ?.showEnglish;
+  
+    englishAnswer.textContent =
+      showEnglish
+        ? String(
+            question.practiceAnswer || ""
+          )
+          .split("[")[1]
+          ?.replace("]", "")
+          .trim() || ""
+        : "";
+  
+    englishAnswer.classList.toggle(
+      "hidden",
+      !showEnglish
+    );
+  
   }
 
   if (tense) {
