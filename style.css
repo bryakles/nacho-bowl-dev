@@ -278,6 +278,29 @@ body.teacher-lock-active {
   border-color: var(--color-chip-active);
 }
 
+.filter-chip {
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-full);
+  background: var(--color-chip);
+  color: var(--color-chip-text);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all var(--transition);
+  user-select: none;
+}
+
+.filter-chip:hover {
+  border-color: var(--color-primary);
+}
+
+.filter-chip.active {
+  background: var(--color-chip-active);
+  color: var(--color-chip-active-text);
+  border-color: var(--color-chip-active);
+}
+
 .filter-hint {
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
