@@ -1064,16 +1064,33 @@ function buildConjugationPractice() {
     alert(
       "No conjugation questions match your selected settings."
     );
-
+  
     return;
   }
-
+  
+  // ----------------------------------------------------------
+  // SHUFFLE QUESTIONS
+  // ----------------------------------------------------------
+  
+  for (let i = rows.length - 1; i > 0; i--) {
+  
+    const j =
+      Math.floor(Math.random() * (i + 1));
+  
+    [rows[i], rows[j]] =
+      [rows[j], rows[i]];
+  
+  }
+  
+  console.log(
+    "CONJUGATION PRACTICE DATA:",
+    rows
+  );
+  
   window.conjugationPracticeData =
     rows;
-
+  
   startConjugationPractice();
-
-}
 
 // ============================================================
 // START PRACTICE
