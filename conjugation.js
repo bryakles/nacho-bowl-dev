@@ -1298,14 +1298,68 @@ document
   );
 
 // ============================================================
-// CHECK CONJUGATION ANSWER
+// CONJUGATION ACTION BUTTON — CHECK → NEXT
 // ============================================================
 
 document
-  .getElementById("conjugationCheckBtn")
+  .getElementById("conjugationActionBtn")
   ?.addEventListener(
     "click",
     () => {
+
+      const actionButton =
+        document.getElementById(
+          "conjugationActionBtn"
+        );
+
+      if (!actionButton) {
+        return;
+      }
+
+      // --------------------------------------------------------
+      // NEXT QUESTION
+      // --------------------------------------------------------
+
+      if (
+        actionButton.dataset.action === "next"
+      ) {
+
+        const practiceData =
+          window.conjugationPracticeData;
+
+        if (
+          !practiceData ||
+          !practiceData.length
+        ) {
+          return;
+        }
+
+        window.conjugationPracticeIndex =
+          (window.conjugationPracticeIndex || 0) + 1;
+
+        if (
+          window.conjugationPracticeIndex >=
+          practiceData.length
+        ) {
+
+          window.conjugationPracticeIndex = 0;
+
+        }
+
+        actionButton.dataset.action =
+          "check";
+
+        actionButton.textContent =
+          "Check";
+
+        showNextConjugationQuestion();
+
+        return;
+      }
+
+      // --------------------------------------------------------
+      // CHECK ANSWER
+      // --------------------------------------------------------
 
       const practiceData =
         window.conjugationPracticeData;
@@ -1318,7 +1372,7 @@ document
       }
 
       const currentIndex =
-       window.conjugationPracticeIndex || 0;
+        window.conjugationPracticeIndex || 0;
 
       const question =
         practiceData[currentIndex];
@@ -1348,10 +1402,12 @@ document
         .trim();
 
       if (!studentAnswer) {
+
         feedback.textContent =
           "Please enter an answer.";
 
         return;
+
       }
 
       const normalize =
@@ -1369,30 +1425,22 @@ document
         feedback.textContent =
           "✓ Correct!";
 
-        answerInput.disabled =
-          true;
-
-        document
-          .getElementById(
-            "conjugationNextBtn"
-          )
-          ?.classList.remove("hidden");
-
       } else {
 
         feedback.textContent =
           `✗ Correct answer: ${correctAnswer}`;
 
-        answerInput.disabled =
-          true;
-
-        document
-          .getElementById(
-            "conjugationNextBtn"
-          )
-          ?.classList.remove("hidden");
-
       }
+
+      answerInput.disabled =
+        true;
+
+      // Change the SAME button from Check → Next
+      actionButton.dataset.action =
+        "next";
+
+      actionButton.textContent =
+        "Next →";
 
     }
   );
@@ -1452,11 +1500,6 @@ function showNextConjugationQuestion() {
   const feedback =
     document.getElementById(
       "conjugationFeedback"
-    );
-
-  const nextButton =
-    document.getElementById(
-      "conjugationNextBtn"
     );
 
   if (verbTitle) {
@@ -1559,47 +1602,19 @@ function showNextConjugationQuestion() {
 
   }
 
-  nextButton?.classList.add(
-    "hidden"
-  );
+  const actionButton =
+    document.getElementById(
+      "conjugationActionBtn"
+    );
+  
+  if (actionButton) {
+  
+    actionButton.dataset.action =
+      "check";
+  
+    actionButton.textContent =
+      "Check";
+  
+  }
 
 }
-
-// ============================================================
-// NEXT CONJUGATION QUESTION
-// ============================================================
-
-document
-  .getElementById("conjugationNextBtn")
-  ?.addEventListener(
-    "click",
-    () => {
-
-      const practiceData =
-        window.conjugationPracticeData;
-
-      if (
-        !practiceData ||
-        !practiceData.length
-      ) {
-        return;
-      }
-
-      window.conjugationPracticeIndex =
-        (window.conjugationPracticeIndex || 0) + 1;
-
-      if (
-        window.conjugationPracticeIndex >=
-        practiceData.length
-      ) {
-
-        // For now, loop back to the beginning.
-        // We can replace this later with a results screen.
-        window.conjugationPracticeIndex = 0;
-
-      }
-
-      showNextConjugationQuestion();
-
-    }
-  );
