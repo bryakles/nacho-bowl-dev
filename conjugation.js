@@ -1969,15 +1969,14 @@ document
           (window.conjugationPracticeIndex || 0) + 1;
 
         if (
-          if (
-            window.conjugationPracticeIndex >=
-            practiceData.length
-          ) {
-          
-            endConjugationPractice();
-          
-            return;
-          }
+          window.conjugationPracticeIndex >=
+          practiceData.length
+        ) {
+
+          endConjugationPractice();
+
+          return;
+        }
 
         actionButton.dataset.action =
           "check";
@@ -1989,7 +1988,7 @@ document
           document.querySelector(
             ".conjugation-card"
           );
-        
+
         if (conjugationCard) {
           conjugationCard.classList.remove(
             "answer-correct",
@@ -2002,154 +2001,156 @@ document
         return;
       }
 
-      // ============================================================
-// CHECK ANSWER
-// ============================================================
+      // --------------------------------------------------------
+      // CHECK ANSWER
+      // --------------------------------------------------------
 
-const practiceData =
-  window.conjugationPracticeData;
+      const practiceData =
+        window.conjugationPracticeData;
 
-if (
-  !practiceData ||
-  !practiceData.length
-) {
-  return;
-}
+      if (
+        !practiceData ||
+        !practiceData.length
+      ) {
+        return;
+      }
 
-const currentIndex =
-  window.conjugationPracticeIndex || 0;
+      const currentIndex =
+        window.conjugationPracticeIndex || 0;
 
-const question =
-  practiceData[currentIndex];
+      const question =
+        practiceData[currentIndex];
 
-const answerInput =
-  document.getElementById(
-    "conjugationAnswerInput"
+      const answerInput =
+        document.getElementById(
+          "conjugationAnswerInput"
+        );
+
+      const feedback =
+        document.getElementById(
+          "conjugationFeedback"
+        );
+
+      if (!answerInput || !feedback) {
+        return;
+      }
+
+      const studentAnswer =
+        answerInput.value.trim();
+
+      const correctAnswer =
+        String(
+          question.practiceAnswer || ""
+        )
+        .split("[")[0]
+        .trim();
+
+      if (!studentAnswer) {
+
+        feedback.textContent =
+          "Please enter an answer.";
+
+        return;
+      }
+
+      const normalize =
+        value =>
+          String(value)
+            .trim()
+            .toLowerCase()
+            .replace(/[.!?]+$/g, "");
+
+      const conjugationCard =
+        document.querySelector(
+          ".conjugation-card"
+        );
+
+      // --------------------------------------------------------
+      // CORRECT ANSWER
+      // --------------------------------------------------------
+
+      if (
+        normalize(studentAnswer) ===
+        normalize(correctAnswer)
+      ) {
+
+        feedback.textContent =
+          "✓ Correct!";
+
+        feedback.className =
+          "conjugation-feedback correct";
+
+        if (conjugationCard) {
+          conjugationCard.classList.remove(
+            "answer-incorrect"
+          );
+
+          conjugationCard.classList.add(
+            "answer-correct"
+          );
+        }
+
+        window.conjugationCorrectCount =
+          (window.conjugationCorrectCount || 0) + 1;
+
+        launchConjugationTaco();
+
+      }
+
+      // --------------------------------------------------------
+      // INCORRECT ANSWER
+      // --------------------------------------------------------
+
+      else {
+
+        feedback.textContent =
+          `✗ Correct answer: ${correctAnswer}`;
+
+        feedback.className =
+          "conjugation-feedback incorrect";
+
+        if (conjugationCard) {
+          conjugationCard.classList.remove(
+            "answer-correct"
+          );
+
+          conjugationCard.classList.add(
+            "answer-incorrect"
+          );
+        }
+
+        window.conjugationIncorrectCount =
+          (window.conjugationIncorrectCount || 0) + 1;
+
+        window.conjugationWrongAnswers =
+          window.conjugationWrongAnswers || [];
+
+        window.conjugationWrongAnswers.push({
+          prompt:
+            `${question.Subject || ""} ${question.Verb || ""}`.trim(),
+
+          studentAnswer:
+            studentAnswer
+        });
+
+      }
+
+      // --------------------------------------------------------
+      // CHANGE CHECK → NEXT
+      // --------------------------------------------------------
+
+      answerInput.readOnly =
+        true;
+
+      actionButton.dataset.action =
+        "next";
+
+      actionButton.textContent =
+        "Next →";
+
+    }
   );
 
-const feedback =
-  document.getElementById(
-    "conjugationFeedback"
-  );
-
-if (!answerInput || !feedback) {
-  return;
-}
-
-const studentAnswer =
-  answerInput.value.trim();
-
-const correctAnswer =
-  String(
-    question.practiceAnswer || ""
-  )
-  .split("[")[0]
-  .trim();
-
-if (!studentAnswer) {
-
-  feedback.textContent =
-    "Please enter an answer.";
-
-  return;
-
-}
-
-const normalize =
-  value =>
-    String(value)
-      .trim()
-      .toLowerCase()
-      .replace(/[.!?]+$/g, "");
-
-const conjugationCard =
-  document.querySelector(
-    ".conjugation-card"
-  );
-
-// ------------------------------------------------------------
-// CORRECT ANSWER
-// ------------------------------------------------------------
-
-if (
-  normalize(studentAnswer) ===
-  normalize(correctAnswer)
-) {
-
-  window.conjugationCorrectCount =
-    (window.conjugationCorrectCount || 0) + 1;
-
-  feedback.textContent =
-    "✓ Correct!";
-
-  feedback.className =
-    "conjugation-feedback correct";
-
-  if (conjugationCard) {
-
-    conjugationCard.classList.remove(
-      "answer-incorrect"
-    );
-
-    conjugationCard.classList.add(
-      "answer-correct"
-    );
-
-  }
-
-  launchConjugationTaco();
-
-
-// ------------------------------------------------------------
-// INCORRECT ANSWER
-// ------------------------------------------------------------
-
-} else {
-
-  window.conjugationIncorrectCount =
-    (window.conjugationIncorrectCount || 0) + 1;
-
-  window.conjugationWrongAnswers =
-    window.conjugationWrongAnswers || [];
-
-  window.conjugationWrongAnswers.push({
-    prompt:
-      `${question.Subject || question.Formality || ""} ${question.Verb || ""}`.trim(),
-
-    studentAnswer:
-      studentAnswer
-  });
-
-  feedback.textContent =
-    `✗ Correct answer: ${correctAnswer}`;
-
-  feedback.className =
-    "conjugation-feedback incorrect";
-
-  if (conjugationCard) {
-
-    conjugationCard.classList.remove(
-      "answer-correct"
-    );
-
-    conjugationCard.classList.add(
-      "answer-incorrect"
-    );
-
-  }
-
-}
-
-answerInput.readOnly =
-  true;
-
-// Change the SAME button from Check → Next
-
-actionButton.dataset.action =
-  "next";
-
-actionButton.textContent =
-  "Next →";
 // ============================================================
 // SHOW CONJUGATION QUESTION
 // ============================================================
