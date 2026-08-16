@@ -704,6 +704,11 @@ function setupConjugationEnglishToggle() {
         ? "ON"
         : "OFF";
 
+    toggle.setAttribute(
+      "aria-pressed",
+      String(isOn)
+    );
+
     window.populateConjugationVerbs();
 
   };
