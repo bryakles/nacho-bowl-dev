@@ -183,21 +183,14 @@
       <!-- CONJUGATION SELECTION PANEL -->
       <section id="conjugationSelectionPanel" class="panel hidden">
       
-        <div class="practice-header">
-          <div>
-            <h2>🔤 Verb Conjugator</h2>
-            <div class="practice-meta">
-              <span>Practice Spanish verb conjugations.</span>
-            </div>
-          </div>
-        </div>
+        <h2>🔤 Verb Conjugator</h2>
       
-        <div class="conjugation-options">
+        <div class="filter-grid">
       
           <!-- SHOW ENGLISH -->
           <div class="filter-group">
             <label>Show verbs in English?</label>
-          
+      
             <div class="toggle-row">
               <button
                 id="conjugationEnglishToggle"
@@ -213,12 +206,12 @@
           <!-- VERBS -->
           <div class="filter-group">
             <label>Which verbs should be included?</label>
-          
+      
             <div
               id="conjugationVerbOptions"
               class="conjugation-verb-selector"
             >
-          
+      
               <button
                 id="conjugationAllVerbsBtn"
                 class="filter-chip active"
@@ -227,7 +220,7 @@
               >
                 All Verbs
               </button>
-          
+      
               <button
                 id="conjugationFavoriteVerbsBtn"
                 class="filter-chip"
@@ -236,14 +229,15 @@
               >
                 Favorite Verbs ▾
               </button>
-          
+      
               <div
                 id="conjugationFavoriteList"
                 class="conjugation-favorite-list hidden"
               ></div>
-          
+      
             </div>
           </div>
+      
           <!-- SUBJECTS -->
           <div class="filter-group">
             <label>Subjects</label>
@@ -266,36 +260,46 @@
       
         </div>
       
+        <div class="section-divider"></div>
+      
         <!-- SESSION LENGTH -->
-        <div class="filter-group">
-          <label>Session Length</label>
-        
+        <div class="mode-row">
+          <label>Session Length:</label>
+      
           <div
             id="conjugationSessionLengthOptions"
-            class="filter-options"
+            class="session-chips"
           >
-        
+      
             <button
               type="button"
-              class="filter-chip active"
+              class="session-chip active"
               data-session-length="25"
             >
               Standard (25)
             </button>
-        
+      
             <button
               type="button"
-              class="filter-chip"
+              class="session-chip"
               data-session-length="10"
             >
               Quick (10)
             </button>
-        
+      
           </div>
         </div>
-        
+      
+        <!-- START PRACTICE -->
         <div class="filter-footer-bottom">
-              
+      
+          <span
+            id="conjugationCardCountPreview"
+            class="card-count-preview"
+          >
+            No cards selected
+          </span>
+      
           <button
             id="startConjugationBtn"
             class="btn btn-primary"
@@ -303,11 +307,10 @@
           >
             Start Conjugating
           </button>
-              
+      
         </div>
       
       </section>
-
       <!-- ACTIVE CONJUGATION PANEL -->
       <section id="conjugationPanel" class="panel hidden">
       
