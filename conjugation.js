@@ -1752,7 +1752,19 @@ function startConjugationPractice() {
   }
 
   window.conjugationPracticeIndex = 0;
-
+  
+  // Reset the action button for a new session
+  const actionButton =
+    document.getElementById(
+      "conjugationActionBtn"
+    );
+  
+  if (actionButton) {
+    actionButton.dataset.action = "check";
+    actionButton.textContent = "Check";
+    actionButton.disabled = false;
+  }
+  
   const selectionPanel =
     document.getElementById(
       "conjugationSelectionPanel"
