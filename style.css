@@ -301,6 +301,38 @@ body.teacher-lock-active {
   border-color: var(--color-chip-active);
 }
 
+/* ============================================================
+   CONJUGATION FILTER CHIP COLORS
+   ============================================================ */
+
+/* VERBS — PURPLE */
+#conjugationVerbOptions .filter-chip.active {
+  background: #8b5cf6;
+  color: white;
+  border-color: #8b5cf6;
+}
+
+/* SUBJECTS — GREEN */
+#conjugationSubjectOptions .filter-chip.active {
+  background: #22c55e;
+  color: white;
+  border-color: #22c55e;
+}
+
+/* TENSES — BLUE */
+#conjugationTenseOptions .filter-chip.active {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+/* SESSION LENGTH — RED */
+#conjugationSessionLengthOptions .filter-chip.active {
+  background: #ef4444;
+  color: white;
+  border-color: #ef4444;
+}
+
 .filter-hint {
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
