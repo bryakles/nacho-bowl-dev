@@ -368,6 +368,7 @@ function populateConjugationSettings() {
   setupConjugationTenseButtons();
   setupConjugationVerbFilterButtons();
   setupConjugationSessionLengthButtons();
+  setupConjugationEnglishToggle();
 
   const label =
     document.querySelector(
@@ -673,6 +674,37 @@ function setupConjugationSelectionButtons() {
       }
 
     }
+
+  };
+
+}
+
+// ============================================================
+// SHOW ENGLISH TOGGLE
+// ============================================================
+
+function setupConjugationEnglishToggle() {
+
+  const toggle =
+    document.getElementById(
+      "conjugationEnglishToggle"
+    );
+
+  if (!toggle) {
+    return;
+  }
+
+  toggle.onclick = () => {
+
+    const isOn =
+      toggle.classList.toggle("active");
+
+    toggle.textContent =
+      isOn
+        ? "ON"
+        : "OFF";
+
+    window.populateConjugationVerbs();
 
   };
 
