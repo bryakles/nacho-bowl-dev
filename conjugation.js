@@ -590,6 +590,8 @@ function setupConjugationSelectionButtons() {
         shouldSelectAll
       );
     
+      updateConjugationCardCount();
+      
       return;
     }
 
@@ -626,6 +628,8 @@ function setupConjugationSelectionButtons() {
 
         }
       );
+
+      updateConjugationCardCount();
 
       return;
     }
@@ -672,6 +676,8 @@ function setupConjugationSelectionButtons() {
         );
 
       }
+
+      updateConjugationCardCount();
 
     }
 
@@ -929,15 +935,17 @@ function setupConjugationTenseButtons() {
       event.target.closest(
         ".filter-chip"
       );
-
+  
     if (!button) {
       return;
     }
-
+  
     button.classList.toggle(
       "active"
     );
-
+  
+    updateConjugationCardCount();
+  
   };
 
 }
@@ -980,10 +988,211 @@ function setupConjugationSessionLengthButtons() {
         btn.classList.remove("active");
       }
     );
-
+    
     button.classList.add("active");
+    
+    updateConjugationCardCount();
 
   };
+
+}
+
+// ============================================================
+// CARD COUNT PREVIEW
+// ============================================================
+
+function updateConjugationCardCount() {
+
+  const preview =
+    document.getElementById(
+      "conjugationCardCountPreview"
+    );
+
+  if (!preview || !conjugationData.length) {
+    return;
+  }
+
+  const subjectContainer =
+    document.getElementById(
+      "conjugationSubjectOptions"
+    );
+
+  const tenseContainer =
+    document.getElementById(
+      "conjugationTenseOptions"
+    );
+
+  if (!subjectContainer || !tenseContainer) {
+    return;
+  }
+
+  // ----------------------------------------------------------
+  // SELECTED SUBJECTS / FORMALITY
+  // ----------------------------------------------------------
+
+  const selectedSubjects =
+    [
+      ...subjectContainer.querySelectorAll(
+        ".filter-chip.active[data-selection-value]"
+      )
+    ]
+    .map(
+      button =>
+        button.dataset.selectionValue
+    );
+
+  // ----------------------------------------------------------
+  // SELECTED TENSES
+  // ----------------------------------------------------------
+
+  const selectedTenses =
+    [
+      ...tenseContainer.querySelectorAll(
+        ".filter-chip.active[data-tense]"
+      )
+    ]
+    .map(
+      button =>
+        button.dataset.tense
+    );
+
+  // ----------------------------------------------------------
+  // START WITH ALL CONJUGATION ROWS
+  // ----------------------------------------------------------
+
+  let rows =
+    [...conjugationData];
+
+  // ----------------------------------------------------------
+  // FAVORITE VERB FILTER
+  // ----------------------------------------------------------
+
+  const favoriteButton =
+    document.getElementById(
+      "conjugationFavoriteVerbsBtn"
+    );
+
+  if (
+    favoriteButton?.classList.contains("active")
+  ) {
+
+    const selectedVerbs =
+      [
+        ...document.querySelectorAll(
+          "#conjugationFavoriteList input[type='checkbox']:checked"
+        )
+      ]
+      .map(
+        checkbox =>
+          checkbox.value
+      );
+
+    rows =
+      rows.filter(
+        row =>
+          selectedVerbs.includes(
+            row.Verb
+          )
+      );
+
+  }
+
+  // ----------------------------------------------------------
+  // SUBJECT / FORMALITY FILTER
+  // ----------------------------------------------------------
+
+  if (selectedSubjects.length) {
+
+    rows =
+      rows.filter(
+        row => {
+
+          const value =
+            row.Subject ||
+            row.Formality ||
+            "";
+
+          return selectedSubjects.includes(
+            value
+          );
+
+        }
+      );
+
+  }
+
+  // ----------------------------------------------------------
+  // BUILD ACTUAL PRACTICE CARDS
+  // ----------------------------------------------------------
+
+  const cards = [];
+
+  rows.forEach(
+    row => {
+
+      selectedTenses.forEach(
+        tense => {
+
+          const answer =
+            row[tense];
+
+          if (
+            answer &&
+            String(answer).trim()
+          ) {
+
+            cards.push({
+
+              ...row,
+
+              practiceTense:
+                tense,
+
+              practiceAnswer:
+                answer
+
+            });
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+  // ----------------------------------------------------------
+  // SESSION LENGTH
+  // ----------------------------------------------------------
+
+  const sessionLength =
+    Number(
+      document.querySelector(
+        "[data-session-length].active"
+      )?.dataset.sessionLength
+    ) || 25;
+
+  const selectedCount =
+    Math.min(
+      cards.length,
+      sessionLength
+    );
+
+  // ----------------------------------------------------------
+  // DISPLAY
+  // ----------------------------------------------------------
+
+  if (!cards.length) {
+
+    preview.textContent =
+      "No cards available";
+
+    return;
+
+  }
+
+  preview.textContent =
+    `${cards.length} cards available — ${selectedCount} will be selected randomly`;
 
 }
 
