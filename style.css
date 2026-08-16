@@ -1692,6 +1692,32 @@ body.teacher-lock-active {
 }
 
 /* ============================================================
+   ENGLSIH CONJUGATION TOGGLE BUTTON
+   ============================================================ */
+
+.toggle-btn {
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.toggle-btn:hover {
+  border-color: var(--color-success);
+}
+
+.toggle-btn.active {
+  background: var(--color-success);
+  color: #ffffff;
+  border-color: var(--color-success);
+}
+
+/* ============================================================
    CONVERSATION MODE
    ============================================================ */
 
