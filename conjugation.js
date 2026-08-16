@@ -370,6 +370,8 @@ function populateConjugationSettings() {
   setupConjugationSessionLengthButtons();
   setupConjugationEnglishToggle();
 
+  updateConjugationCardCount();
+
   const label =
     document.querySelector(
       "#conjugationSubjectOptions"
@@ -1195,6 +1197,180 @@ function updateConjugationCardCount() {
     `${cards.length} cards available — ${selectedCount} will be selected randomly`;
 
 }
+
+// ============================================================
+// CONJUGATION CARD COUNT
+// ============================================================
+
+function updateConjugationCardCount() {
+
+  const countDisplay =
+    document.getElementById(
+      "conjugationCardCountPreview"
+    );
+
+  if (!countDisplay) {
+    return;
+  }
+
+  const subjectContainer =
+    document.getElementById(
+      "conjugationSubjectOptions"
+    );
+
+  const tenseContainer =
+    document.getElementById(
+      "conjugationTenseOptions"
+    );
+
+  if (
+    !subjectContainer ||
+    !tenseContainer
+  ) {
+    return;
+  }
+
+  // ----------------------------------------------------------
+  // SELECTED SUBJECTS / FORMALITY
+  // ----------------------------------------------------------
+
+  const selectedSubjects =
+    [
+      ...subjectContainer.querySelectorAll(
+        ".filter-chip.active[data-selection-value]"
+      )
+    ]
+    .map(
+      button =>
+        button.dataset.selectionValue
+    );
+
+  // ----------------------------------------------------------
+  // SELECTED TENSES
+  // ----------------------------------------------------------
+
+  const selectedTenses =
+    [
+      ...tenseContainer.querySelectorAll(
+        ".filter-chip.active[data-tense]"
+      )
+    ]
+    .map(
+      button =>
+        button.dataset.tense
+    );
+
+  // ----------------------------------------------------------
+  // SELECTED VERBS
+  // ----------------------------------------------------------
+
+  let selectedVerbs = [];
+
+  const favoriteButton =
+    document.getElementById(
+      "conjugationFavoriteVerbsBtn"
+    );
+
+  if (
+    favoriteButton?.classList.contains("active")
+  ) {
+
+    selectedVerbs =
+      [
+        ...document.querySelectorAll(
+          "#conjugationFavoriteList input[type='checkbox']:checked"
+        )
+      ]
+      .map(
+        checkbox =>
+          checkbox.value
+      );
+
+  } else {
+
+    selectedVerbs =
+      [
+        ...new Set(
+          conjugationData.map(
+            row =>
+              row.Verb
+          )
+        )
+      ];
+
+  }
+
+  // ----------------------------------------------------------
+  // COUNT AVAILABLE CONJUGATIONS
+  // ----------------------------------------------------------
+
+  let count = 0;
+
+  conjugationData.forEach(
+    row => {
+
+      if (
+        !selectedVerbs.includes(
+          row.Verb
+        )
+      ) {
+        return;
+      }
+
+      const subjectValue =
+        row.Subject ||
+        row.Formality ||
+        "";
+
+      if (
+        !selectedSubjects.includes(
+          subjectValue
+        )
+      ) {
+        return;
+      }
+
+      selectedTenses.forEach(
+        tense => {
+
+          if (
+            row[tense] &&
+            String(row[tense]).trim()
+          ) {
+
+            count++;
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+  // ----------------------------------------------------------
+  // SESSION LENGTH
+  // ----------------------------------------------------------
+
+  const sessionLength =
+    Number(
+      document.querySelector(
+        '[data-session-length].active'
+      )?.dataset.sessionLength
+    ) || 25;
+
+  // ----------------------------------------------------------
+  // DISPLAY
+  // ----------------------------------------------------------
+
+  countDisplay.textContent =
+    `${count} cards available — ${Math.min(
+      count,
+      sessionLength
+    )} will be selected randomly`;
+
+}
+
 
 // ============================================================
 // START CONJUGATION
