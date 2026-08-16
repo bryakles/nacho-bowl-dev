@@ -2343,6 +2343,147 @@ body.teacher-lock-active {
   padding-top: 0.7rem;
 }
 
+/* ============================================================
+   CONJUGATION FEEDBACK STATES
+   ============================================================ */
+
+.conjugation-card.answer-correct {
+  background: #f0fdf4;
+  border-color: #22c55e;
+  animation: conjugationCorrectPop 0.35s ease-out;
+}
+
+.conjugation-card.answer-incorrect {
+  background: #fef2f2;
+  border-color: #ef4444;
+  animation: conjugationIncorrectShake 0.4s ease-out;
+}
+
+.conjugation-feedback.correct {
+  color: #16a34a;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.conjugation-feedback.incorrect {
+  color: #dc2626;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+@keyframes conjugationCorrectPop {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.015);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes conjugationIncorrectShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-7px);
+  }
+
+  40% {
+    transform: translateX(7px);
+  }
+
+  60% {
+    transform: translateX(-5px);
+  }
+
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+
+/* ============================================================
+   CONJUGATION TACO FIREWORK
+   ============================================================ */
+
+.conjugation-taco-firework {
+  position: fixed;
+  z-index: 5000;
+  pointer-events: none;
+
+  font-size: 2rem;
+  line-height: 1;
+
+  animation-duration: 1.1s;
+  animation-timing-function: cubic-bezier(.2, .7, .3, 1);
+  animation-fill-mode: forwards;
+}
+
+@keyframes tacoFireworkLeft {
+  0% {
+    transform: translate(0, 0) scale(0.5) rotate(0deg);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  45% {
+    transform: translate(-55px, -150px) scale(1.15) rotate(-25deg);
+  }
+
+  100% {
+    transform: translate(-170px, 180px) scale(0.8) rotate(-220deg);
+    opacity: 0;
+  }
+}
+
+@keyframes tacoFireworkRight {
+  0% {
+    transform: translate(0, 0) scale(0.5) rotate(0deg);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  45% {
+    transform: translate(55px, -165px) scale(1.15) rotate(25deg);
+  }
+
+  100% {
+    transform: translate(190px, 160px) scale(0.8) rotate(230deg);
+    opacity: 0;
+  }
+}
+
+@keyframes tacoFireworkCenter {
+  0% {
+    transform: translate(0, 0) scale(0.5) rotate(0deg);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  45% {
+    transform: translate(0, -180px) scale(1.15) rotate(20deg);
+  }
+
+  100% {
+    transform: translate(35px, 200px) scale(0.75) rotate(210deg);
+    opacity: 0;
+  }
+}
 
 /* ============================================================
    INPUT AREA
