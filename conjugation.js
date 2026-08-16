@@ -1856,6 +1856,63 @@ document
   );
 
 // ============================================================
+// CONJUGATION TACO FIREWORK
+// ============================================================
+
+function launchConjugationTaco() {
+
+  const input =
+    document.getElementById(
+      "conjugationAnswerInput"
+    );
+
+  if (!input) {
+    return;
+  }
+
+  const rect =
+    input.getBoundingClientRect();
+
+  const taco =
+    document.createElement("div");
+
+  taco.className =
+    "conjugation-taco-firework";
+
+  taco.textContent =
+    "🌮";
+
+  taco.style.left =
+    `${rect.left + rect.width / 2}px`;
+
+  taco.style.top =
+    `${rect.top + rect.height / 2}px`;
+
+  const animations = [
+    "tacoFireworkLeft",
+    "tacoFireworkRight",
+    "tacoFireworkCenter"
+  ];
+
+  const randomAnimation =
+    animations[
+      Math.floor(
+        Math.random() *
+        animations.length
+      )
+    ];
+
+  taco.style.animationName =
+    randomAnimation;
+
+  document.body.appendChild(taco);
+
+  setTimeout(() => {
+    taco.remove();
+  }, 1200);
+}
+
+// ============================================================
 // CONJUGATION ACTION BUTTON — CHECK → NEXT
 // ============================================================
 
@@ -1919,6 +1976,18 @@ document
 
         actionButton.textContent =
           "Check";
+
+        const conjugationCard =
+          document.querySelector(
+            ".conjugation-card"
+          );
+        
+        if (conjugationCard) {
+          conjugationCard.classList.remove(
+            "answer-correct",
+            "answer-incorrect"
+          );
+        }
 
         showNextConjugationQuestion();
 
@@ -1985,19 +2054,52 @@ document
             .toLowerCase()
             .replace(/[.!?]+$/g, "");
 
+      const conjugationCard =
+        document.querySelector(
+          ".conjugation-card"
+        );
+      
       if (
         normalize(studentAnswer) ===
         normalize(correctAnswer)
       ) {
-
+      
         feedback.textContent =
           "✓ Correct!";
-
+      
+        feedback.className =
+          "conjugation-feedback correct";
+      
+        if (conjugationCard) {
+          conjugationCard.classList.remove(
+            "answer-incorrect"
+          );
+      
+          conjugationCard.classList.add(
+            "answer-correct"
+          );
+        }
+      
+        launchConjugationTaco();
+      
       } else {
-
+      
         feedback.textContent =
           `✗ Correct answer: ${correctAnswer}`;
-
+      
+        feedback.className =
+          "conjugation-feedback incorrect";
+      
+        if (conjugationCard) {
+          conjugationCard.classList.remove(
+            "answer-correct"
+          );
+      
+          conjugationCard.classList.add(
+            "answer-incorrect"
+          );
+        }
+      
       }
 
       answerInput.readOnly =
