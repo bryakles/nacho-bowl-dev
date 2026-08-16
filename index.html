@@ -178,246 +178,245 @@
         </div>
       
       </section>
-
-
-      <!-- CONJUGATION SELECTION PANEL -->
-      <section id="conjugationSelectionPanel" class="panel hidden">
-      
-        <h2>🔤 Verb Conjugator</h2>
-      
-        <div class="filter-grid">
-      
-          <!-- SHOW ENGLISH -->
-          <div class="filter-group">
-            <label>Show verbs in English?</label>
-      
-            <div class="toggle-row">
-              <button
-                id="conjugationEnglishToggle"
-                class="toggle-btn active"
-                type="button"
-                aria-pressed="true"
-              >
-                ON
-              </button>
-            </div>
-          </div>
-      
-          <!-- VERBS -->
-          <div class="filter-group">
-            <label>Which verbs should be included?</label>
-      
-            <div
-              id="conjugationVerbOptions"
-              class="conjugation-verb-selector"
-            >
-      
-              <button
-                id="conjugationAllVerbsBtn"
-                class="filter-chip active"
-                data-verb-filter="all"
-                type="button"
-              >
-                All Verbs
-              </button>
-      
-              <button
-                id="conjugationFavoriteVerbsBtn"
-                class="filter-chip"
-                data-verb-filter="favorite"
-                type="button"
-              >
-                Favorite Verbs ▾
-              </button>
-      
-              <div
-                id="conjugationFavoriteList"
-                class="conjugation-favorite-list hidden"
-              ></div>
-      
-            </div>
-          </div>
-      
-          <!-- SUBJECTS -->
-          <div class="filter-group">
-            <label>Subjects</label>
-      
-            <div
-              id="conjugationSubjectOptions"
-              class="chip-group"
-            ></div>
-          </div>
-      
-          <!-- TENSES -->
-          <div class="filter-group">
-            <label>Tenses</label>
-      
-            <div
-              id="conjugationTenseOptions"
-              class="chip-group"
-            ></div>
-          </div>
-      
-        </div>
-      
-        <div class="section-divider"></div>
-      
-        <!-- SESSION LENGTH -->
-        <div class="mode-row">
-          <label>Session Length:</label>
-      
-          <div
-            id="conjugationSessionLengthOptions"
-            class="session-chips"
-          >
-      
-            <button
-              type="button"
-              class="session-chip active"
-              data-session-length="25"
-            >
-              Standard (25)
-            </button>
-      
-            <button
-              type="button"
-              class="session-chip"
-              data-session-length="10"
-            >
-              Quick (10)
-            </button>
-      
-          </div>
-        </div>
-      
-        <!-- START PRACTICE -->
-        <div class="filter-footer-bottom">
-      
-          <span
-            id="conjugationCardCountPreview"
-            class="card-count-preview"
-          >
-            No cards selected
-          </span>
-      
-          <button
-            id="startConjugationBtn"
-            class="btn btn-primary"
-            type="button"
-          >
-            Start Conjugating
-          </button>
-      
-        </div>
-      
-      </section>
-      <!-- ACTIVE CONJUGATION PANEL -->
-      <section id="conjugationPanel" class="panel hidden">
-      
-        <!-- HEADER -->
-        <div class="conjugation-practice-header">
-
-          <h2 class="conjugation-practice-title">
-            Conjugation Practice
-          </h2>
-        
-          <div class="conjugation-header-right">
-        
-            <button
-              id="conjugationEndBtn"
-              class="btn btn-secondary"
-              type="button"
-            >
-              ← Conjugation Settings
-            </button>
-        
-          </div>
-        
-        </div>
-      
-        <!-- CONJUGATION CARD -->
-        <div class="conjugation-card">
-      
-          <div
-            id="conjugationTense"
-            class="conjugation-tense"
-          ></div>
-      
-          <div
-            id="conjugationVerbTitle"
-            class="conjugation-verb-title"
-          ></div>
-      
-          <div
-            id="conjugationVerbEnglish"
-            class="conjugation-verb-english"
-          ></div>
-      
-          <div class="conjugation-answer-row">
-      
-            <div
-              id="conjugationSubject"
-              class="conjugation-subject"
-            ></div>
-      
-            <div class="conjugation-input-area">
-      
-              <input
-                id="conjugationAnswerInput"
-                type="text"
-                class="conjugation-answer-input"
-                autocomplete="off"
-                autocapitalize="off"
-                spellcheck="false"
-                placeholder="Type your answer..."
-              />
-      
-              <div
-                id="conjugationEnglishAnswer"
-                class="conjugation-english-answer hidden"
-              ></div>
-      
-            </div>
-      
-            <button
-              id="conjugationActionBtn"
-              class="btn btn-primary"
-              type="button"
-            >
-              Check
-            </button>
-      
-          </div>
-      
-          <div class="accent-legend">
-            <span class="legend-label">Shortcuts:</span>
-            <span>A=á</span>
-            <span>E=é</span>
-            <span>I=í</span>
-            <span>O=ó</span>
-            <span>U=ú</span>
-            <span>N=ñ</span>
-            <span>Y=ü</span>
-          </div>
-
-          <div class="conjugation-progress-bar">
-            <div
-              id="conjugationProgressFill"
-              class="conjugation-progress-fill"
-            ></div>
-          </div>
-      
-          <div
-            id="conjugationFeedback"
-            class="conjugation-feedback"
-          ></div>
-      
-        </div>
-      
-      </section>
                   
       <!-- STUDY SETS CONTENT -->
       <main class="practice-main">
+
+              <!-- CONJUGATION SELECTION PANEL -->
+              <section id="conjugationSelectionPanel" class="panel hidden">
+              
+                <h2>🔤 Verb Conjugator</h2>
+              
+                <div class="filter-grid">
+              
+                  <!-- SHOW ENGLISH -->
+                  <div class="filter-group">
+                    <label>Show verbs in English?</label>
+              
+                    <div class="toggle-row">
+                      <button
+                        id="conjugationEnglishToggle"
+                        class="toggle-btn active"
+                        type="button"
+                        aria-pressed="true"
+                      >
+                        ON
+                      </button>
+                    </div>
+                  </div>
+              
+                  <!-- VERBS -->
+                  <div class="filter-group">
+                    <label>Which verbs should be included?</label>
+              
+                    <div
+                      id="conjugationVerbOptions"
+                      class="conjugation-verb-selector"
+                    >
+              
+                      <button
+                        id="conjugationAllVerbsBtn"
+                        class="filter-chip active"
+                        data-verb-filter="all"
+                        type="button"
+                      >
+                        All Verbs
+                      </button>
+              
+                      <button
+                        id="conjugationFavoriteVerbsBtn"
+                        class="filter-chip"
+                        data-verb-filter="favorite"
+                        type="button"
+                      >
+                        Favorite Verbs ▾
+                      </button>
+              
+                      <div
+                        id="conjugationFavoriteList"
+                        class="conjugation-favorite-list hidden"
+                      ></div>
+              
+                    </div>
+                  </div>
+              
+                  <!-- SUBJECTS -->
+                  <div class="filter-group">
+                    <label>Subjects</label>
+              
+                    <div
+                      id="conjugationSubjectOptions"
+                      class="chip-group"
+                    ></div>
+                  </div>
+              
+                  <!-- TENSES -->
+                  <div class="filter-group">
+                    <label>Tenses</label>
+              
+                    <div
+                      id="conjugationTenseOptions"
+                      class="chip-group"
+                    ></div>
+                  </div>
+              
+                </div>
+              
+                <div class="section-divider"></div>
+              
+                <!-- SESSION LENGTH -->
+                <div class="mode-row">
+                  <label>Session Length:</label>
+              
+                  <div
+                    id="conjugationSessionLengthOptions"
+                    class="session-chips"
+                  >
+              
+                    <button
+                      type="button"
+                      class="session-chip active"
+                      data-session-length="25"
+                    >
+                      Standard (25)
+                    </button>
+              
+                    <button
+                      type="button"
+                      class="session-chip"
+                      data-session-length="10"
+                    >
+                      Quick (10)
+                    </button>
+              
+                  </div>
+                </div>
+              
+                <!-- START PRACTICE -->
+                <div class="filter-footer-bottom">
+              
+                  <span
+                    id="conjugationCardCountPreview"
+                    class="card-count-preview"
+                  >
+                    No cards selected
+                  </span>
+              
+                  <button
+                    id="startConjugationBtn"
+                    class="btn btn-primary"
+                    type="button"
+                  >
+                    Start Conjugating
+                  </button>
+              
+                </div>
+              
+              </section>
+              <!-- ACTIVE CONJUGATION PANEL -->
+              <section id="conjugationPanel" class="panel hidden">
+              
+                <!-- HEADER -->
+                <div class="conjugation-practice-header">
+        
+                  <h2 class="conjugation-practice-title">
+                    Conjugation Practice
+                  </h2>
+                
+                  <div class="conjugation-header-right">
+                
+                    <button
+                      id="conjugationEndBtn"
+                      class="btn btn-secondary"
+                      type="button"
+                    >
+                      ← Conjugation Settings
+                    </button>
+                
+                  </div>
+                
+                </div>
+              
+                <!-- CONJUGATION CARD -->
+                <div class="conjugation-card">
+              
+                  <div
+                    id="conjugationTense"
+                    class="conjugation-tense"
+                  ></div>
+              
+                  <div
+                    id="conjugationVerbTitle"
+                    class="conjugation-verb-title"
+                  ></div>
+              
+                  <div
+                    id="conjugationVerbEnglish"
+                    class="conjugation-verb-english"
+                  ></div>
+              
+                  <div class="conjugation-answer-row">
+              
+                    <div
+                      id="conjugationSubject"
+                      class="conjugation-subject"
+                    ></div>
+              
+                    <div class="conjugation-input-area">
+              
+                      <input
+                        id="conjugationAnswerInput"
+                        type="text"
+                        class="conjugation-answer-input"
+                        autocomplete="off"
+                        autocapitalize="off"
+                        spellcheck="false"
+                        placeholder="Type your answer..."
+                      />
+              
+                      <div
+                        id="conjugationEnglishAnswer"
+                        class="conjugation-english-answer hidden"
+                      ></div>
+              
+                    </div>
+              
+                    <button
+                      id="conjugationActionBtn"
+                      class="btn btn-primary"
+                      type="button"
+                    >
+                      Check
+                    </button>
+              
+                  </div>
+              
+                  <div class="accent-legend">
+                    <span class="legend-label">Shortcuts:</span>
+                    <span>A=á</span>
+                    <span>E=é</span>
+                    <span>I=í</span>
+                    <span>O=ó</span>
+                    <span>U=ú</span>
+                    <span>N=ñ</span>
+                    <span>Y=ü</span>
+                  </div>
+        
+                  <div class="conjugation-progress-bar">
+                    <div
+                      id="conjugationProgressFill"
+                      class="conjugation-progress-fill"
+                    ></div>
+                  </div>
+              
+                  <div
+                    id="conjugationFeedback"
+                    class="conjugation-feedback"
+                  ></div>
+              
+                </div>
+              
+              </section>
       
         <!-- FILTER PANEL -->
         <section id="filterPanel" class="panel hidden">
