@@ -1093,13 +1093,16 @@ document
 
         subjects:
           selectedSubjects,
-
+      
         tenses:
           selectedTenses,
-
+      
         verbFilter:
           selectedVerbFilter,
-
+      
+        sessionLength:
+          selectedSessionLength,
+      
         showEnglish:
           document
             .getElementById(
@@ -1107,7 +1110,7 @@ document
             )
             ?.classList.contains("active") ??
           true
-
+      
       };
 
       console.log(
