@@ -111,6 +111,11 @@ window.loadConjugationData = async function() {
       conjugationData.slice(0, 3)
     );
 
+    console.log(
+      "FIRST KOREAN ROW:",
+      conjugationData[0]
+    );
+
     populateConjugationSettings();
 
   } catch (error) {
