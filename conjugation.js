@@ -2363,13 +2363,17 @@ function endConjugationPractice() {
       ? "Favorite Verbs"
       : "All Verbs";
 
-  const subjectLabel =
-    settings.subjectLabel ||
-    "All Subjects";
-
-  const tenseLabel =
-    settings.tenseLabel ||
-    "All Tenses";
+    const subjectLabel =
+      settings.subjects &&
+      settings.subjects.length
+        ? settings.subjects.join(", ")
+        : "All Subjects";
+  
+    const tenseLabel =
+      settings.tenses &&
+      settings.tenses.length
+        ? settings.tenses.join(", ")
+        : "All Tenses";
 
   // ----------------------------------------------------------
   // TIMESTAMP
