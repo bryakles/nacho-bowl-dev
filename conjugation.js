@@ -73,8 +73,10 @@ window.loadConjugationData = async function() {
     }
 
     console.log(
-      "CONJUGATION LANGUAGE:",
-      language
+      "🌮 CONJUGATION LOADER:",
+      "USER =", currentUser?.username,
+      "LANGUAGE =", language,
+      "GID =", gid
     );
 
     console.log(
