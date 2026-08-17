@@ -3425,6 +3425,142 @@ answerInput.addEventListener("input", () => {
   }
 });
 
+// ============================================================
+// FRENCH ACCENT INPUT
+// ============================================================
+
+const FRENCH_ACCENT_MAP = {
+  "ee": "é",
+  "ée": "è",
+  "èe": "ê",
+
+  "aa": "à",
+  "àa": "â",
+
+  "ii": "î",
+  "îi": "ï",
+
+  "oo": "ô",
+
+  "uu": "û",
+  "ûu": "ù"
+};
+
+function applyLanguageAccentInput(input) {
+
+  if (!input) {
+    return;
+  }
+
+  const language =
+    currentUser?.language || "Spanish";
+
+  const pos =
+    input.selectionStart;
+
+  const original =
+    input.value;
+
+  // ----------------------------------------------------------
+  // SPANISH
+  // ----------------------------------------------------------
+
+  if (language === "Spanish") {
+
+    const converted =
+      original.replace(
+        /[AEIOUNY]/g,
+        ch => ACCENT_MAP[ch]
+      );
+
+    if (converted !== original) {
+
+      input.value =
+        converted;
+
+      input.setSelectionRange(
+        pos,
+        pos
+      );
+
+    }
+
+    return;
+  }
+
+  // ----------------------------------------------------------
+  // FRENCH
+  // ----------------------------------------------------------
+
+  if (language === "French") {
+
+    let converted =
+      original;
+
+    // Capital C → ç
+    converted =
+      converted.replace(
+        /C/g,
+        "ç"
+      );
+
+    // Longest patterns first
+    const frenchPatterns = [
+      ["ée", "è"],
+      ["èe", "ê"],
+      ["ee", "é"],
+
+      ["àa", "â"],
+      ["aa", "à"],
+
+      ["îi", "ï"],
+      ["ii", "î"],
+
+      ["oo", "ô"],
+
+      ["ûu", "ù"],
+      ["uu", "û"]
+    ];
+
+    frenchPatterns.forEach(
+      ([pattern, replacement]) => {
+
+        converted =
+          converted.replaceAll(
+            pattern,
+            replacement
+          );
+
+      }
+    );
+
+    if (converted !== original) {
+
+      // Adjust cursor so it stays roughly
+      // where the student was typing.
+      const difference =
+        original.length -
+        converted.length;
+
+      input.value =
+        converted;
+
+      input.setSelectionRange(
+        Math.max(
+          0,
+          pos - difference
+        ),
+        Math.max(
+          0,
+          pos - difference
+        )
+      );
+
+    }
+
+  }
+
+}
 
 // ------------------------------------------------------------
 // BUTTON EVENTS
