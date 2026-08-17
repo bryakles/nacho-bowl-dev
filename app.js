@@ -4867,6 +4867,10 @@ setTimeout(() => {
     currentUser.language
   );
 
+  if (typeof loadConjugationData === "function") {
+    loadConjugationData();
+  }
+
   welcomeName.textContent =
     currentUser.name;
   
