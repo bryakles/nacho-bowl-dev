@@ -20,22 +20,56 @@ async function loadConjugationData() {
   try {
 
     let language = "Spanish";
-    
+
+    // --------------------------------------------------------
+    // FIND CURRENT USER'S LANGUAGE
+    // --------------------------------------------------------
+
+    const savedUsername =
+      localStorage.getItem("nachoCurrentUser");
+
     if (
-      typeof currentUser !== "undefined" &&
-      currentUser &&
-      currentUser.language
+      savedUsername &&
+      typeof allAccounts !== "undefined" &&
+      Array.isArray(allAccounts)
     ) {
-      language = currentUser.language;
+
+      const user =
+        allAccounts.find(
+          account =>
+            String(account.username)
+              .trim()
+              .toLowerCase() ===
+            String(savedUsername)
+              .trim()
+              .toLowerCase()
+        );
+
+      if (
+        user &&
+        user.language
+      ) {
+
+        language =
+          user.language;
+
+      }
+
     }
+
+    // --------------------------------------------------------
+    // FIND CORRESPONDING GOOGLE SHEET TAB
+    // --------------------------------------------------------
 
     const gid =
       CONJUGATION_SHEET_GIDS[language];
 
     if (!gid) {
+
       throw new Error(
         `No conjugation sheet configured for language: ${language}`
       );
+
     }
 
     console.log(
@@ -48,15 +82,21 @@ async function loadConjugationData() {
       gid
     );
 
+    // --------------------------------------------------------
+    // LOAD THE CORRECT TAB
+    // --------------------------------------------------------
+
     const response =
       await fetch(
         `${CONJUGATION_CSV_URL}&gid=${gid}`
       );
 
     if (!response.ok) {
+
       throw new Error(
         `Conjugation request failed: ${response.status}`
       );
+
     }
 
     const text =
@@ -83,7 +123,6 @@ async function loadConjugationData() {
   }
 
 }
-
 function parseConjugationCSV(text) {
 
   const rows = [];
