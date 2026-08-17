@@ -19,25 +19,14 @@ async function loadConjugationData() {
 
   try {
 
-    const savedUsername =
-      localStorage.getItem("nachoCurrentUser");
-
-    let language =
-      "Spanish";
-
-    if (savedUsername && typeof allAccounts !== "undefined") {
-
-      const user =
-        allAccounts.find(
-          account =>
-            String(account.username).trim().toLowerCase() ===
-            String(savedUsername).trim().toLowerCase()
-        );
-
-      if (user && user.language) {
-        language = user.language;
-      }
-
+    let language = "Spanish";
+    
+    if (
+      typeof currentUser !== "undefined" &&
+      currentUser &&
+      currentUser.language
+    ) {
+      language = currentUser.language;
     }
 
     const gid =
