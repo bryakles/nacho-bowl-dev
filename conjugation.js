@@ -2545,3 +2545,91 @@ function endConjugationPractice() {
   renderAttemptHistory();
 
 }
+
+// ============================================================
+// CONJUGATION RESULTS BUTTONS
+// ============================================================
+
+// ------------------------------------------------------------
+// PRACTICE AGAIN — SAME SETTINGS
+// ------------------------------------------------------------
+
+document
+  .getElementById(
+    "conjugationPracticeAgainBtn"
+  )
+  ?.addEventListener(
+    "click",
+    () => {
+
+      // Reset the current session
+      window.conjugationPracticeIndex =
+        0;
+
+      window.conjugationCorrectCount =
+        0;
+
+      window.conjugationIncorrectCount =
+        0;
+
+      window.conjugationWrongAnswers =
+        [];
+
+      // Hide results
+      document
+        .getElementById(
+          "conjugationResultsPanel"
+        )
+        ?.classList.add(
+          "hidden"
+        );
+
+      // Start a fresh session using
+      // the same settings and practice data
+      startConjugationPractice();
+
+    }
+  );
+
+
+// ------------------------------------------------------------
+// CHOOSE NEW SETTINGS
+// ------------------------------------------------------------
+
+document
+  .getElementById(
+    "conjugationNewPracticeBtn"
+  )
+  ?.addEventListener(
+    "click",
+    () => {
+
+      // Hide results
+      document
+        .getElementById(
+          "conjugationResultsPanel"
+        )
+        ?.classList.add(
+          "hidden"
+        );
+
+      // Hide active practice
+      document
+        .getElementById(
+          "conjugationPanel"
+        )
+        ?.classList.add(
+          "hidden"
+        );
+
+      // Show conjugation settings
+      document
+        .getElementById(
+          "conjugationSelectionPanel"
+        )
+        ?.classList.remove(
+          "hidden"
+        );
+
+    }
+  );
