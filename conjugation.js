@@ -2325,7 +2325,7 @@ function showNextConjugationQuestion() {
 
 }
 
-    // ============================================================
+// ============================================================
 // END CONJUGATION PRACTICE
 // ============================================================
 
@@ -2459,7 +2459,7 @@ function endConjugationPractice() {
     `${totalNachos.toLocaleString()} nachos collected`;
 
   // ----------------------------------------------------------
-  // SHOW EXISTING RESULTS PANEL
+  // SHOW CONJUGATION RESULTS PANEL
   // ----------------------------------------------------------
 
   const conjugationPanel =
@@ -2467,16 +2467,80 @@ function endConjugationPractice() {
       "conjugationPanel"
     );
 
+  const conjugationResultsPanel =
+    document.getElementById(
+      "conjugationResultsPanel"
+    );
+
+  const conjugationResultsSummary =
+    document.getElementById(
+      "conjugationResultsSummary"
+    );
+
+  const conjugationNachoCountDisplay =
+    document.getElementById(
+      "conjugationNachoCountDisplay"
+    );
+
+  const conjugationNachoEarnedMessage =
+    document.getElementById(
+      "conjugationNachoEarnedMessage"
+    );
+
+  const conjugationCelebrationIcon =
+    document.getElementById(
+      "conjugationCelebrationIcon"
+    );
+
+  const conjugationCelebrationTitle =
+    document.getElementById(
+      "conjugationCelebrationTitle"
+    );
+
+  const conjugationCelebrationMessage =
+    document.getElementById(
+      "conjugationCelebrationMessage"
+    );
+
   conjugationPanel?.classList.add(
     "hidden"
   );
 
-  resultsPanel.classList.remove(
+  conjugationResultsPanel?.classList.remove(
     "hidden"
   );
 
-  resultsSummary.textContent =
-    entry;
+  if (conjugationResultsSummary) {
+    conjugationResultsSummary.textContent =
+      entry;
+  }
+
+  if (conjugationNachoCountDisplay) {
+    conjugationNachoCountDisplay.textContent =
+      `${totalNachos.toLocaleString()} nachos collected`;
+  }
+
+  if (conjugationNachoEarnedMessage) {
+    conjugationNachoEarnedMessage.textContent =
+      nachosEarned > 0
+        ? `+${nachosEarned} nacho${nachosEarned !== 1 ? "s" : ""} earned!`
+        : "No nachos earned this session.";
+  }
+
+  if (conjugationCelebrationIcon) {
+    conjugationCelebrationIcon.textContent =
+      tier.icon;
+  }
+
+  if (conjugationCelebrationTitle) {
+    conjugationCelebrationTitle.textContent =
+      tier.title;
+  }
+
+  if (conjugationCelebrationMessage) {
+    conjugationCelebrationMessage.textContent =
+      randomMessage(tier);
+  }
 
   renderAttemptHistory();
 
