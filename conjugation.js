@@ -15,7 +15,7 @@ const CONJUGATION_SHEET_GIDS = {
   Korean: "688505735"
 };
 
-async function loadConjugationData() {
+window.loadConjugationData = async function() {
 
   try {
 
