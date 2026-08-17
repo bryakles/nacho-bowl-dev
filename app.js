@@ -1447,7 +1447,7 @@ conversationNavBtn.addEventListener("click", () => {
 
 conjugationNavBtn.addEventListener(
   "click",
-  () => {
+  async () => {
 
     landingPanel.classList.add("hidden");
 
@@ -1467,7 +1467,8 @@ conjugationNavBtn.addEventListener(
       "conjugationSelection"
     );
 
-    window.populateConjugationVerbs();
+    // Load conjugation data for the CURRENT user's language
+    await loadConjugationData();
 
   }
 );
