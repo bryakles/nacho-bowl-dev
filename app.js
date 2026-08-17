@@ -1853,6 +1853,14 @@ function getFilteredCards() {
 
 function updateCardCountPreview() {
   const count = getFilteredCards().length;
+
+  console.log(
+    "CARD PREVIEW DEBUG:",
+    "count =", count,
+    "selectedCardCount =", selectedCardCount,
+    "maxCardsPerSession =", maxCardsPerSession
+  );
+  
   if (count === 0) {
     cardCountPreview.textContent = "No cards match your selection";
     cardCountPreview.className = "card-count-preview";
@@ -3441,6 +3449,7 @@ const FRENCH_ACCENT_MAP = {
   "îi": "ï",
 
   "oo": "ô",
+  "ôo": "œ",
 
   "uu": "û",
   "ûu": "ù"
