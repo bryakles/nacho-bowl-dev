@@ -2562,7 +2562,7 @@ document
     "click",
     () => {
 
-      // Reset the current session
+      // Reset session statistics
       window.conjugationPracticeIndex =
         0;
 
@@ -2584,13 +2584,11 @@ document
           "hidden"
         );
 
-      // Start a fresh session using
-      // the same settings and practice data
-      startConjugationPractice();
+      // Build a NEW randomized practice set
+      buildConjugationPractice();
 
     }
   );
-
 
 // ------------------------------------------------------------
 // CHOOSE NEW SETTINGS
