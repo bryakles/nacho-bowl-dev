@@ -3417,18 +3417,6 @@ const ACCENT_MAP = {
   "Y": "ü"
 };
 
-  const converted =
-    original.replace(
-      /[AEIOUNY]/g,
-      ch => ACCENT_MAP[ch]
-    );
-
-  if (converted !== original) {
-    answerInput.value = converted;
-    answerInput.setSelectionRange(pos, pos);
-  }
-});
-
 // ============================================================
 // FRENCH ACCENT INPUT
 // ============================================================
