@@ -335,13 +335,34 @@ async function openConversationSelection() {
 
   }
 
+  // Hide conjugation
+  if (
+    typeof conjugationSelectionPanel !==
+    "undefined"
+  ) {
+
+    conjugationSelectionPanel.classList.add(
+      "hidden"
+    );
+
+  }
+
+  if (
+    typeof conjugationPanel !==
+    "undefined"
+  ) {
+
+    conjugationPanel.classList.add(
+      "hidden"
+    );
+
+  }
+
   conversationSelectionPanel.classList.remove(
     "hidden"
   );
 
   await loadConversationIndex();
-
-}
 
 
 // ============================================================
