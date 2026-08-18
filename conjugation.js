@@ -1802,6 +1802,8 @@ function startConjugationPractice() {
     "hidden"
   );
 
+  updateConjugationAccentLegend();
+
   showNextConjugationQuestion();
 
 }
