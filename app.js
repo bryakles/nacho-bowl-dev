@@ -1461,6 +1461,7 @@ conjugationNavBtn.addEventListener(
     nachoBuilderPanel.classList.add("hidden");
 
     conjugationSelectionPanel.classList.remove("hidden");
+    conjugationPanel?.classList.add("hidden");
 
     localStorage.setItem(
       "nachoCurrentPanel",
@@ -3572,6 +3573,61 @@ if (answerInput) {
   );
 }
 
+function updateConjugationAccentLegend() {
+
+  const legend =
+    document.getElementById("accentLegend");
+
+  if (!legend) {
+    return;
+  }
+
+  const language =
+    currentUser?.language || "Spanish";
+
+  if (language === "Spanish") {
+
+    legend.innerHTML = `
+      <span class="legend-label">Shortcuts:</span>
+      <span>A=á</span>
+      <span>E=é</span>
+      <span>I=í</span>
+      <span>O=ó</span>
+      <span>U=ú</span>
+      <span>N=ñ</span>
+      <span>Y=ü</span>
+    `;
+
+    return;
+  }
+
+  if (language === "French") {
+
+    legend.innerHTML = `
+      <span class="legend-label">Shortcuts:</span>
+      <span>aa=à</span>
+      <span>àa=ä</span>
+      <span>äa=â</span>
+      <span>ée=è</span>
+      <span>èe=ê</span>
+      <span>ee=é</span>
+      <span>eé=ë</span>
+      <span>ii=î</span>
+      <span>îi=ï</span>
+      <span>oo=ô</span>
+      <span>ôo=ö</span>
+      <span>öo=œ</span>
+      <span>uu=ù</span>
+      <span>ùu=û</span>
+      <span>ûu=ü</span>
+      <span>yy=ÿ</span>
+      <span>C=ç</span>
+    `;
+
+  }
+
+}
+
 // ------------------------------------------------------------
 // BUTTON EVENTS
 // ------------------------------------------------------------
@@ -5111,6 +5167,8 @@ setTimeout(() => {
       resultsPanel.classList.add("hidden");
       conversationSelectionPanel?.classList.add("hidden");
       conversationPanel?.classList.add("hidden");
+      conjugationSelectionPanel?.classList.add("hidden");
+      conjugationPanel?.classList.add("hidden");
 
       showStudySet(cards);
 
@@ -5136,8 +5194,9 @@ setTimeout(() => {
     resultsPanel.classList.add("hidden");
     nachoBuilderPanel.classList.add("hidden");
     conversationPanel?.classList.add("hidden");
-  
     conversationSelectionPanel?.classList.remove("hidden");
+    conjugationSelectionPanel?.classList.add("hidden");
+    conjugationPanel?.classList.add("hidden");
   
     loadConversationIndex();
   
@@ -5168,6 +5227,8 @@ setTimeout(() => {
       resultsPanel.classList.add("hidden");
       conversationSelectionPanel?.classList.add("hidden");
       conversationPanel?.classList.add("hidden");
+      conjugationSelectionPanel?.classList.add("hidden");
+      conjugationPanel?.classList.add("hidden");
 
       nachoBuilderPanel.classList.remove("hidden");
 
@@ -5247,6 +5308,8 @@ setTimeout(() => {
       resultsPanel.classList.add("hidden");
       conversationSelectionPanel?.classList.add("hidden");
       conversationPanel?.classList.add("hidden");
+      conjugationSelectionPanel?.classList.add("hidden");
+      conjugationPanel?.classList.add("hidden");
 
       practiceModeTitle.textContent =
         PRACTICE_MODES[practiceMode]?.label ||
