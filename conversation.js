@@ -2251,8 +2251,12 @@ function showConversationQuestion() {
   
   if (question.say) {
   
-    playSpanishText(
+    const ttsText =
       question.say
+        .replace(/\[([^\]]+)\]/g, "$1");
+  
+    playSpanishText(
+      ttsText
     );
   
   }
@@ -2363,9 +2367,13 @@ function showShortSpeak(
   // ----------------------------------------------------------
   
   if (question.say) {
+
+    const ttsText =
+      question.say
+        .replace(/\[([^\]]+)\]/g, "$1");
   
     playSpanishText(
-      question.say
+      ttsText
     );
   
   }
@@ -4586,10 +4594,14 @@ conversationReplayBtn.addEventListener(
 
     if (question && question.say) {
 
-      playSpanishText(
+      const ttsText =
         question.say
+          .replace(/\[([^\]]+)\]/g, "$1");
+    
+      playSpanishText(
+        ttsText
       );
-
+    
     }
 
   }
