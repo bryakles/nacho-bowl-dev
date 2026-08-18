@@ -1415,6 +1415,8 @@ function showLandingPage() {
   resultsPanel.classList.add("hidden");
   conversationSelectionPanel.classList.add("hidden");
   conversationPanel.classList.add("hidden");
+  conjugationSelectionPanel?.classList.add("hidden");
+  conjugationPanel?.classList.add("hidden");
 }
 
 // ============================================================
@@ -1536,6 +1538,9 @@ function showFilterPanel() {
 
   conversationSelectionPanel.classList.add("hidden");
   conversationPanel.classList.add("hidden");
+
+  conjugationSelectionPanel?.classList.add("hidden");
+  conjugationPanel?.classList.add("hidden");
 
   loadFilterSettings();
 
