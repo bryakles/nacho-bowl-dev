@@ -2137,10 +2137,16 @@ function showConversationQuestion() {
 
   const question =
     getCurrentQuestion();
-
+  
   console.log(
-    "CURRENT QUESTION:",
-    question
+    "CONVERSATION POSITION:",
+    {
+      currentConceptIndex,
+      currentQuestionIndex,
+      totalQuestions:
+        row.questions.length,
+      question
+    }
   );
 
 
