@@ -2945,6 +2945,31 @@ function clearConversationResponseAreas() {
 
 function showStatement(question) {
 
+  console.log(
+    "SHOW STATEMENT:",
+    question
+  );
+
+  console.log(
+    "STATEMENT SAY:",
+    question.say
+  );
+
+  console.log(
+    "STATEMENT SHOW:",
+    question.show
+  );
+
+  console.log(
+    "STATEMENT ANSWER:",
+    question.answer
+  );
+
+  console.log(
+    "STATEMENT IMAGE:",
+    question.imageURL
+  );
+
   conversationYesNo.classList.remove(
     "hidden"
   );
