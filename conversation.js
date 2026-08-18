@@ -364,6 +364,7 @@ async function openConversationSelection() {
 
   await loadConversationIndex();
 
+}
 
 // ============================================================
 // LOAD CONVERSATION INDEX
