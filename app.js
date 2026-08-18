@@ -3522,6 +3522,7 @@ function applyLanguageAccentInput(input) {
       ["ii", "î"],
 
       ["oo", "ô"],
+      ["ôo", "œ"],
 
       ["ûu", "ù"],
       ["uu", "û"]
