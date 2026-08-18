@@ -3417,10 +3417,6 @@ const ACCENT_MAP = {
   "Y": "ü"
 };
 
-answerInput.addEventListener("input", () => {
-  const pos = answerInput.selectionStart;
-  const original = answerInput.value;
-
   const converted =
     original.replace(
       /[AEIOUNY]/g,
@@ -3569,6 +3565,15 @@ function applyLanguageAccentInput(input) {
 
   }
 
+}
+
+if (answerInput) {
+  answerInput.addEventListener(
+    "input",
+    () => {
+      applyLanguageAccentInput(answerInput);
+    }
+  );
 }
 
 // ------------------------------------------------------------
