@@ -2341,25 +2341,16 @@ function showShortSpeak(
 
 
   // ----------------------------------------------------------
-  // PROMPT
+  // TEXT TO SPEECH
   // ----------------------------------------------------------
-
-  conversationPrompt.textContent =
-    "";
-
-
-  if (
-    question.ask
-  ) {
-
+  
+  if (question.say) {
+  
     playSpanishText(
-      getConversationDisplayPrompt(
-        question.ask
-      )
+      question.say
     );
-
+  
   }
-
 
   // ----------------------------------------------------------
   // CREATE RECORDING UI
