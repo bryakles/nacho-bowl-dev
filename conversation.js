@@ -1609,12 +1609,13 @@ function parseQuestionCell(cell) {
     parts[0].toUpperCase();
 
   const validTypes = [
+    "STATEMENT",
     "YES_NO",
     "EITHER_OR",
     "MULTIPLE_CHOICE",
     "SHORT_WRITE",
     "SHORT_SPEAK",
-    "LONG_WRITE",
+    "LONG_WRITE"
   ];
 
   if (!validTypes.includes(type)) {
@@ -1632,15 +1633,15 @@ function parseQuestionCell(cell) {
   // ----------------------------------------------------------
   // BASIC QUESTION OBJECT
   // ----------------------------------------------------------
-  
+
   const question = {
-  
+
     type,
-  
-    ask: "",
-  
+
+    say: "",
+
     show: "",
-  
+
     answer: "",
 
     acceptedKeywords: [],
@@ -1649,7 +1650,9 @@ function parseQuestionCell(cell) {
 
     correctOption: "",
 
-    responseRequired: true
+    responseRequired: true,
+
+    imageURL: ""
 
   };
 
@@ -1678,6 +1681,20 @@ function parseQuestionCell(cell) {
         .slice(colonIndex + 1)
         .trim();
 
+
+    // --------------------------------------------------------
+    // SAY
+    // --------------------------------------------------------
+
+    if (field === "SAY") {
+
+      question.say =
+        value;
+
+      return;
+    }
+
+
     // --------------------------------------------------------
     // SHOW
     // --------------------------------------------------------
@@ -1687,19 +1704,6 @@ function parseQuestionCell(cell) {
       question.show =
         value;
 
-      return;
-    }
-
-
-    // --------------------------------------------------------
-    // ASK
-    // --------------------------------------------------------
-    
-    if (field === "ASK") {
-    
-      question.ask =
-        value;
-    
       return;
     }
 
@@ -1718,17 +1722,20 @@ function parseQuestionCell(cell) {
 
 
     // --------------------------------------------------------
+    // IMAGE
+    // --------------------------------------------------------
+
+    if (field === "IMAGE") {
+
+      question.imageURL =
+        value;
+
+      return;
+    }
+
+
+    // --------------------------------------------------------
     // OPTIONS
-    //
-    // OPTIONS may contain additional "|" characters.
-    //
-    // Example:
-    //
-    // OPTIONS:A. California | B. Utah | C. España
-    //
-    // Because the cell is already split on "|", each
-    // subsequent field beginning with a letter + "." is
-    // treated as another option.
     // --------------------------------------------------------
 
     if (field === "OPTIONS") {
@@ -1748,14 +1755,7 @@ function parseQuestionCell(cell) {
 
 
   // ----------------------------------------------------------
-  // CLEAN MULTIPLE-CHOICE OPTIONS
-  //
-  // Because "|" separates spreadsheet fields, additional
-  // options appear as standalone pieces such as:
-  //
-  // B. Utah
-  // C. España
-  //
+  // MULTIPLE CHOICE
   // ----------------------------------------------------------
 
   if (
@@ -1785,25 +1785,9 @@ function parseQuestionCell(cell) {
     });
 
 
-    // ANSWER: may have been parsed normally above.
-    // If the final standalone field is just a letter,
-    // support the older format too.
-
     if (
-      !question.answer &&
-      /^[A-Z]$/i.test(
-        parts[parts.length - 1]
-      )
+      question.answer
     ) {
-
-      question.correctOption =
-        parts[
-          parts.length - 1
-        ]
-          .trim()
-          .toUpperCase();
-
-    } else {
 
       question.correctOption =
         question.answer
@@ -1811,32 +1795,6 @@ function parseQuestionCell(cell) {
           .toUpperCase();
 
     }
-
-    return question;
-  }
-
-
-  // ----------------------------------------------------------
-  // EITHER / OR
-  // ----------------------------------------------------------
-
-  if (
-    type ===
-    "EITHER_OR"
-  ) {
-
-    return question;
-  }
-
-
-  // ----------------------------------------------------------
-  // YES / NO
-  // ----------------------------------------------------------
-
-  if (
-    type ===
-    "YES_NO"
-  ) {
 
     return question;
   }
@@ -1864,6 +1822,26 @@ function parseQuestionCell(cell) {
     return question;
   }
 
+
+  // ----------------------------------------------------------
+  // SHORT SPEAK
+  // ----------------------------------------------------------
+
+  if (
+    type ===
+    "SHORT_SPEAK"
+  ) {
+
+    // Student response is spoken.
+    // No typed answer is required.
+
+    question.responseRequired =
+      true;
+
+    return question;
+  }
+
+
   // ----------------------------------------------------------
   // LONG WRITE
   // ----------------------------------------------------------
@@ -1875,6 +1853,48 @@ function parseQuestionCell(cell) {
 
     question.responseRequired =
       false;
+
+    return question;
+  }
+
+
+  // ----------------------------------------------------------
+  // STATEMENT
+  // ----------------------------------------------------------
+
+  if (
+    type ===
+    "STATEMENT"
+  ) {
+
+    question.responseRequired =
+      true;
+
+    return question;
+  }
+
+
+  // ----------------------------------------------------------
+  // YES / NO
+  // ----------------------------------------------------------
+
+  if (
+    type ===
+    "YES_NO"
+  ) {
+
+    return question;
+  }
+
+
+  // ----------------------------------------------------------
+  // EITHER / OR
+  // ----------------------------------------------------------
+
+  if (
+    type ===
+    "EITHER_OR"
+  ) {
 
     return question;
   }
@@ -2144,7 +2164,30 @@ function showConversationQuestion() {
     "hidden"
   );
 
-
+  // ----------------------------------------------------------
+  // DISPLAY QUESTION IMAGE
+  // ----------------------------------------------------------
+  
+  if (question.imageURL) {
+  
+    conversationSceneImage.src =
+      question.imageURL;
+  
+    conversationSceneImage.classList.remove(
+      "hidden"
+    );
+  
+  } else {
+  
+    conversationSceneImage.src =
+      "";
+  
+    conversationSceneImage.classList.add(
+      "hidden"
+    );
+  
+  }
+  
   // ----------------------------------------------------------
   // PROGRESS
   // ----------------------------------------------------------
@@ -2180,30 +2223,18 @@ function showConversationQuestion() {
 
 
   // ----------------------------------------------------------
-  // QUESTION PROMPT
-  //
-  // ASK is TTS only.
-  // It should NOT appear on screen.
-  // SHOW is handled by conversationSceneText above.
-  // ----------------------------------------------------------
-  
-  conversationPrompt.textContent =
-    "";
-  
-  
-  // ----------------------------------------------------------
   // TEXT TO SPEECH
   //
-  // ASK = spoken only
-  // SHOW = never spoken
+  // SAY = spoken by TTS
+  // SHOW = displayed on screen
+  // Neither one needs to appear in the old
+  // "teacher prompt" area.
   // ----------------------------------------------------------
   
-  if (question.ask) {
+  if (question.say) {
   
     playSpanishText(
-      getConversationDisplayPrompt(
-        question.ask
-      )
+      question.say
     );
   
   }
@@ -2216,6 +2247,14 @@ function showConversationQuestion() {
     question.type
   ) {
 
+    case "STATEMENT":
+
+      showStatement(
+        question
+      );
+    
+      break;
+      
     case "YES_NO":
 
       showYesNo();
@@ -2897,6 +2936,172 @@ function clearConversationResponseAreas() {
 
 }
 
+// ============================================================
+// STATEMENT
+// ============================================================
+
+function showStatement(question) {
+
+  conversationYesNo.classList.remove(
+    "hidden"
+  );
+
+  const buttons =
+    conversationYesNo.querySelectorAll(
+      ".conversation-answer-btn"
+    );
+
+  buttons.forEach(
+    (button, index) => {
+
+      button.classList.remove(
+        "hidden"
+      );
+
+      button.disabled =
+        false;
+
+      if (index === 0) {
+
+        button.textContent =
+          "Entiendo";
+
+        button.dataset.answer =
+          "ENTIENDO";
+
+      } else {
+
+        button.textContent =
+          "No entiendo";
+
+        button.dataset.answer =
+          "NO ENTIENDO";
+
+      }
+
+      button.onclick =
+        () => {
+
+          handleStatementResponse(
+            question,
+            button.dataset.answer
+          );
+
+        };
+
+    }
+  );
+
+}
+
+
+// ============================================================
+// HANDLE STATEMENT RESPONSE
+// ============================================================
+
+function handleStatementResponse(
+  question,
+  response
+) {
+
+  // ----------------------------------------------------------
+  // ENTIENDO
+  //
+  // Move immediately to the next conversation card.
+  // ----------------------------------------------------------
+
+  if (
+    response ===
+    "ENTIENDO"
+  ) {
+
+    disableCurrentConversationResponse();
+
+    conversationNextBtn.click();
+
+    return;
+  }
+
+
+  // ----------------------------------------------------------
+  // NO ENTIENDO
+  //
+  // Show Spanish answer with English underneath.
+  // ----------------------------------------------------------
+
+  if (
+    response ===
+    "NO ENTIENDO"
+  ) {
+
+    disableCurrentConversationResponse();
+
+    const answer =
+      String(
+        question.answer || ""
+      ).trim();
+
+
+    // --------------------------------------------------------
+    // Separate English translation from Spanish.
+    //
+    // Expected format:
+    //
+    // Spanish statement (English translation)
+    // --------------------------------------------------------
+
+    const match =
+      answer.match(
+        /^(.*?)\s*\(([^()]*)\)\s*$/
+      );
+
+
+    let spanishAnswer =
+      answer;
+
+    let englishAnswer =
+      "";
+
+
+    if (match) {
+
+      spanishAnswer =
+        match[1].trim();
+
+      englishAnswer =
+        match[2].trim();
+
+    }
+
+
+    conversationFeedback.innerHTML = `
+      <div class="conversation-answer-spanish">
+        ${spanishAnswer}
+      </div>
+
+      ${
+        englishAnswer
+          ? `
+            <div class="conversation-answer-english">
+              ${englishAnswer}
+            </div>
+          `
+          : ""
+      }
+    `;
+
+    conversationFeedback.className =
+      "conversation-feedback correct";
+
+
+    conversationNextBtn.classList.remove(
+      "hidden"
+    );
+
+  }
+
+}
+
 
 // ============================================================
 // YES / NO
@@ -2981,7 +3186,7 @@ function showEitherOr(question) {
     );
 
   const choices =
-    extractBracketChoices(question.ask);
+    extractBracketChoices(question.say);
 
   if (choices.length !== 2) {
 
@@ -4031,7 +4236,7 @@ function recordQuestionAttempt(
     question.type,
 
   prompt:
-    question.ask ||
+    question.say ||
     question.show ||
     "",
 
@@ -4345,20 +4550,16 @@ conversationReplayBtn.addEventListener(
     const question =
       getCurrentQuestion();
 
+    if (question && question.say) {
 
-    if (question && question.ask) {
-    
       playSpanishText(
-        getConversationDisplayPrompt(
-          question.ask
-        )
+        question.say
       );
-    
+
     }
 
   }
 );
-
 
 // ============================================================
 // FINISH
