@@ -1754,6 +1754,67 @@ if (conjugationAnswerInput) {
 
 }
 
+function updateConjugationAccentLegend() {
+
+  const legend =
+    document.getElementById(
+      "accentLegend"
+    );
+
+  if (!legend) {
+    return;
+  }
+
+  const language =
+    currentUser?.language || "Spanish";
+
+  // ----------------------------------------------------------
+  // SPANISH
+  // ----------------------------------------------------------
+
+  if (language === "Spanish") {
+
+    legend.innerHTML = `
+      <strong>Accent shortcuts:</strong>
+      A = á &nbsp; E = é &nbsp; I = í &nbsp;
+      O = ó &nbsp; U = ú &nbsp; N = ñ &nbsp; Y = ü
+    `;
+
+    return;
+  }
+
+  // ----------------------------------------------------------
+  // FRENCH
+  // ----------------------------------------------------------
+
+  if (language === "French") {
+
+    legend.innerHTML = `
+      <strong>Accent shortcuts:</strong>
+      ee = é &nbsp;
+      eee = è &nbsp;
+      eeee = ê &nbsp;
+      aa = à &nbsp;
+      aaa = â &nbsp;
+      ii = î &nbsp;
+      iii = ï &nbsp;
+      oo = ô &nbsp;
+      ôo = œ &nbsp;
+      uu = û &nbsp;
+      uuu = ù &nbsp;
+      C = ç
+    `;
+
+    return;
+  }
+
+  // ----------------------------------------------------------
+  // OTHER LANGUAGES
+  // ----------------------------------------------------------
+
+  legend.innerHTML = "";
+}
+
 function startConjugationPractice() {
 
   const practiceData =
