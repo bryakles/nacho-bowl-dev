@@ -146,24 +146,120 @@ const conversationNextBtn =
   document.getElementById("conversationNextBtn");
 
 // ============================================================
-// CONVERSATION AUTO-ACCENTS
+// CONVERSATION LANGUAGE ACCENTS
 // ============================================================
 
-conversationWritingInput.addEventListener("input", () => {
-  const pos = conversationWritingInput.selectionStart;
-  const original = conversationWritingInput.value;
+conversationWritingInput.addEventListener(
+  "input",
+  () => {
 
-  const converted =
-    original.replace(
-      /[AEIOUNY]/g,
-      ch => ACCENT_MAP[ch]
-    );
+    const language =
+      currentUser?.language || "Spanish";
 
-  if (converted !== original) {
-    conversationWritingInput.value = converted;
-    conversationWritingInput.setSelectionRange(pos, pos);
+    const pos =
+      conversationWritingInput.selectionStart;
+
+    const original =
+      conversationWritingInput.value;
+
+    // --------------------------------------------------------
+    // SPANISH
+    // --------------------------------------------------------
+
+    if (language === "Spanish") {
+
+      const converted =
+        original.replace(
+          /[AEIOUNY]/g,
+          ch => ACCENT_MAP[ch]
+        );
+
+      if (converted !== original) {
+
+        conversationWritingInput.value =
+          converted;
+
+        conversationWritingInput.setSelectionRange(
+          pos,
+          pos
+        );
+
+      }
+
+      return;
+    }
+
+    // --------------------------------------------------------
+    // FRENCH
+    // --------------------------------------------------------
+
+    if (language === "French") {
+
+      let converted =
+        original;
+
+      converted =
+        converted.replace(
+          /C/g,
+          "ç"
+        );
+
+      const frenchPatterns = [
+        ["ée", "è"],
+        ["èe", "ê"],
+        ["ee", "é"],
+
+        ["àa", "â"],
+        ["aa", "à"],
+
+        ["îi", "ï"],
+        ["ii", "î"],
+
+        ["ôo", "œ"],
+        ["oo", "ô"],
+
+        ["ûu", "ù"],
+        ["uu", "û"]
+      ];
+
+      frenchPatterns.forEach(
+        ([pattern, replacement]) => {
+
+          converted =
+            converted.replaceAll(
+              pattern,
+              replacement
+            );
+
+        }
+      );
+
+      if (converted !== original) {
+
+        const difference =
+          original.length -
+          converted.length;
+
+        conversationWritingInput.value =
+          converted;
+
+        conversationWritingInput.setSelectionRange(
+          Math.max(
+            0,
+            pos - difference
+          ),
+          Math.max(
+            0,
+            pos - difference
+          )
+        );
+
+      }
+
+    }
+
   }
-});
+);
 
 // ============================================================
 // OPEN CONVERSATION SELECTION
