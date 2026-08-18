@@ -3502,6 +3502,7 @@ function applyLanguageAccentInput(input) {
       ["ée", "è"],
       ["èe", "ê"],
       ["ee", "é"],
+      ["eé", "ë"],
 
       ["àa", "â"],
       ["aa", "à"],
@@ -3514,6 +3515,8 @@ function applyLanguageAccentInput(input) {
 
       ["ûu", "ù"],
       ["uu", "û"]
+
+      ["yy", "ÿ"]
     ];
 
     frenchPatterns.forEach(
