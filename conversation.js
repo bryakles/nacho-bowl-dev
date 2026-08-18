@@ -2138,6 +2138,11 @@ function showConversationQuestion() {
   const question =
     getCurrentQuestion();
 
+  console.log(
+    "CURRENT QUESTION:",
+    question
+  );
+
 
   if (!question) {
 
