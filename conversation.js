@@ -1608,6 +1608,13 @@ function parseQuestionCell(cell) {
   const type =
     parts[0].toUpperCase();
 
+  console.log(
+    "CONVERSATION PARSER TYPE:",
+    type,
+    "CELL:",
+    cell
+  );
+
   const validTypes = [
     "STATEMENT",
     "YES_NO",
