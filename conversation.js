@@ -2373,10 +2373,10 @@ function showShortSpeak(
       question.say
         .replace(/\[([^\]]+)\]/g, "$1");
   
-    playSpanishText(
+    playLanguageText(
       ttsText
     );
-  
+      
   }
 
   // ----------------------------------------------------------
@@ -3145,6 +3145,21 @@ function handleStatementResponse(
 
 }
 
+function getConversationLanguage() {
+
+  if (
+    currentUser &&
+    currentUser.language
+  ) {
+
+    return currentUser.language;
+
+  }
+
+  return "Spanish";
+
+}
+
 // ============================================================
 // YES / NO
 // ============================================================
@@ -3160,6 +3175,69 @@ function showYesNo() {
       ".conversation-answer-btn"
     );
 
+  // ----------------------------------------------------------
+  // LANGUAGE-SPECIFIC YES / NO
+  // ----------------------------------------------------------
+
+  const language =
+    getConversationLanguage();
+
+  let yesText =
+    "Sí";
+
+  let noText =
+    "No";
+
+  let yesAnswer =
+    "SÍ";
+
+  let noAnswer =
+    "NO";
+
+
+  if (
+    language ===
+    "French"
+  ) {
+
+    yesText =
+      "Oui";
+
+    noText =
+      "Non";
+
+    yesAnswer =
+      "OUI";
+
+    noAnswer =
+      "NON";
+
+  }
+
+  else if (
+    language ===
+    "English"
+  ) {
+
+    yesText =
+      "Yes";
+
+    noText =
+      "No";
+
+    yesAnswer =
+      "YES";
+
+    noAnswer =
+      "NO";
+
+  }
+
+
+  // ----------------------------------------------------------
+  // SET BUTTONS
+  // ----------------------------------------------------------
+
   buttons.forEach(
     (button, index) => {
 
@@ -3170,23 +3248,25 @@ function showYesNo() {
       button.disabled =
         false;
 
+
       if (index === 0) {
 
         button.textContent =
-          "Sí";
+          yesText;
 
         button.dataset.answer =
-          "SÍ";
+          yesAnswer;
 
       } else {
 
         button.textContent =
-          "No";
+          noText;
 
         button.dataset.answer =
-          "NO";
+          noAnswer;
 
       }
+
 
       button.onclick =
         () => {
