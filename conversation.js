@@ -3145,6 +3145,65 @@ function handleStatementResponse(
 
 }
 
+// ============================================================
+// CONVERSATION UI LANGUAGE
+// ============================================================
+
+const conversationUI = {
+
+  Spanish: {
+    yes: "Sí",
+    no: "No",
+    replay: "Escuchar otra vez",
+    next: "Siguiente →"
+  },
+
+  French: {
+    yes: "Oui",
+    no: "Non",
+    replay: "Écouter à nouveau",
+    next: "Suivant →"
+  },
+
+  German: {
+    yes: "Ja",
+    no: "Nein",
+    replay: "Noch einmal anhören",
+    next: "Weiter →"
+  },
+
+  Korean: {
+    yes: "네",
+    no: "아니요",
+    replay: "다시 듣기",
+    next: "다음 →"
+  },
+
+  English: {
+    yes: "Yes",
+    no: "No",
+    replay: "Listen again",
+    next: "Next →"
+  }
+
+};
+
+
+// ------------------------------------------------------------
+// GET CURRENT CONVERSATION UI LANGUAGE
+// ------------------------------------------------------------
+
+function getConversationUI() {
+
+  const language =
+    currentUser?.language || "Spanish";
+
+  return (
+    conversationUI[language] ||
+    conversationUI.Spanish
+  );
+
+}
 
 // ============================================================
 // YES / NO
@@ -3152,10 +3211,13 @@ function handleStatementResponse(
 
 function showYesNo() {
 
+  const ui =
+    getConversationUI();
+
   conversationYesNo.classList.remove(
     "hidden"
   );
-
+  
   const buttons =
     conversationYesNo.querySelectorAll(
       ".conversation-answer-btn"
@@ -3174,19 +3236,18 @@ function showYesNo() {
       if (index === 0) {
 
         button.textContent =
-          "Sí";
-
+          ui.yes;
+      
         button.dataset.answer =
           "SÍ";
-
+      
       } else {
-
+      
         button.textContent =
-          "No";
-
+          ui.no;
+      
         button.dataset.answer =
           "NO";
-
       }
 
       button.onclick =
