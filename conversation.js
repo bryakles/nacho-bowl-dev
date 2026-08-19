@@ -3165,13 +3165,6 @@ const conversationUI = {
     next: "Suivant →"
   },
 
-  German: {
-    yes: "Ja",
-    no: "Nein",
-    replay: "Noch einmal anhören",
-    next: "Weiter →"
-  },
-
   Korean: {
     yes: "네",
     no: "아니요",
@@ -4612,10 +4605,6 @@ const languageTTS = {
   Spanish: "es-ES",
   Korean: "ko-KR",
   French: "fr-FR",
-  German: "de-DE",
-  Italian: "it-IT",
-  Portuguese: "pt-BR",
-  English: "en-US"
 
 };
 
@@ -4746,26 +4735,12 @@ function finishConversation() {
         "🎉 Conversation terminée !"
     },
 
-    German: {
-      prompt:
-        "Sehr gut! Du hast die Konversation beendet.",
-      feedback:
-        "🎉 Konversation abgeschlossen!"
-    },
-
     Korean: {
       prompt:
         "아주 잘했어요! 대화를 끝냈습니다.",
       feedback:
         "🎉 대화가 완료되었습니다!"
     },
-
-    English: {
-      prompt:
-        "Great job! You have finished the conversation.",
-      feedback:
-        "🎉 Conversation completed!"
-    }
 
   };
 
