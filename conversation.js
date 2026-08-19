@@ -3204,13 +3204,10 @@ function getConversationUI() {
 
 function showYesNo() {
 
-  const ui =
-    getConversationUI();
-
   conversationYesNo.classList.remove(
     "hidden"
   );
-  
+
   const buttons =
     conversationYesNo.querySelectorAll(
       ".conversation-answer-btn"
@@ -3229,18 +3226,19 @@ function showYesNo() {
       if (index === 0) {
 
         button.textContent =
-          ui.yes;
-      
+          "Sí";
+
         button.dataset.answer =
           "SÍ";
-      
+
       } else {
-      
+
         button.textContent =
-          ui.no;
-      
+          "No";
+
         button.dataset.answer =
           "NO";
+
       }
 
       button.onclick =
