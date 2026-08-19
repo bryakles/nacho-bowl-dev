@@ -1,5 +1,9 @@
 console.log("CONJUGATION.JS LOADED");
 
+console.log(
+  "CONVERSATION.JS STARTING"
+);
+
 const CONJUGATION_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQDsHNJvUyc4jvwafQ6za_fgxj-7DLbE8EbftLINQFD-4h5lpiH9LxmkkHyBfLa6XPKyuq4L7P0tlgr/pub?output=csv";
 
