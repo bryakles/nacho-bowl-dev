@@ -2240,26 +2240,24 @@ function showConversationQuestion() {
   }
 
 
-  // ----------------------------------------------------------
-  // TEXT TO SPEECH
-  //
-  // SAY = spoken by TTS
-  // SHOW = displayed on screen
-  // Neither one needs to appear in the old
-  // "teacher prompt" area.
-  // ----------------------------------------------------------
+    // ----------------------------------------------------------
+    // TEXT TO SPEECH
+    //
+    // SAY = spoken by TTS
+    // SHOW = displayed on screen
+    // ----------------------------------------------------------
   
-  if (question.say) {
+    if (question.say) {
   
-    const ttsText =
-      question.say
-        .replace(/\[([^\]]+)\]/g, "$1");
+      const ttsText =
+        question.say
+          .replace(/\[([^\]]+)\]/g, "$1");
   
-    playSpanishText(
-      ttsText
-    );
+      playLanguageText(
+        ttsText
+      );
   
-  }
+    }
 
   // ----------------------------------------------------------
   // QUESTION TYPE
@@ -4541,7 +4539,50 @@ conversationWritingInput.addEventListener(
 // TEXT TO SPEECH
 // ============================================================
 
-function playSpanishText(
+// ============================================================
+// LANGUAGE TTS
+// ============================================================
+
+const languageTTS = {
+
+  Spanish: "es-ES",
+  Korean: "ko-KR",
+  French: "fr-FR",
+  German: "de-DE",
+  Italian: "it-IT",
+  Portuguese: "pt-BR",
+  English: "en-US"
+
+};
+
+
+// ============================================================
+// GET CURRENT LANGUAGE
+// ============================================================
+
+function getCurrentLanguage() {
+
+  if (
+    typeof currentUser !== "undefined" &&
+    currentUser &&
+    currentUser.language
+  ) {
+
+    return currentUser.language;
+
+  }
+
+
+  return "Spanish";
+
+}
+
+
+// ============================================================
+// PLAY LANGUAGE TEXT
+// ============================================================
+
+function playLanguageText(
   text
 ) {
 
@@ -4567,8 +4608,14 @@ function playSpanishText(
     );
 
 
+  const language =
+    getCurrentLanguage();
+
+
   utterance.lang =
-    "es-ES";
+    languageTTS[language] ||
+    "en-US";
+
 
   utterance.rate =
     0.9;
@@ -4579,7 +4626,6 @@ function playSpanishText(
   );
 
 }
-
 
 // ============================================================
 // REPLAY
@@ -4597,11 +4643,11 @@ conversationReplayBtn.addEventListener(
       const ttsText =
         question.say
           .replace(/\[([^\]]+)\]/g, "$1");
-    
-      playSpanishText(
+
+      playLanguageText(
         ttsText
       );
-    
+
     }
 
   }
