@@ -1078,16 +1078,19 @@ async function loadConversationFromSheet(
     // ----------------------------------------------------------
     // Reset progress
     // ----------------------------------------------------------
-
+    
     currentConceptIndex =
       0;
-
+    
     currentQuestionIndex =
       0;
-
+    
     conversationAttempts =
       0;
-
+    
+    currentConceptMastered =
+      false;
+    
     conversationReport =
       [];
 
@@ -4662,13 +4665,62 @@ function finishConversation() {
   clearConversationResponseAreas();
 
 
+  const language =
+    currentUser.language || "Spanish";
+
+
+  const finishMessages = {
+
+    Spanish: {
+      prompt:
+        "¡Muy bien! Has terminado la conversación.",
+      feedback:
+        "🎉 ¡Conversación completada!"
+    },
+
+    French: {
+      prompt:
+        "Très bien ! Tu as terminé la conversation.",
+      feedback:
+        "🎉 Conversation terminée !"
+    },
+
+    German: {
+      prompt:
+        "Sehr gut! Du hast die Konversation beendet.",
+      feedback:
+        "🎉 Konversation abgeschlossen!"
+    },
+
+    Korean: {
+      prompt:
+        "아주 잘했어요! 대화를 끝냈습니다.",
+      feedback:
+        "🎉 대화가 완료되었습니다!"
+    },
+
+    English: {
+      prompt:
+        "Great job! You have finished the conversation.",
+      feedback:
+        "🎉 Conversation completed!"
+    }
+
+  };
+
+
+  const messages =
+    finishMessages[language] ||
+    finishMessages.Spanish;
+
+
   conversationPrompt.textContent =
     conversationData.endTeacher ||
-    "¡Muy bien! Has terminado la conversación.";
+    messages.prompt;
 
 
   conversationFeedback.textContent =
-    "🎉 ¡Conversación completada!";
+    messages.feedback;
 
 
   conversationFeedback.className =
@@ -4683,7 +4735,6 @@ function finishConversation() {
   renderConversationReport();
 
 }
-
 
 // ============================================================
 // TEACHER REPORT
