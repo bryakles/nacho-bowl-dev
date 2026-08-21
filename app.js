@@ -719,202 +719,177 @@ async function loadData() {
   // ----------------------------------------------------------
 
   if (accountsText) {
-  
-    allAccounts =
-      parseAccounts(accountsText);
-  
-    boredCards =
-      parseBoredCards(boredText || "");
-  
-    // --------------------------------------------------------
-    // DETERMINE USER LANGUAGE
-    // --------------------------------------------------------
-    
-    const savedUsername =
-      localStorage.getItem("nachoCurrentUser");
-    
-    let language =
-      "Spanish";
-    
-    console.log(
-      "LOAD DATA LANGUAGE:",
-      language
-    );
-    
-    if (savedUsername) {
-    
-      const user =
-        allAccounts.find(
-          a =>
-            String(a.username).trim().toLowerCase() ===
-            String(savedUsername).trim().toLowerCase()
-        );
-    
-      if (user && user.language) {
-    
-        language =
-          user.language;
-    
-        console.log(
-          "LOAD DATA USER LANGUAGE:",
-          user.language
-        );
-      }
-    
-    }
-    
-    // --------------------------------------------------------
-    // LOAD CACHED TABS FOR THIS LANGUAGE
-    // --------------------------------------------------------
-  
-    console.log(
-      "ABOUT TO LOAD TABS:",
-      language
-    );
-    
-    const tabs =
-      getCardTabsForLanguage(language);
 
-    console.log(
-      "LANGUAGE TABS:",
-      language,
-      Object.entries(tabs)
-    );
+  // --------------------------------------------------------
+  // LOAD CACHED DATA IMMEDIATELY
+  // --------------------------------------------------------
 
-    for (const [level, gid] of Object.entries(tabs)) {
+  allAccounts =
+    parseAccounts(accountsText);
 
-      const cachedCards =
-        localStorage.getItem(
-          `${CARDS_CACHE_KEY}${level}`
-        );
-    
-      console.log(
-        "CACHED TAB:",
-        level,
-        cachedCards ? cachedCards.length : 0
+  boredCards =
+    parseBoredCards(boredText || "");
+
+  const savedUsername =
+    localStorage.getItem("nachoCurrentUser");
+
+  let language =
+    "Spanish";
+
+  console.log(
+    "LOAD DATA LANGUAGE:",
+    language
+  );
+
+  if (savedUsername) {
+
+    const user =
+      allAccounts.find(
+        a =>
+          String(a.username).trim().toLowerCase() ===
+          String(savedUsername).trim().toLowerCase()
       );
-    
-      if (level === "French 1") {
-        console.log(
-          "FRENCH 1 CACHE CONTENT:",
-          cachedCards
-        );
-      }
-    }
-  
-    allCards = [];
-  
-    for (const [level, gid] of Object.entries(tabs)) {
-  
-      const cachedCards =
-        localStorage.getItem(
-          `${CARDS_CACHE_KEY}${level}`
-        );
-  
-      if (cachedCards) {
-  
-        const cards =
-          parseCards(cachedCards);
 
-        console.log(
-          "PARSED CARDS:",
-          level,
-          cards
-        );
-  
-        cards.forEach(card => {
-          card.level = level;
-        });
-  
-        allCards.push(...cards);
+    if (user && user.language) {
 
-        console.log(
-          "CARD LANGUAGE CHECK:",
-          level,
-          cards.length,
-          cards.slice(0, 3)
-        );
-      }
+      language =
+        user.language;
+
+      console.log(
+        "LOAD DATA USER LANGUAGE:",
+        user.language
+      );
     }
-  
-    loadingMsg.textContent = "";
-  
-    // --------------------------------------------------------
-    // REFRESH DATA IN BACKGROUND
-    // --------------------------------------------------------
-  
+  }
+
+  // --------------------------------------------------------
+  // LOAD CACHED TABS FOR THIS LANGUAGE
+  // --------------------------------------------------------
+
+  const tabs =
+    getCardTabsForLanguage(language);
+
+  console.log(
+    "LANGUAGE TABS:",
+    language,
+    Object.entries(tabs)
+  );
+
+  allCards = [];
+
+  for (const [level, gid] of Object.entries(tabs)) {
+
+    const cachedCards =
+      localStorage.getItem(
+        `${CARDS_CACHE_KEY}${level}`
+      );
+
+    if (cachedCards) {
+
+      const cards =
+        parseCards(cachedCards);
+
+      cards.forEach(card => {
+        card.level = level;
+      });
+
+      allCards.push(...cards);
+
+      console.log(
+        "CACHED CARDS:",
+        level,
+        cards.length
+      );
+    }
+  }
+
+  loadingMsg.textContent = "";
+
+  console.log(
+    "CACHED DATA LOADED. STARTING BACKGROUND REFRESH."
+  );
+
+  // --------------------------------------------------------
+  // BACKGROUND REFRESH
+  // --------------------------------------------------------
+  // This does NOT block the initial page load.
+  // It refreshes the cache for the next visit.
+
+  (async () => {
+
     try {
-  
+
       const [accountsRes, boredRes] =
         await Promise.all([
           fetch(ACCOUNTS_CSV_URL),
           fetch(BORED_CSV_URL)
         ]);
-  
+
       if (!accountsRes.ok) {
         throw new Error(
           `Accounts request failed: ${accountsRes.status}`
         );
       }
-  
+
       if (!boredRes.ok) {
         throw new Error(
           `Bored request failed: ${boredRes.status}`
         );
       }
-  
+
       const freshAccountsText =
         await accountsRes.text();
-  
+
       const freshBoredText =
         await boredRes.text();
-  
+
       const freshAccounts =
         parseAccounts(freshAccountsText);
-  
+
       let freshLanguage =
         language;
-  
+
       if (savedUsername) {
-  
+
         const user =
           freshAccounts.find(
             a =>
               String(a.username).trim().toLowerCase() ===
               String(savedUsername).trim().toLowerCase()
           );
-  
+
         if (user && user.language) {
-          freshLanguage = user.language;
+          freshLanguage =
+            user.language;
         }
       }
-  
+
       // ------------------------------------------------------
       // LOAD ALL TABS FOR USER'S LANGUAGE
       // ------------------------------------------------------
-  
+
       const freshTabs =
         getCardTabsForLanguage(freshLanguage);
-  
+
       const cardResults =
         await Promise.all(
           Object.entries(freshTabs).map(
             async ([level, gid]) => {
-  
+
               const response =
                 await fetch(
                   `${CARDS_SHEET_URL}?output=csv&gid=${gid}`
                 );
-  
+
               if (!response.ok) {
                 throw new Error(
                   `Cards request failed for ${level}: ${response.status}`
                 );
               }
-  
+
               const text =
                 await response.text();
-  
+
               return {
                 level,
                 text
@@ -922,77 +897,56 @@ async function loadData() {
             }
           )
         );
-  
+
       // ------------------------------------------------------
-      // CACHE ALL TABS
+      // UPDATE CACHE
       // ------------------------------------------------------
-  
+
       cardResults.forEach(
         ({ level, text }) => {
-  
+
           localStorage.setItem(
             `${CARDS_CACHE_KEY}${level}`,
             text
           );
-  
+
         }
       );
-  
+
       localStorage.setItem(
         ACCOUNTS_CACHE_KEY,
         freshAccountsText
       );
-  
+
       localStorage.setItem(
         BORED_CACHE_KEY,
         freshBoredText
       );
-  
-      // ------------------------------------------------------
-      // USE FRESH DATA
-      // ------------------------------------------------------
-  
-      allCards = [];
-  
-      cardResults.forEach(
-        ({ level, text }) => {
-  
-          const cards =
-            parseCards(text);
-  
-          cards.forEach(card => {
-            card.level = level;
-          });
-  
-          allCards.push(...cards);
 
-          console.log(
-            "CARD LANGUAGE CHECK:",
-            level,
-            cards.length,
-            cards.slice(0, 3)
-          );
-  
-        }
+      console.log(
+        "BACKGROUND DATA REFRESH COMPLETE."
       );
-  
-      allAccounts =
-        freshAccounts;
-  
-      boredCards =
-        parseBoredCards(freshBoredText);
-  
+
     } catch (err) {
-  
+
       console.warn(
-        "Background data refresh failed. Using cached data.",
+        "Background data refresh failed. Cached data remains in use.",
         err
       );
-    }
-  
-    return;
-  }
 
+    }
+
+  })();
+
+  // --------------------------------------------------------
+  // IMPORTANT:
+  // Return immediately after cached data is ready.
+  // Do NOT wait for the background refresh.
+  // --------------------------------------------------------
+
+  return;
+}
+  
   // ----------------------------------------------------------
   // NO CACHE — LOAD FROM NETWORK
   // ----------------------------------------------------------
