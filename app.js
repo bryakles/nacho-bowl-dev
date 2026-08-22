@@ -2882,6 +2882,14 @@ function checkAnswer() {
       getExpectedAnswer(card)
     );
 
+  console.log(
+    "ANSWER DEBUG:",
+    {
+      rawAnswer: getExpectedAnswer(card),
+      acceptedAnswers: expectedAnswers
+    }
+  );
+
   const student =
     answerInput.value;
 
