@@ -1539,6 +1539,7 @@ body.teacher-lock-active {
   border-top: 2px solid #f59e0b;
   padding: 0.6rem 1.5rem;
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
