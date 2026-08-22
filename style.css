@@ -1583,15 +1583,30 @@ body.teacher-lock-active {
 /* ============================================================
    RESPONSIVE
    ============================================================ */
-@media (max-width: 480px) {
-  .practice-main { padding: 1rem 0.75rem 2rem; }
-  .panel { padding: 1.25rem 1rem; }
-  .prompt-text { font-size: var(--font-size-xl); }
-  .answer-actions { flex-direction: column; }
-  .filter-footer { flex-direction: column; align-items: flex-start; }
-   }
 
 @media (max-width: 480px) {
+
+  .practice-main {
+    padding: 1rem 0.75rem 2rem;
+  }
+
+  .panel {
+    padding: 1.25rem 1rem;
+  }
+
+  .prompt-text {
+    font-size: var(--font-size-xl);
+  }
+
+  .answer-actions {
+    flex-direction: column;
+  }
+
+  .filter-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .conversation-entry {
     flex-direction: column;
     text-align: center;
@@ -1600,8 +1615,7 @@ body.teacher-lock-active {
   .conversation-entry-btn {
     width: 100%;
   }
-}
-   
+
   .nacho-keyboard {
     gap: 0.25rem;
   }
@@ -1643,6 +1657,7 @@ body.teacher-lock-active {
   #boredWord {
     font-size: var(--font-size-lg);
   }
+
 }
 
 /* ============================================================
